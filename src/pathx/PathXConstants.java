@@ -7,6 +7,8 @@
 package pathx;
 
 import java.awt.Font;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -19,7 +21,7 @@ public class PathXConstants {
     public static String PROPERTIES_FILE_NAME = "properties.xml";
     public static String PROPERTIES_SCHEMA_FILE_NAME = "properties_schema.xsd";    
     public static String PATH_DATA = "./data/";
-    
+    public static String PATH_LEVEL_SCHEMA = PATH_DATA + "levels/PathXLevelScehma.xml";
     // THESE ARE THE TYPES OF CONTROLS, WE USE THESE CONSTANTS BECAUSE WE'LL
     // STORE THEM BY TYPE, SO THESE WILL PROVIDE A MEANS OF IDENTIFYING THEM
     
@@ -81,6 +83,10 @@ public class PathXConstants {
     public static final String FLYING_BUTTON_TYPE = "FLYING_BUTTON_TYPE";
     public static final String GOD_MODE_BUTTON_TYPE = "GOD_MODE_BUTTON_TYPE";
     
+    public static final String NODE_TYPE = "NODE_TYPE";
+    public static final String CAR_TYPE = "CAR_TYPE";
+    public static final String ROAD_TYPE = "ROAD_TYPE";
+    
     public static final String LEVEL_FAIL_DIALOG_TYPE = "LEVEL_FAIL_DIALOG_TYPE";
     
     public static final String MENU_SCREEN_STATE = "MENU_SCREEN_STATE";
@@ -94,7 +100,11 @@ public class PathXConstants {
     public static final int WINDOW_WIDTH = 640;
     public static final int WINDOW_HEIGHT = 480;
     
-    //TODO MENU BUTTON SIZES
+    //MAP LEVEL COORDINATES
+    public static final int[] LEVEL_X_POS = {70, 97, 140, 155, 180, 205, 245, 250, 250, 290, 255, 
+        290, 360, 430, 395, 355, 400, 323, 340, 403};
+    public static final int[] LEVEL_Y_POS = {280, 330, 380, 280, 225, 150, 175, 220, 290, 290, 360,
+        430, 425, 420, 360, 310, 273, 184, 138, 137};
     
     public static final int MIN_CAR_VELOCITY = 5;
     public static final int MAX_CAR_VELOCITY = 20;

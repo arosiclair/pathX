@@ -42,7 +42,9 @@
         <property name="IMAGE_MAP"						value="./Map.png"></property>
         <property name="IMAGE_LOCKED_LEVEL "            value="./LockedLevel.png"></property>
         <property name="IMAGE_INCOMPLETE_LEVEL"         value="./IncompleteLevel.png"></property>
+        <property name="IMAGE_INCOMPLETE_LEVEL_MOUSE_OVER"  value="./IncompleteLevelMouseOver.png"></property>
         <property name="IMAGE_COMPLETED_LEVEL"          value="./CompletedLevel.png"></property>
+        <property name="IMAGE_COMPLETED_LEVEL_MOUSE_OVER"   value="./CompletedLevelMouseOver.png"></property>
         <property name="IMAGE_BACKGROUND_GAME"			value="./GameBackground.png"></property>
         <property name="IMAGE_BUTTON_START"				value="./ButtonStart.png"></property>
         <property name="IMAGE_BUTTON_START_MOUSE_OVER"	value="./ButtonStartMouseOver.png"></property>
@@ -116,7 +118,7 @@
 
     <property_options_list>
         <property_options name="LEVEL_OPTIONS">
-            <option>Los Angeles, 50, Path, 160, 400</option>
+            <option>./levels/Cali.xml</option>
         </property_options>
     </property_options_list>
 

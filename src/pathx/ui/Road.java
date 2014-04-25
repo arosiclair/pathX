@@ -27,10 +27,10 @@ public class Road {
     private float yPos = s.getY();
     
     //Connecting nodes. If this road is one way, the direction is indicated by
-    // and restricted to: Node n1 to Node n2.
-    private Node n1, n2;
+    // and restricted to: PathXNode n1 to PathXNode n2.
+    private PathXNode n1, n2;
     
-    public Road(Sprite s, Node node1, Node node2, double speedLimit, String state){
+    public Road(Sprite s, PathXNode node1, PathXNode node2, double speedLimit, String state){
         this.s = s;
         n1 = node1;
         n2 = node2;
@@ -78,8 +78,8 @@ public class Road {
         return yPos;
     }
     
-    public Node[] getNodes(){
-        Node[] nodes = {n1, n2};
+    public PathXNode[] getPathXNodes(){
+        PathXNode[] nodes = {n1, n2};
         return nodes;
     }
 } 

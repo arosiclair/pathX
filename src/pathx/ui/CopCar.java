@@ -8,6 +8,8 @@ package pathx.ui;
 
 import java.util.ArrayList;
 import mini_game.Sprite;
+import mini_game.SpriteType;
+import pathx.data.PathXLevel;
 
 /**
  *
@@ -15,12 +17,13 @@ import mini_game.Sprite;
  */
 public class CopCar extends Car{
 
-    public CopCar(Sprite s, Node startSpot, String state) {
-        super(s, startSpot, state);
+    public CopCar(SpriteType initSpriteType, float initX, float initY, float initVx, 
+            float initVy, String initState, PathXLevel level, PathXNode startSpot){
+        super(initSpriteType, initX, initY, initVx, initVy, initState, level, startSpot);
     }
     
     @Override
-    public ArrayList<Node> generatePath(){
+    public ArrayList<PathXNode> generatePath(PathXNode destination){
         return null;
         //TODO Create an algorithm for finding a CopCar's path.
     }

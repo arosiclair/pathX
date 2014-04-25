@@ -165,11 +165,11 @@ public class PathXEventHandler {
     }
     
     //GAME SPECIALS
-    public void makeLightGreen(Node node){
+    public void makeLightGreen(PathXNode node){
         
     }
     
-    public void makeLightRed(Node node){
+    public void makeLightRed(PathXNode node){
         
     }
     
@@ -201,11 +201,11 @@ public class PathXEventHandler {
         
     }
     
-    public void closeIntersection(Node node){
+    public void closeIntersection(PathXNode node){
         
     }
     
-    public void openIntersection(Node node){
+    public void openIntersection(PathXNode node){
         
     }
     

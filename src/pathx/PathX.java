@@ -90,8 +90,13 @@ public class PathX {
         IMAGE_LEFT_ARROW_MOUSE_OVER,
         IMAGE_MAP,
         IMAGE_LOCKED_LEVEL,
+        IMAGE_LOCKED_LEVEL_MOUSE_OVER,
         IMAGE_INCOMPLETE_LEVEL,
+        IMAGE_INCOMPLETE_LEVEL_MOUSE_OVER,
         IMAGE_COMPLETED_LEVEL,
+        IMAGE_COMPLETED_LEVEL_MOUSE_OVER,
+        
+        
         //In-game images
         IMAGE_BACKGROUND_GAME,
         IMAGE_POPUP_BACKGROUND,
@@ -162,7 +167,7 @@ public class PathX {
         AUDIO_CUE_WIN,
         AUDIO_CUE_FAIL,
         SONG_CUE_GAME_SCREEN,
-        SONG_CUE_MENU_SCREEN,
+        SONG_CUE_MENU_SCREEN, 
         
         
 

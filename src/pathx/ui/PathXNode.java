@@ -6,6 +6,7 @@
 
 package pathx.ui;
 
+import graph.Vertex;
 import pathX.*;
 import mini_game.*;
 import java.util.ArrayList;
@@ -15,13 +16,14 @@ import java.util.ArrayList;
  * corresponding levels graph.
  * @author Andrew
  */
-public class Node {
+public class PathXNode extends Sprite {
     
-    private Sprite s;
+    //The associated vertex in the level's Graph data structure.
+    private Vertex vertex;
     
     //Pixel position in game.
-    private float xPos = s.getX();
-    private float yPos = s.getY();
+    private float xPos;
+    private float yPos;
     
     //A list of roads this Node is connected to.
     private ArrayList<Road> roads;
@@ -29,15 +31,17 @@ public class Node {
     //The current state of this node be it GREEN, RED or CLOSED.
     private String currentState;
     
-    public Node(Sprite s, String state){
-        this.s = s;
-        currentState = state;
+    public PathXNode(SpriteType initSpriteType, float initX, float initY, float initVx, 
+            float initVy, String initState, Vertex initVertex){
+        super(initSpriteType, initX, initY, initVx, initVy, initState);
+        currentState = initState;
+        vertex = initVertex;
     }
     
-    public Node(Sprite s, String state, ArrayList<Road> roads){
-        this(s, state);
-        this.roads = roads;
-    }
+//    public PathXNode(Sprite s, String state, ArrayList<Road> roads){
+//        this(s, state);
+//        this.roads = roads;
+//    }
     
     public void makeGreen(){
         setCurrentState(PathXSpriteState.GREEN.toString());
@@ -58,10 +62,6 @@ public class Node {
         return false;
     }
 
-    public Sprite getSprite() {
-        return s;
-    }
-
     public float getXPos() {
         return xPos;
     }
@@ -80,6 +80,10 @@ public class Node {
 
     public void setCurrentState(String currentState) {
         this.currentState = currentState;
+    }
+
+    public Vertex getVertex() {
+        return vertex;
     }
     
 }

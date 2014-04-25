@@ -8,6 +8,7 @@ package pathx.ui;
 
 import java.util.ArrayList;
 import mini_game.Sprite;
+import mini_game.SpriteType;
 
 /**
  *
@@ -15,12 +16,13 @@ import mini_game.Sprite;
  */
 public class BanditCar extends Car{
 
-    public BanditCar(Sprite s, Node startSpot, String state) {
-        super(s, startSpot, state);
+    public BanditCar(SpriteType initSpriteType, float initX, float initY, float initVx, 
+            float initVy, String initState, PathXNode startSpot){
+        super(initSpriteType, initX, initY, initVx, initVy, initState, startSpot);
     }
     
     @Override
-    public ArrayList<Node> generatePath(){
+    public ArrayList<PathXNode> generatePath(PathXNode destination){
         return null;
         //TODO Create algorithm for finding a BanditCar's path.
     }

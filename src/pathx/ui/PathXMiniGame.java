@@ -796,7 +796,7 @@ public class PathXMiniGame extends MiniGame{
         initLevelSelectHandlers();
         initGameScreenHandlers();
         initSettingsHandlers();
-        fileManager.loadLevelDetails();
+        fileManager.loadLevels();
         ((PathXDataModel)data).updateRecord();
         
     }

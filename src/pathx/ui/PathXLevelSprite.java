@@ -24,55 +24,31 @@ import static pathx.ui.PathXSpriteState.VISIBLE;
  *
  * @author Andrew
  */
-public class PathXLevelSprite {
+public class PathXLevelSprite extends Sprite{
     
     private String name;
-    private Sprite s;
     private PathXLevel level;
-    private int xPos, yPos;
     private PathXMiniGame game;
     private PathXEventHandler eventHandler;
     
-    public PathXLevelSprite (PathXLevel level, int xPos, int yPos, PathXMiniGame game){
+    public PathXLevelSprite (SpriteType initSpriteType, float initX, float initY, float initVx, 
+            float initVy, String initState, PathXLevel level, PathXMiniGame game){
+        super(initSpriteType, initX, initY, initVx, initVy, initState);
+        
         this.level = level;
         eventHandler = game.getEventHandler();
-        this.xPos = xPos;
-        this.yPos = yPos;
         this.game = game;
         name = level.getLevelName();
         
-        //Construct the sprite
-        if (level.isCompleted()){
-            SpriteType sT = new SpriteType(COMPLETE_LEVEL_TYPE);
-            BufferedImage img = game.getLevelNodeImage(COMPLETE_LEVEL_TYPE);
-            sT.addState(VISIBLE.toString(), img);
-            sT.addState(MOUSE_OVER.toString(), img);
-            s = new Sprite(sT, xPos, yPos, 0, 0, VISIBLE.toString());
-            s.setActionListener(new ActionListener(){
-                public void actionPerformed(ActionEvent ae)
-                {   eventHandler.switchToGameScreen();    }
-            });
-        }else{
-            SpriteType sT = new SpriteType(INCOMPLETE_LEVEL_TYPE);
-            BufferedImage img = game.getLevelNodeImage(INCOMPLETE_LEVEL_TYPE);
-            sT.addState(VISIBLE.toString(), img);
-            sT.addState(MOUSE_OVER.toString(), img);
-            s = new Sprite(sT, xPos, yPos, 0, 0, VISIBLE.toString());
-            s.setActionListener(new ActionListener(){
-                public void actionPerformed(ActionEvent ae)
-                {   eventHandler.switchToGameScreen();    }
-            });
-        }
-        
-        
+        setActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                eventHandler.switchToGameScreen();
+            }
+        });
     }
 
     public String getName() {
         return name;
-    }
-
-    public Sprite getSprite() {
-        return s;
     }
 
     public PathXLevel getLevel() {
@@ -80,32 +56,12 @@ public class PathXLevelSprite {
     }
     
     public void update(){
-        TreeMap<String, Sprite> buttons = game.getGUIButtons();
+        //TreeMap<String, Sprite> buttons = game.getGUIButtons();
         Viewport vp = game.getDataModel().getViewport();
         
-        //Construct the new sprite
-        if (level.isCompleted()){
-            SpriteType sT = new SpriteType(COMPLETE_LEVEL_TYPE);
-            BufferedImage img = game.getLevelNodeImage(COMPLETE_LEVEL_TYPE);
-            sT.addState(VISIBLE.toString(), img);
-            sT.addState(MOUSE_OVER.toString(), img);
-            s = new Sprite(sT, VIEWPORT_X + xPos - vp.getViewportX(), VIEWPORT_Y + yPos - vp.getViewportY(), 0, 0, VISIBLE.toString());
-            s.setActionListener(new ActionListener(){
-                public void actionPerformed(ActionEvent ae)
-                {   eventHandler.switchToGameScreen();    }
-            });
-        }else{
-            SpriteType sT = new SpriteType(INCOMPLETE_LEVEL_TYPE);
-            BufferedImage img = game.getLevelNodeImage(INCOMPLETE_LEVEL_TYPE);
-            sT.addState(VISIBLE.toString(), img);
-            sT.addState(MOUSE_OVER.toString(), img);
-            s = new Sprite(sT, VIEWPORT_X + xPos - vp.getViewportX(), VIEWPORT_Y + yPos - vp.getViewportY(), 0, 0, VISIBLE.toString());
-            s.setActionListener(new ActionListener(){
-                public void actionPerformed(ActionEvent ae)
-                {   eventHandler.switchToGameScreen();    }
-            });
-        }
-        
-        buttons.put(level.getLevelName(), s);
+        setX(VIEWPORT_X + getX() - vp.getViewportX());
+        setY(VIEWPORT_Y + getY() - vp.getViewportY());
+
+        //buttons.put(level.getLevelName(), s);
     }
 }

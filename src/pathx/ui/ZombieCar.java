@@ -8,6 +8,7 @@ package pathx.ui;
 
 import java.util.ArrayList;
 import mini_game.Sprite;
+import mini_game.SpriteType;
 
 /**
  *
@@ -15,12 +16,13 @@ import mini_game.Sprite;
  */
 public class ZombieCar extends Car{
 
-    public ZombieCar(Sprite s, Node startSpot, String state) {
-        super(s, startSpot, state);
+    public ZombieCar(SpriteType initSpriteType, float initX, float initY, float initVx, 
+            float initVy, String initState, PathXNode startSpot){
+        super(initSpriteType, initX, initY, initVx, initVy, initState, startSpot);
     }
     
     @Override
-    public ArrayList<Node> generatePath(){
+    public ArrayList<PathXNode> generatePath(PathXNode destination){
         return null;
         //TODO create algorithm for finding ZombieCar paths.
     }
