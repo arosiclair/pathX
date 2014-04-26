@@ -21,6 +21,8 @@ public class PathXLevel {
     
     private String levelName;
     
+    private String xmlFile;
+    
     //The directory to the background image to be loaded.
     private String bgImage, startNodeImage, destinationNodeImage;
     
@@ -39,9 +41,10 @@ public class PathXLevel {
     private boolean completed;
     
     
-    public PathXLevel(String levelName, String bgImage, Graph graph, int reward, int xPos, int yPos, PathXDataModel data){
+    public PathXLevel(String levelName, String xmlFile, String bgImage, Graph graph, int reward, int xPos, int yPos, PathXDataModel data){
         this.dataModel = data;
         this.levelName = levelName;
+        this.xmlFile = xmlFile;
         this.reward = reward;
         this.xPos = xPos;
         this.yPos = yPos;
@@ -72,11 +75,11 @@ public class PathXLevel {
     }
 
     public int getxPos() {
-        return VIEWPORT_X + xPos - dataModel.getViewport().getViewportX();
+        return VIEWPORT_X + xPos - getDataModel().getViewport().getViewportX();
     }
 
     public int getyPos() {
-        return VIEWPORT_Y + yPos - dataModel.getViewport().getViewportY();
+        return VIEWPORT_Y + yPos - getDataModel().getViewport().getViewportY();
     }
 
     public boolean isCompleted() {
@@ -133,5 +136,9 @@ public class PathXLevel {
 
     public Graph getGraph() {
         return graph;
+    }
+
+    public PathXDataModel getDataModel() {
+        return dataModel;
     }
 }

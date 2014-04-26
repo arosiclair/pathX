@@ -109,7 +109,8 @@ public class PathXFileManager {
         for (String s : levelDetails){
             try {
                 Document levelDoc = xmlUtil.loadXMLDocument(PATH_DATA + s, PATH_LEVEL_SCHEMA);
-                PathXLevel newLevel = createLevel(levelDoc, xmlUtil);
+                String path = PATH_DATA + s;
+                PathXLevel newLevel = createLevel(path, levelDoc, xmlUtil);
                 levels.put(newLevel.getLevelName(), newLevel);
                 PathXLevelSprite newSprite = createLevelSprite(newLevel);
                 levelSprites.add(newSprite);
@@ -125,7 +126,7 @@ public class PathXFileManager {
         data.setLevelSprites(levelSprites);
     }
     
-    private PathXLevel createLevel(Document levelDoc, XMLUtilities xmlUtil){
+    private PathXLevel createLevel(String path, Document levelDoc, XMLUtilities xmlUtil){
 
         //Get the level name and background Image.
         Node levelNode = levelDoc.getElementsByTagName(LEVEL_NODE_TAG).item(0);
@@ -210,7 +211,7 @@ public class PathXFileManager {
         }
 
         //Create the PathXLevel and add all relevant information.
-        PathXLevel newLevel = new PathXLevel(levelName, bgImageName, newGraph, reward, LEVEL_X_POS[levelsLoaded], LEVEL_Y_POS[levelsLoaded], data);
+        PathXLevel newLevel = new PathXLevel(levelName, path, bgImageName, newGraph, reward, LEVEL_X_POS[levelsLoaded], LEVEL_Y_POS[levelsLoaded], data);
         levelsLoaded++;
         newLevel.setNumCops(numPolice);
         newLevel.setNumBandits(numBandits);

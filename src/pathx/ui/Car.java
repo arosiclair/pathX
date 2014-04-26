@@ -6,6 +6,7 @@
 
 package pathx.ui;
 
+import graph.VertexNotFoundException;
 import java.util.ArrayList;
 import pathx.ui.PathXNode;
 import mini_game.Sprite;
@@ -51,7 +52,7 @@ public abstract class Car extends Sprite{
     }
     
     //This method will be overidden and defined for other, AI-driven cars in game.
-    public abstract ArrayList<PathXNode> generatePath(PathXNode destination);
+    public abstract ArrayList<PathXNode> generatePath() throws VertexNotFoundException;
     
     public void changeDestination(ArrayList<PathXNode> path){
         this.setPath(path);

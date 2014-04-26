@@ -94,6 +94,7 @@ public class PathXMiniGame extends MiniGame{
         guiButtons.get(BACK_BUTTON_TYPE).setEnabled(true);
         guiButtons.get(QUIT_BUTTON_TYPE).setState(VISIBLE.toString());
         guiButtons.get(QUIT_BUTTON_TYPE).setEnabled(true);
+        
         //ACTIVATE ARROW BUTTONS
         guiButtons.get(UP_ARROW_BUTTON_TYPE).setState(PathXSpriteState.VISIBLE.toString());
         guiButtons.get(UP_ARROW_BUTTON_TYPE).setEnabled(true);
@@ -137,7 +138,8 @@ public class PathXMiniGame extends MiniGame{
         //SONGS
     }
     
-    public void switchToGameScreen(){
+    public void switchToGameScreen(PathXLevel level){
+        
         // CHANGE THE BACKGROUND
         guiDecor.get(BACKGROUND_TYPE).setState(GAME_SCREEN_STATE);
         //ACTIVATE POPUP DIALOG AND CLOSE BUTTON
@@ -160,17 +162,19 @@ public class PathXMiniGame extends MiniGame{
         guiDecor.get(GAME_POPUP_TYPE).setEnabled(true);
         guiButtons.get(CLOSE_BUTTON_TYPE).setState(VISIBLE.toString());
         guiButtons.get(CLOSE_BUTTON_TYPE).setEnabled(true);
-        
+            
         //DEACTIVATE LEVEL SELECT BUTTONS
         guiButtons.get(BACK_BUTTON_TYPE).setState(INVISIBLE.toString());
         guiButtons.get(BACK_BUTTON_TYPE).setEnabled(false);
         guiButtons.get(QUIT_BUTTON_TYPE).setState(INVISIBLE.toString());
         guiButtons.get(QUIT_BUTTON_TYPE).setEnabled(false);
         
-        ArrayList<PathXLevelSprite> levelSprites = ((PathXDataModel)data).getLevelSprites();
-        for (PathXLevelSprite ls : levelSprites)
-            guiButtons.remove(ls.getName());
+//        ArrayList<PathXLevelSprite> levelSprites = ((PathXDataModel)data).getLevelSprites();
+//        for (PathXLevelSprite ls : levelSprites)
+//            guiButtons.remove(ls.getName());
         
+        //Construct the PathXNode Sprites.
+        ((PathXDataModel)data).constructNodes(level);
         screenState = GAME_SCREEN_STATE;
     }
     

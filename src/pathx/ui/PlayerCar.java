@@ -8,6 +8,7 @@ package pathx.ui;
 
 import graph.Graph;
 import graph.Vertex;
+import graph.VertexNotFoundException;
 import java.util.ArrayList;
 import mini_game.SpriteType;
 import pathx.data.PathXLevel;
@@ -32,16 +33,32 @@ public class PlayerCar extends Car{
      * @param destination
      * 
      * @return
-     * @throws VertexNotFoundException 
+     * An ArrayList representation of the shortest path to the destination PathXNode.
+     * @throws VertexNotFoundException
+     * If either the current intersection or the destination is not part of the 
+     * current level's graph, then this exception is thrown.
      */
     public ArrayList<PathXNode> generatePath(PathXNode destination)throws VertexNotFoundException{
         Graph graph = getLevel().getGraph();
         
         //The shortest path from the current intersection/vertex to the destination
-        //intersection/vertex as
+        //intersection/vertex as an ArrayList of vertices.
         ArrayList<Vertex> shortestPath = graph.findPath(getIntersection().getVertex(), destination.getVertex());
         
+        ArrayList<PathXNode> path = new ArrayList();
         
-         
+        //Convert the shortestPath ArrayList of Vertices to PathXNodes.
+        ArrayList<PathXNode> nodes = getLevel().getDataModel().getNodes();
+        for (Vertex v : shortestPath){
+            for (PathXNode node : nodes)
+                if (node.getVertex() == v) path.add(node);
+        }
+        
+        return path;  
+    }
+
+    @Override
+    public ArrayList<PathXNode> generatePath() throws VertexNotFoundException {
+        return null;
     }
 }

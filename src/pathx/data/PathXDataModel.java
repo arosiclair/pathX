@@ -6,6 +6,7 @@
 
 package pathx.data;
 
+import graph.Graph;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,8 +19,11 @@ import pathx.ui.Car;
 import pathx.ui.CopCar;
 import pathx.ui.PathXLevelSprite;
 import pathx.ui.PathXMiniGame;
+import pathx.ui.PathXNode;
 import pathx.ui.PathXSpriteState;
+import pathx.ui.Road;
 import pathx.ui.ZombieCar;
+import xml_utilities.XMLUtilities;
 
 /**
  *
@@ -33,10 +37,15 @@ public class PathXDataModel extends MiniGameDataModel{
     private PathXRecord record;
     
     private Car player;
+    
     //References to all the opposing cars in the game.
     private ArrayList<CopCar> cops;
     private ArrayList<BanditCar> bandits;
     private ArrayList<ZombieCar> zombies;
+    
+    //References to all of the PathXNodes and Roads in the current level.
+    private ArrayList<PathXNode> nodes;
+    private ArrayList<Road> roads;
     
     //Used to check unlocked specials and unlocked/completed levels.
     private HashMap<String, Boolean> specials;
@@ -142,5 +151,25 @@ public class PathXDataModel extends MiniGameDataModel{
 
     public ArrayList<PathXLevelSprite> getLevelSprites() {
         return levelSprites;
+    }
+
+    public ArrayList<PathXNode> getNodes() {
+        return nodes;
+    }
+
+    public ArrayList<Road> getRoads() {
+        return roads;
+    }
+
+    //Constructs all of the PathXNodes needed for a specific level. These Nodes 
+    //are put into the nodes ArrayList.
+    public void constructNodes(PathXLevel level) {
+        //Needed for loading and analyzing the PathXLevel's XML file.s
+        XMLUtilities xmlUtil = new XMLUtilities();
+        Graph graph = level.getGraph();
+        ArrayList<PathXNode> intersections = new ArrayList();
+        
+        //Load the XML File.
+        
     }
 }
