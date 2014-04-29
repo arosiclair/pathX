@@ -21,7 +21,7 @@ public class PathXConstants {
     public static String PROPERTIES_FILE_NAME = "properties.xml";
     public static String PROPERTIES_SCHEMA_FILE_NAME = "properties_schema.xsd";    
     public static String PATH_DATA = "./data/";
-    public static String PATH_LEVEL_SCHEMA = PATH_DATA + "levels/PathXLevelScehma.xml";
+    public static String PATH_LEVEL_SCHEMA = PATH_DATA + "levels/PathXLevelSchema.xsd";
     // THESE ARE THE TYPES OF CONTROLS, WE USE THESE CONSTANTS BECAUSE WE'LL
     // STORE THEM BY TYPE, SO THESE WILL PROVIDE A MEANS OF IDENTIFYING THEM
     
@@ -43,6 +43,7 @@ public class PathXConstants {
     public static final String RIGHT_ARROW_BUTTON_TYPE = "RIGHT_ARROW_BUTTON_TYPE";
     public static final String LEFT_ARROW_BUTTON_TYPE = "LEFT_ARROW_BUTTON_TYPE";
     public static final String MAP_TYPE = "MAP_TYPE";
+    public static final String LEVEL_TYPE = "LEVEL_TYPE";
     public static final String LOCKED_LEVEL_TYPE = "LOCKED_LEVEL_TYPE";
     public static final String INCOMPLETE_LEVEL_TYPE = "INCOMPLETE_LEVEL_TYPE";
     public static final String COMPLETE_LEVEL_TYPE = "COMPLETE_LEVEL_TYPE";
@@ -171,4 +172,5 @@ public class PathXConstants {
     public static final Font FONT_LEVEL_DISPLAY = new Font(Font.SANS_SERIF, Font.PLAIN, 24);
     public static final Font FONT_DEBUG_TEXT = new Font(Font.MONOSPACED, Font.BOLD, 14);
     public static final Font FONT_STATS = new Font(Font.MONOSPACED, Font.BOLD, 20);
+    
 }

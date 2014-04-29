@@ -6,10 +6,12 @@
 
 package pathx.ui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import javax.swing.JPanel;
@@ -21,6 +23,7 @@ import pathx.PathX.PathXPropertyType;
 import pathx.PathXConstants;
 import static pathx.PathXConstants.BACKGROUND_TYPE;
 import static pathx.PathXConstants.FONT_TEXT_DISPLAY;
+import static pathx.PathXConstants.GAME_SCREEN_STATE;
 import static pathx.PathXConstants.LEVEL_SELECT_SCREEN_STATE;
 import static pathx.PathXConstants.VIEWPORT_HEIGHT;
 import static pathx.PathXConstants.VIEWPORT_WIDTH;
@@ -88,27 +91,27 @@ public class PathXPanel extends JPanel{
             // RENDER THE BACKGROUND, WHICHEVER SCREEN WE'RE ON
             renderBackground(g);
             
-            //Render these things if the game as has started.
-            if (!dataModel.notStarted()){
+            //Render these things if the player is at the Game Screen.
+            if (((PathXMiniGame)game).isCurrentScreenState(GAME_SCREEN_STATE)){
                 
-//                RENDER THE CARS IF THE LEVEL HASN'T BEEN WON YET
-//                if (!dataModel.won())
-//                    renderCars(g);
-//                
-//                RENDER THE GRAPH, INCLUDING THE ROADS AND NODES.
-//                renderGraph();
-//                
-//                RENDER DIALOGS IF THERE ARE ANY.
-//                renderDialogs(g);
-//                
-//                renderLevelName(g);
+                //RENDER THE GRAPH, INCLUDING THE ROADS AND NODES.
+                renderGraph(g);
+                
+                //RENDER THE CARS IF THE LEVEL HASN'T BEEN WON YET
+                if (!dataModel.won())
+                    renderCars(g);
+                
+                //RENDER DIALOGS IF THERE ARE ANY.
+                //renderDialogs(g);
+                
+                renderLevelName(g);
             
             
             }
             if (((PathXMiniGame) game).isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
                 renderMap(g);
                 renderLevelSelectStats(g);
-                updateLevelSprites();
+                renderLevelSprites(g);
             }
             
             //RENDER BUTTONS AND DECOR
@@ -212,8 +215,93 @@ public class PathXPanel extends JPanel{
         
     }
 
-    private void updateLevelSprites() {
-        for (PathXLevelSprite ls : dataModel.getLevelSprites())
+    private void renderLevelSprites(Graphics g) {
+        for (PathXLevelSprite ls : dataModel.getLevelSprites()){
+            ls.setEnabled(true);
             ls.update();
+            renderSprite(g, ls);
+        }          
+    }
+
+    private void renderGraph(Graphics g) {
+        PathXDataModel data = (PathXDataModel) game.getDataModel();
+        Viewport vp = data.getViewport();
+        
+        //Render the Roads first
+        ArrayList<Road> roads = data.getRoads();
+
+        //Render each of the roads using our PathXPanel's Graphics component.
+        //Taking account for the Viewport
+        int startX, startY, endX, endY;
+        for(Road road: roads){
+            PathXNode[] nodes = road.getNodes();
+            startX = VIEWPORT_X + (int) nodes[0].getX() - vp.getViewportX();
+            startY = VIEWPORT_Y + (int) nodes[0].getY() - vp.getViewportY();
+            endX = VIEWPORT_X + (int) nodes[1].getX() - vp.getViewportX();;
+            endY = VIEWPORT_Y + (int) nodes[1].getY() - vp.getViewportY();
+            
+            //Draw this road in either green or black depedning on its state.
+            String state = road.getCurrentState();
+            if (state.equals(PathXSpriteState.HIGHLIGHTED.toString()) || 
+                    state.equals(PathXSpriteState.MOUSE_OVER.toString()))
+                g.setColor(new Color(34, 177, 76));
+            else
+                g.setColor(Color.BLACK);
+            g.drawLine(startX, startY, endX, endY);
+        }
+        
+        //Render the nodes. Taking account for the Viewport
+        ArrayList<PathXNode> nodes = data.getNodes();
+        for (PathXNode node : nodes){
+            node.setX(VIEWPORT_X + node.getConstantXPos() - vp.getViewportX());
+            node.setY(VIEWPORT_Y + node.getConstantYPos() - vp.getViewportY());
+            renderSprite(g, node);
+        }
+    }
+
+    private void renderCars(Graphics g) {
+        PathXDataModel data = (PathXDataModel) game.getDataModel();
+        Viewport vp = data.getViewport();
+        //Get our collection of Car Sprites
+        ArrayList<CopCar> cops = data.getCops();
+        ArrayList<BanditCar> bandits = data.getBandits();
+        ArrayList<ZombieCar> zombies = data.getZombies();
+        PlayerCar playerCar = data.getPlayer();
+        
+        //Render the cops
+        for (CopCar car : cops){
+            //Adjust for the viewport
+            car.setX(VIEWPORT_X + car.getConstantXPos() - vp.getViewportX());
+            car.setY(VIEWPORT_Y + car.getConstantYPos() - vp.getViewportY());
+            renderSprite(g, car);
+        }
+        
+        //Render the bandits
+        for (BanditCar car : bandits){
+            //Adjust for the viewport
+            car.setX(VIEWPORT_X + car.getConstantXPos() - vp.getViewportX());
+            car.setY(VIEWPORT_Y + car.getConstantYPos() - vp.getViewportY());
+            renderSprite(g, car);
+        }
+        
+        //Render the zombies
+        for (ZombieCar car : zombies){
+            //Adjust for the viewport
+            car.setX(VIEWPORT_X + car.getConstantXPos() - vp.getViewportX());
+            car.setY(VIEWPORT_Y + car.getConstantYPos() - vp.getViewportY());
+            renderSprite(g, car);
+        }
+        
+        //Render the player's car
+        playerCar.setX(VIEWPORT_X + playerCar.getConstantXPos() - vp.getViewportX());
+        playerCar.setY(VIEWPORT_Y + playerCar.getConstantYPos() - vp.getViewportX());
+        renderSprite(g, playerCar);
+        
+    }
+
+    private void renderLevelName(Graphics g) {
+        String levelName = dataModel.getCurrentLevel().getLevelName();
+        g.setColor(Color.BLACK);
+        g.drawString(levelName, PathXConstants.GAME_CITY_LABEL_X, PathXConstants.GAME_CITY_LABEL_Y);
     }
 }

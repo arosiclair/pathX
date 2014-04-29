@@ -12,6 +12,7 @@ import mini_game.Sprite;
 import mini_game.Viewport;
 import pathx.PathXConstants;
 import static pathx.PathXConstants.LEVEL_SELECT_SCREEN_STATE;
+import pathx.data.PathXDataModel;
 import pathx.data.PathXLevel;
 import static pathx.ui.PathXSpriteState.INVISIBLE;
 
@@ -23,12 +24,12 @@ import static pathx.ui.PathXSpriteState.INVISIBLE;
 public class PathXEventHandler {
     
     PathXMiniGame game;
-    MiniGameDataModel dataModel;
+    PathXDataModel dataModel;
     Viewport vp;
     
     public PathXEventHandler(PathXMiniGame initGame){
         game = initGame;
-        dataModel = initGame.getDataModel();
+        dataModel = (PathXDataModel) initGame.getDataModel();
         vp = dataModel.getViewport();
     }
     
@@ -61,8 +62,9 @@ public class PathXEventHandler {
         }
     }
     
-    public void switchToGameScreen(){
-        game.switchToGameScreen();
+    public void switchToGameScreen(PathXLevel level){
+        //PathXLevel level = dataModel.getLevels().get(levelName);
+        game.switchToGameScreen(level);
     }
     
     //Resets the player's record.

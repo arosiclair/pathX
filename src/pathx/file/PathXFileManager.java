@@ -27,6 +27,8 @@ import static pathx.PathXConstants.PATH_LEVEL_SCHEMA;
 import xml_utilities.InvalidXMLFileFormatException;
 import graph.Graph;
 import graph.Vertex;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import mini_game.SpriteType;
 import pathx.PathXConstants;
@@ -35,7 +37,13 @@ import static pathx.PathXConstants.LEVEL_Y_POS;
 import static pathx.PathXConstants.NODE_TYPE;
 import pathx.ui.PathXNode;
 import pathx.ui.PathXSpriteState;
+import static pathx.ui.PathXSpriteState.COMPLETED;
+import static pathx.ui.PathXSpriteState.COMPLETE_MOUSE_OVER;
+import static pathx.ui.PathXSpriteState.INCOMPLETE;
+import static pathx.ui.PathXSpriteState.INCOMPLETE_MOUSE_OVER;
 import static pathx.ui.PathXSpriteState.INVISIBLE;
+import static pathx.ui.PathXSpriteState.LOCKED;
+import static pathx.ui.PathXSpriteState.LOCKED_MOUSE_OVER;
 import static pathx.ui.PathXSpriteState.MOUSE_OVER;
 import static pathx.ui.PathXSpriteState.VISIBLE;
 
@@ -50,11 +58,11 @@ public class PathXFileManager {
     
     public static final String LEVEL_NODE_TAG = "level";
     public static final String INTERSECTIONS_LIST_TAG = "intersections";
-    public final String NAME_ATT = "name";
-    public final String IMAGE_ATT = "image";
-    public final String INTERSECTION_TAG = "intersection";
-    public final String ID_ATT = "id";
-    public final String OPEN_ATT = "open";
+    public static final String NAME_ATT = "name";
+    public static final String IMAGE_ATT = "image";
+    public static final String INTERSECTION_TAG = "intersection";
+    public static final String ID_ATT = "id";
+    public static final String OPEN_ATT = "open";
     public static final String X_ATT = "x";
     public static final String Y_ATT = "y";
     public static final String INT_ID1_ATT = "int_id1";
@@ -63,7 +71,7 @@ public class PathXFileManager {
     public static final String ONE_WAY_ATT = "one_way";
     public static final String AMOUNT_ATT = "amount";
     public static final String NUM_ATT = "num";
-    public String MONEY_TAG = "money";
+    public static final String MONEY_TAG = "money";
     public static final String POLICE_TAG = "police";
     public static final String BANDITS_TAG = "bandits";
     public static final String ZOMBIES_TAG = "zombies";
@@ -226,15 +234,34 @@ public class PathXFileManager {
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         String imgPath = props.getProperty(PathXPropertyType.PATH_IMG);
         
-        SpriteType sT = new SpriteType(PathXConstants.INCOMPLETE_LEVEL_TYPE);
-        BufferedImage img = game.getLevelNodeImage(PathXConstants.INCOMPLETE_LEVEL_TYPE);
-        sT.addState(VISIBLE.toString(), img);
-        img = game.loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_INCOMPLETE_LEVEL_MOUSE_OVER));
-        sT.addState(MOUSE_OVER.toString(), img);
+        //Add the necessary images for displaying whether or not the level is 
+        //locked incomplete or completed.
+        SpriteType sT = new SpriteType(PathXConstants.LEVEL_TYPE);
+        BufferedImage[] images = game.getLevelNodeImage(PathXConstants.LOCKED_LEVEL_TYPE);
+        sT.addState(LOCKED.toString(), images[0]);
+        sT.addState(LOCKED_MOUSE_OVER.toString(), images[1]);
+        images = game.getLevelNodeImage(PathXConstants.INCOMPLETE_LEVEL_TYPE);
+        sT.addState(INCOMPLETE.toString(), images[0]);
+        sT.addState(INCOMPLETE_MOUSE_OVER.toString(), images[1]);
+        images = game.getLevelNodeImage(PathXConstants.COMPLETE_LEVEL_TYPE);
+        sT.addState(COMPLETED.toString(), images[0]);
+        sT.addState(COMPLETE_MOUSE_OVER.toString(), images[1]);
+        String state;
+        if (newLevel.isCompleted())
+            state = PathXSpriteState.COMPLETED.toString();
+        else
+            state = PathXSpriteState.INCOMPLETE.toString();
+        PathXLevelSprite newSprite = new PathXLevelSprite(sT, newLevel.getxPos(), newLevel.getyPos(), 0, 0, state, newLevel, game);
         
-        PathXLevelSprite newSprite = new PathXLevelSprite(sT, newLevel.getxPos(), newLevel.getyPos(), 0, 0, INVISIBLE.toString(), newLevel, game);
+        //Set the event handler
+//        newSprite.setActionCommand(newSprite.getName());
+//        newSprite.setActionListener(new ActionListener(){
+//            public void actionPerformed(ActionEvent ae)
+//            {   game.getEventHandler().switchToGameScreen(this.);    }
+//        });
         
         return newSprite;
     }
+
 
 }

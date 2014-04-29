@@ -21,19 +21,22 @@ public class Road {
     private String currentState;
     
     //Associated sprite.
-    private Sprite s;
+    //private Sprite s;
     
-    private float xPos = s.getX();
-    private float yPos = s.getY();
+//    private float xPos = s.getX();
+//    private float yPos = s.getY();
+    
+    private boolean oneWay;
     
     //Connecting nodes. If this road is one way, the direction is indicated by
     // and restricted to: PathXNode n1 to PathXNode n2.
     private PathXNode n1, n2;
     
-    public Road(Sprite s, PathXNode node1, PathXNode node2, double speedLimit, String state){
-        this.s = s;
+    public Road(PathXNode node1, PathXNode node2, boolean oneWay, double speedLimit, String state){
+        //this.s = s;
         n1 = node1;
         n2 = node2;
+        this.oneWay = oneWay;
         this.speedLimit = speedLimit;
         currentState = state;
     }
@@ -65,21 +68,18 @@ public class Road {
     public String getCurrentState() {
         return currentState;
     }
-
-    public Sprite getSprite() {
-        return s;
-    }
-
-    public float getXPos() {
-        return xPos;
-    }
-
-    public float getYPos() {
-        return yPos;
-    }
     
-    public PathXNode[] getPathXNodes(){
-        PathXNode[] nodes = {n1, n2};
-        return nodes;
+//    public PathXNode[] getPathXNodes(){
+//        PathXNode[] nodes = {getN1(), getN2()};
+//        return nodes;
+//    }
+
+    public boolean isOneWay() {
+        return oneWay;
     }
-} 
+
+    public PathXNode[] getNodes() {
+        return new PathXNode[]{n1, n2};
+    }
+}
+

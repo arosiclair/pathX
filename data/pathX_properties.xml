@@ -40,7 +40,8 @@
             <property name="IMAGE_LEFT_ARROW_MOUSE_OVER"	value="./LeftArrowMouseOver.png"></property> 
         -->
         <property name="IMAGE_MAP"						value="./Map.png"></property>
-        <property name="IMAGE_LOCKED_LEVEL "            value="./LockedLevel.png"></property>
+        <property name="IMAGE_LOCKED_LEVEL"            value="./LockedLevel.png"></property>
+        <property name="IMAGE_LOCKED_LEVEL_MOUSE_OVER" value="./LockedLevelMouseOver.png"></property>
         <property name="IMAGE_INCOMPLETE_LEVEL"         value="./IncompleteLevel.png"></property>
         <property name="IMAGE_INCOMPLETE_LEVEL_MOUSE_OVER"  value="./IncompleteLevelMouseOver.png"></property>
         <property name="IMAGE_COMPLETED_LEVEL"          value="./CompletedLevel.png"></property>
@@ -65,6 +66,7 @@
         <property name="IMAGE_EMPTY_GAS"				value="./EmptyGas.png"></property>
         <property name="IMAGE_EMPTY_GAS_ACTIVE"			value="./EmptyGasActive.png"></property>
         <property name="IMAGE_CLOSE_ROAD"				value="./CloseRoad.png"></property>
+        <property name="IMAGE_CLOSE_ROAD_MOUSE_OVER"    value="./CloseRoadMouseOver.png"></property>
         <property name="IMAGE_CLOSE_ROAD_ACTIVE"		value="./CloseRoadActive.png"></property>
         <property name="IMAGE_CLOSE_NODE"				value="./CloseIntersection.png"></property>
         <property name="IMAGE_CLOSE_NODE_ACTIVE"		value="./CloseIntersectionActive.png"></property>
@@ -82,6 +84,13 @@
         <property name="IMAGE_FLYING_ACTIVE"			value="./FlyingActive.png"></property>
         <property name="IMAGE_GOD_MODE"					value="./GodMode.png"></property>
         <property name="IMAGE_GOD_MODE_ACTIVE"			value="./GodModeActive.png"></property>
+
+        <property name="IMAGE_GREEN_INTERSECTION"        value="./GreenNode.png"></property>
+        <property name="IMAGE_GREEN_INTERSECTION_MOUSE_OVER" value="./GreenNodeMouseOver.png"></property>
+        <property name="IMAGE_CLOSED_INTERSECTION"       value="./ClosedNode.png"></property>
+        <property name="IMAGE_CLOSED_INTERSECTION_MOUSE_OVER"    value="./ClosedNodeMouseOver.png"></property>
+        <property name="IMAGE_RED_INTERSECTION"         value="./RedNode.png"></property>
+        <property name="IMAGE_RED_INTERSECTION_MOUSE_OVER"  value="./RedNodeMouseOver.png"></property>
 
         <property name="IMAGE_POPUP_BACKGROUND"         value="./GameOverlay.png"></property>
         <property name="IMAGE_BUTTON_CLOSE"             value="./ButtonClose.png"></property>
@@ -118,7 +127,13 @@
 
     <property_options_list>
         <property_options name="LEVEL_OPTIONS">
-            <option>./levels/Cali.xml</option>
+            <option>./levels/California1.xml</option>
+            <option>./levels/California2.xml</option>
+            <option>./levels/California3.xml</option>
+            <option>./levels/Nevada1.xml</option>
+            <option>./levels/Nevada2.xml</option>
+            <option>./levels/Nevada3.xml</option>
+            <option>./levels/Idaho1.xml</option>
         </property_options>
     </property_options_list>
 

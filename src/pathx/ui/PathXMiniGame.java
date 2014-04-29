@@ -64,16 +64,23 @@ public class PathXMiniGame extends MiniGame{
     
     //This method is used to get images of a locked, incomplete, or complete level
     // node for the level select screen.
-    public BufferedImage getLevelNodeImage(String levelStatus){
+    public BufferedImage[] getLevelNodeImage(String levelStatus){
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         String imgPath = props.getProperty(PathXPropertyType.PATH_IMG);
+        BufferedImage[] images = new BufferedImage[2];
         switch (levelStatus) {
             case PathXConstants.LOCKED_LEVEL_TYPE:
-                return loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_LOCKED_LEVEL));
+                images[0] = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_LOCKED_LEVEL));
+                images[1] = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_LOCKED_LEVEL_MOUSE_OVER));
+                return images;
             case PathXConstants.INCOMPLETE_LEVEL_TYPE:
-                return loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_INCOMPLETE_LEVEL));
+                images[0] = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_INCOMPLETE_LEVEL));
+                images[1] = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_INCOMPLETE_LEVEL_MOUSE_OVER));
+                return images;
             case PathXConstants.COMPLETE_LEVEL_TYPE:
-                return loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_COMPLETED_LEVEL));
+                images[0] = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_COMPLETED_LEVEL));
+                images[1] = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_COMPLETED_LEVEL_MOUSE_OVER));
+                return images;
             default:
                 return null;
         }
@@ -106,10 +113,9 @@ public class PathXMiniGame extends MiniGame{
         guiButtons.get(LEFT_ARROW_BUTTON_TYPE).setEnabled(true);
         
         //Activatate the Level buttons
-        ArrayList<PathXLevelSprite> levelSprites = ((PathXDataModel)data).getLevelSprites();
-        for (PathXLevelSprite ls : levelSprites){
-            guiButtons.put(ls.getName(), ls.getSprite());
-        }
+        //The level sprites will be automatically renedered by the PathXPanel 
+        //when the screen state is changed.
+        
         
         if (screenState.equals(MENU_SCREEN_STATE)) {
             //DEACTIVATE MAIN MENU BUTTONS
@@ -169,12 +175,16 @@ public class PathXMiniGame extends MiniGame{
         guiButtons.get(QUIT_BUTTON_TYPE).setState(INVISIBLE.toString());
         guiButtons.get(QUIT_BUTTON_TYPE).setEnabled(false);
         
+        
 //        ArrayList<PathXLevelSprite> levelSprites = ((PathXDataModel)data).getLevelSprites();
 //        for (PathXLevelSprite ls : levelSprites)
 //            guiButtons.remove(ls.getName());
         
         //Construct the PathXNode Sprites.
         ((PathXDataModel)data).constructNodes(level);
+        //Construct the Road Sprites.
+        ((PathXDataModel)data).constructRoads(level);
+        
         screenState = GAME_SCREEN_STATE;
     }
     
@@ -770,6 +780,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.SOUND_TOGGLE_X;
         y = PathXConstants.SOUND_TOGGLE_Y;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(SOUND_TOGGLE_BUTTON_TYPE, s);
         
         //Settings Music Toggle
@@ -782,6 +793,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.MUSIC_TOGGLE_X;
         y = PathXConstants.MUSIC_TOGGLE_Y;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(MUSIC_TOGGLE_BUTTON_TYPE, s);
     }
     @Override
@@ -948,12 +960,63 @@ public class PathXMiniGame extends MiniGame{
     public void reset() {
         data.reset(this);
     }
+    /**
+     * When invoked, this method results in each button in the GUI testing to
+     * see if the x, y coordinates are inside its bounds. If they are, the
+     * button's actionPerformed method is invoked and the appropriate event
+     * response is executed.
+     *
+     * @param x the x coordinate on the canvas of the mouse press
+     *
+     * @param y the y coordinate on the canvas of the mouse press
+     *
+     * @return true if the mouse press resulted in a button's event handler
+     * being executed, false otherwise. This is important because if false is
+     * returned, other game logic should proceed.
+     */
+    @Override
+    public boolean processButtonPress(int x, int y)
+    {
+        boolean buttonClickPerformed = false;
+
+        // TEST EACH BUTTON
+        for (Sprite s : guiButtons.values())
+        {
+            // THIS METHOD WILL INVOKE actionPeformed WHEN NEEDED
+            buttonClickPerformed = s.testForClick(this, x, y);
+
+            // ONLY EXECUTE THE FIRST ONE, SINCE BUTTONS
+            // SHOULD NOT OVERLAP
+            if (buttonClickPerformed)
+            {
+                return true;
+            }
+        }
+        
+        //TEST FOR LEVEL SPRITES ON THE LEVEL SELECT SCREEN
+        if(screenState.equals(LEVEL_SELECT_SCREEN_STATE)){
+
+            // TEST EACH BUTTON
+            for (Sprite s : ((PathXDataModel) data).getLevelSprites()) {
+                // THIS METHOD WILL INVOKE actionPeformed WHEN NEEDED
+                buttonClickPerformed = s.testForClick(this, x, y);
+
+            // ONLY EXECUTE THE FIRST ONE, SINCE BUTTONS
+                // SHOULD NOT OVERLAP
+                if (buttonClickPerformed) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     @Override
     public void updateGUI() {
-        
+        PathXDataModel dataModel = (PathXDataModel) data;
         // GO THROUGH THE VISIBLE BUTTONS TO TRIGGER MOUSE OVERS
         Iterator<Sprite> buttonsIt = guiButtons.values().iterator();
+        
         while (buttonsIt.hasNext())
         {
             Sprite button = buttonsIt.next();
@@ -965,20 +1028,20 @@ public class PathXMiniGame extends MiniGame{
                 {
                     button.setState(PathXSpriteState.MOUSE_OVER.toString());
                     
-                    //Check if its a level on the level select screen
-                    if(button.getSpriteType().getSpriteTypeID().indexOf("LEVEL_TYPE") >= 0){
-                        
-                        //Find out which level it is
-                        Collection<PathXLevel> levels = ((PathXDataModel)data).getLevels().values();
-                        for (PathXLevel level : levels){
-                            if (level.getxPos() == (int)button.getX() + VIEWPORT_X - data.getViewport().getViewportX() &&
-                                    level.getyPos() == (int)button.getY() + VIEWPORT_Y - data.getViewport().getViewportY()){
-                                ((PathXPanel)canvas).renderLevelInfo(canvas.getGraphics(), level);
-                                break;
-                            }
-                        }
-                        
-                    }
+//                    //Check if its a level on the level select screen
+//                    if(button.getSpriteType().getSpriteTypeID().indexOf("LEVEL_TYPE") >= 0){
+//                        
+//                        //Find out which level it is
+//                        Collection<PathXLevel> levels = ((PathXDataModel)data).getLevels().values();
+//                        for (PathXLevel level : levels){
+//                            if (level.getxPos() == (int)button.getX() + VIEWPORT_X - data.getViewport().getViewportX() &&
+//                                    level.getyPos() == (int)button.getY() + VIEWPORT_Y - data.getViewport().getViewportY()){
+//                                ((PathXPanel)canvas).renderLevelInfo(canvas.getGraphics(), level);
+//                                break;
+//                            }
+//                        }
+//                        
+//                    }
                 }
             }
             // ARE WE EXITING A BUTTON?
@@ -994,6 +1057,56 @@ public class PathXMiniGame extends MiniGame{
 //                    button.getState().equals(PathXSpriteState.ENABLED))
         }
         
+        //Check for mouse overs of the PathXLevelSprites
+        if (screenState.equals(LEVEL_SELECT_SCREEN_STATE)) {
+            Iterator<PathXLevelSprite> levelButtonsIt = dataModel.getLevelSprites().iterator();
+
+            while (levelButtonsIt.hasNext()) {
+                Sprite button = levelButtonsIt.next();
+
+                // ARE WE ENTERING A BUTTON?
+                if (button.getState().indexOf("MOUSE_OVER") < 0) {
+                    if (button.containsPoint(data.getLastMouseX(), data.getLastMouseY())) {
+                        button.setState(button.getState() + "_MOUSE_OVER");
+                    }
+                } // ARE WE EXITING A BUTTON?
+                else if (button.getState().indexOf("MOUSE_OVER") >= 0) {
+                    if (!button.containsPoint(data.getLastMouseX(), data.getLastMouseY())) {
+                        button.setState(button.getState().substring(0, button.getState().indexOf("_MOUSE_OVER")));
+                    }
+                }
+            }
+        }
+        
+        //Check for mouse overs of Game Nodes and roads
+        if (screenState.equals(GAME_SCREEN_STATE)) {
+            ArrayList<Sprite> gameSprites = new ArrayList();
+            gameSprites.addAll(dataModel.getNodes());
+            gameSprites.addAll(dataModel.getCops());
+            gameSprites.addAll(dataModel.getBandits());
+            gameSprites.addAll(dataModel.getZombies());
+            //dataModel.getr;
+            Iterator<Sprite> gameButtonsIt = gameSprites.iterator();
+
+            while (gameButtonsIt.hasNext()) {
+                Sprite button = gameButtonsIt.next();
+
+                // ARE WE ENTERING A BUTTON?
+                if (!button.getState().equals(PathXSpriteState.INVISIBLE.toString())) {
+                    if (button.containsPoint(data.getLastMouseX(), data.getLastMouseY())) {
+                        button.setState(button.getState() + "_MOUSE_OVER");
+                    }
+                } // ARE WE EXITING A BUTTON?
+                else if (button.getState().indexOf("MOUSE_OVER") >= 0) {
+                    if (!button.containsPoint(data.getLastMouseX(), data.getLastMouseY())) {
+                        //This operation truncates the state back to whatever it was
+                        //before "MOUSE_OVER" was added.
+                        button.setState(button.getState().substring(0, button.getState().indexOf("_MOUSE_OVER")));
+                    }
+                }
+            }
+        }
+
     }  
 
     private void initLevelSelectViewport() {

@@ -31,6 +31,8 @@ public class PathXLevelSprite extends Sprite{
     private PathXMiniGame game;
     private PathXEventHandler eventHandler;
     
+    private float constantX, constantY;
+    
     public PathXLevelSprite (SpriteType initSpriteType, float initX, float initY, float initVx, 
             float initVy, String initState, PathXLevel level, PathXMiniGame game){
         super(initSpriteType, initX, initY, initVx, initVy, initState);
@@ -39,10 +41,12 @@ public class PathXLevelSprite extends Sprite{
         eventHandler = game.getEventHandler();
         this.game = game;
         name = level.getLevelName();
+        constantX = initX;
+        constantY = initY;
         
         setActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                eventHandler.switchToGameScreen();
+                eventHandler.switchToGameScreen(getLevel());
             }
         });
     }
@@ -59,8 +63,8 @@ public class PathXLevelSprite extends Sprite{
         //TreeMap<String, Sprite> buttons = game.getGUIButtons();
         Viewport vp = game.getDataModel().getViewport();
         
-        setX(VIEWPORT_X + getX() - vp.getViewportX());
-        setY(VIEWPORT_Y + getY() - vp.getViewportY());
+        setX(VIEWPORT_X + constantX - vp.getViewportX());
+        setY(VIEWPORT_Y + constantY - vp.getViewportY());
 
         //buttons.put(level.getLevelName(), s);
     }

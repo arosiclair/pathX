@@ -21,9 +21,10 @@ public class PathXNode extends Sprite {
     //The associated vertex in the level's Graph data structure.
     private Vertex vertex;
     
-    //Pixel position in game.
-    private float xPos;
-    private float yPos;
+    //We use these constant globals for a reference point when rendering in comparison to
+    //a Viewport. Do NOT use getX or getY for rendering as those values will change
+    //constantly as the Viewport changes.
+    private final int constantXPos, constantYPos;
     
     //A list of roads this Node is connected to.
     private ArrayList<Road> roads;
@@ -34,6 +35,9 @@ public class PathXNode extends Sprite {
     public PathXNode(SpriteType initSpriteType, float initX, float initY, float initVx, 
             float initVy, String initState, Vertex initVertex){
         super(initSpriteType, initX, initY, initVx, initVy, initState);
+        
+        constantXPos = (int) initX;
+        constantYPos = (int) initY;
         currentState = initState;
         vertex = initVertex;
     }
@@ -62,14 +66,6 @@ public class PathXNode extends Sprite {
         return false;
     }
 
-    public float getXPos() {
-        return xPos;
-    }
-
-    public float getYPos() {
-        return yPos;
-    }
-
     public String getCurrentState() {
         return currentState;
     }
@@ -84,6 +80,14 @@ public class PathXNode extends Sprite {
 
     public Vertex getVertex() {
         return vertex;
+    }
+
+    public int getConstantXPos() {
+        return constantXPos;
+    }
+
+    public int getConstantYPos() {
+        return constantYPos;
     }
     
 }

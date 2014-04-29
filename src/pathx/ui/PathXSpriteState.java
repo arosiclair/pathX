@@ -42,9 +42,21 @@ public enum PathXSpriteState {
      */
     //NODE & ROAD STATES
     GREEN,
+    GREEN_MOUSE_OVER,
     RED,
+    RED_MOUSE_OVER,
     OPEN,
+    OPEN_MOUSE_OVER,
     CLOSED,
+    CLOSED_MOUSE_OVER,
+    HIGHLIGHTED,
+    
+    LOCKED,
+    LOCKED_MOUSE_OVER,
+    INCOMPLETE,
+    INCOMPLETE_MOUSE_OVER,
+    COMPLETED,
+    COMPLETE_MOUSE_OVER,
     
     VISIBLE,
     INVISIBLE,

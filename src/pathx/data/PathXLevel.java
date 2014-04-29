@@ -141,4 +141,8 @@ public class PathXLevel {
     public PathXDataModel getDataModel() {
         return dataModel;
     }
+
+    public String getXmlFile() {
+        return xmlFile;
+    }
 }

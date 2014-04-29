@@ -27,6 +27,10 @@ public abstract class Car extends Sprite{
     //Speed of the sprite
     private double speed;
     
+    //We use these constant globals for a reference point when rendering in comparison to
+    //a Viewport. Do NOT use getX or getY for rendering as those values will change
+    //constantly as the Viewport changes.
+    private final int constantXPos, constantYPos;
     
     //Intersection the sprite can be at at any time
     private PathXNode intersection;
@@ -46,6 +50,8 @@ public abstract class Car extends Sprite{
             float initVy, String initState, PathXLevel level, PathXNode startSpot){
         super(initSpriteType, initX, initY, initVx, initVy, initState);
         
+        constantXPos = (int) initX;
+        constantYPos = (int) initY;
         intersection = startSpot;
         movingToTarget = false;
         this.level = level;
@@ -155,5 +161,13 @@ public abstract class Car extends Sprite{
 
     public PathXLevel getLevel() {
         return level;
+    }
+
+    public int getConstantXPos() {
+        return constantXPos;
+    }
+
+    public int getConstantYPos() {
+        return constantYPos;
     }
 }
