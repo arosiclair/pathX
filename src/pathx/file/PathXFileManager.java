@@ -27,25 +27,19 @@ import static pathx.PathXConstants.PATH_LEVEL_SCHEMA;
 import xml_utilities.InvalidXMLFileFormatException;
 import graph.Graph;
 import graph.Vertex;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import mini_game.SpriteType;
 import pathx.PathXConstants;
 import static pathx.PathXConstants.LEVEL_X_POS;
 import static pathx.PathXConstants.LEVEL_Y_POS;
-import static pathx.PathXConstants.NODE_TYPE;
-import pathx.ui.PathXNode;
+import static pathx.PathXConstants.VIEWPORT_Y;
 import pathx.ui.PathXSpriteState;
 import static pathx.ui.PathXSpriteState.COMPLETED;
 import static pathx.ui.PathXSpriteState.COMPLETE_MOUSE_OVER;
 import static pathx.ui.PathXSpriteState.INCOMPLETE;
 import static pathx.ui.PathXSpriteState.INCOMPLETE_MOUSE_OVER;
-import static pathx.ui.PathXSpriteState.INVISIBLE;
 import static pathx.ui.PathXSpriteState.LOCKED;
 import static pathx.ui.PathXSpriteState.LOCKED_MOUSE_OVER;
-import static pathx.ui.PathXSpriteState.MOUSE_OVER;
-import static pathx.ui.PathXSpriteState.VISIBLE;
 
 /**
  *
@@ -251,7 +245,7 @@ public class PathXFileManager {
             state = PathXSpriteState.COMPLETED.toString();
         else
             state = PathXSpriteState.INCOMPLETE.toString();
-        PathXLevelSprite newSprite = new PathXLevelSprite(sT, newLevel.getxPos(), newLevel.getyPos(), 0, 0, state, newLevel, game);
+        PathXLevelSprite newSprite = new PathXLevelSprite(sT, newLevel.getxPos(), newLevel.getyPos() - VIEWPORT_Y, 0, 0, state, newLevel, game);
         
         //Set the event handler
 //        newSprite.setActionCommand(newSprite.getName());

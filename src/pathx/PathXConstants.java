@@ -48,11 +48,11 @@ public class PathXConstants {
     public static final String INCOMPLETE_LEVEL_TYPE = "INCOMPLETE_LEVEL_TYPE";
     public static final String COMPLETE_LEVEL_TYPE = "COMPLETE_LEVEL_TYPE";
     public static final String CLOSE_BUTTON_TYPE = "CLOSE_BUTTON_TYPE";
-    public static final int VIEWPORT_X = 12;
-    public static final int VIEWPORT_Y = 115;
-    public static final int VIEWPORT_WIDTH = 616;
-    public static final int VIEWPORT_HEIGHT = 350;
-    public static final int LEVEL_SELECT_NORTH_PANEL_HEIGHT = 115;
+    public static final int VIEWPORT_X = 0;
+    public static final int VIEWPORT_Y = 112;
+    public static final int VIEWPORT_WIDTH = 640;
+    public static final int VIEWPORT_HEIGHT = 368;
+    public static final int LEVEL_SELECT_NORTH_PANEL_HEIGHT = 112;
     public static final int MAP_WIDTH = 1200;
     public static final int MAP_HEIGHT = 662;
     
@@ -66,6 +66,14 @@ public class PathXConstants {
     public static final String GAME_BACK_BUTTON_TYPE = "GAME_BACK_BUTTON_TYPE";
     public static final String GAME_POPUP_TYPE = "GAME_POPUP_TYPE";
     public static final String POPUP_CLOSE_BUTTON_TYPE = "POPUP_CLOSE_BUTTON_TYPE";
+    
+    //THE GAME'S VIEWPORT LOCATION
+    public static final int GAME_VIEWPORT_X = 160;
+    public static final int GAME_VIEWPORT_Y = 20;
+    public static final int GAME_VIEWPORT_WIDTH = 480;
+    public static final int GAME_VIEWPORT_HEIGHT = 440;
+    
+    //GAME SPECIALS
     public static final String MAKE_GREEN_BUTTON_TYPE = "MAKE_GREEN_BUTTON_TYPE";
     public static final String MAKE_RED_BUTTON_TYPE = "MAKE_RED_BUTTON_TYPE";
     public static final String FREEZE_BUTTON_TYPE = "FREEZE_BUTTON_TYPE";
@@ -84,6 +92,7 @@ public class PathXConstants {
     public static final String FLYING_BUTTON_TYPE = "FLYING_BUTTON_TYPE";
     public static final String GOD_MODE_BUTTON_TYPE = "GOD_MODE_BUTTON_TYPE";
     
+    public static final String PLAYER_TYPE = "PLAYER_TYPE";
     public static final String NODE_TYPE = "NODE_TYPE";
     public static final String CAR_TYPE = "CAR_TYPE";
     public static final String ROAD_TYPE = "ROAD_TYPE";
@@ -152,7 +161,7 @@ public class PathXConstants {
     public static final int FIRST_SPECIAL_X = 15;
     public static final int FIRST_SPECIAL_Y = 187;
     public static final int GAME_CITY_LABEL_X = 165;
-    public static final int GAME_CITY_LABEL_Y = 25;
+    public static final int GAME_CITY_LABEL_Y = 55;
     public static final int GAME_REWARD_LABEL_X = 165;
     public static final int GAME_REWARD_LABEL_Y = 55;
     

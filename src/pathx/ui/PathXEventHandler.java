@@ -11,6 +11,7 @@ import mini_game.MiniGameDataModel;
 import mini_game.Sprite;
 import mini_game.Viewport;
 import pathx.PathXConstants;
+import static pathx.PathXConstants.GAME_SCREEN_STATE;
 import static pathx.PathXConstants.LEVEL_SELECT_SCREEN_STATE;
 import pathx.data.PathXDataModel;
 import pathx.data.PathXLevel;
@@ -26,11 +27,13 @@ public class PathXEventHandler {
     PathXMiniGame game;
     PathXDataModel dataModel;
     Viewport vp;
+    Viewport gameVp;
     
     public PathXEventHandler(PathXMiniGame initGame){
         game = initGame;
         dataModel = (PathXDataModel) initGame.getDataModel();
         vp = dataModel.getViewport();
+        gameVp = dataModel.getGameViewport();
     }
     
     /**
@@ -64,6 +67,7 @@ public class PathXEventHandler {
     
     public void switchToGameScreen(PathXLevel level){
         //PathXLevel level = dataModel.getLevels().get(levelName);
+        dataModel.setCurrentLevel(level);
         game.switchToGameScreen(level);
     }
     
@@ -114,6 +118,9 @@ public class PathXEventHandler {
             if (vp.getMinViewportY() < vp.getViewportY() - 4) {
                 dataModel.getViewport().scroll(0, -4);
             }
+        }else if (game.isCurrentScreenState(GAME_SCREEN_STATE)){
+            if (gameVp.getMinViewportY() < gameVp.getViewportY() - 4)
+                gameVp.scroll(0, -4);
         }
     }
     
@@ -121,8 +128,11 @@ public class PathXEventHandler {
     public void scrollDownRequest(){
         if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
             if (vp.getMaxViewportY() > vp.getViewportY() + 4) {
-                dataModel.getViewport().scroll(0, 4);
+                vp.scroll(0, 4);
             }
+        }else if (game.isCurrentScreenState(GAME_SCREEN_STATE)){
+            if (gameVp.getMaxViewportY() > gameVp.getViewportY() + 4)
+                gameVp.scroll(0, 4);
         }
     }
     
@@ -130,8 +140,11 @@ public class PathXEventHandler {
     public void scrollLeftRequest(){
         if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
             if (vp.getMinViewportX() < vp.getViewportX() - 4) {
-                dataModel.getViewport().scroll(-4, 0);
+                vp.scroll(-4, 0);
             }
+        }else if (game.isCurrentScreenState(GAME_SCREEN_STATE)){
+            if (gameVp.getMinViewportX() < gameVp.getViewportX() - 4)
+                gameVp.scroll(-4, 0);
         }
     }
     
@@ -139,8 +152,11 @@ public class PathXEventHandler {
     public void scrollRightRequest(){
         if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
             if (vp.getMaxViewportX() > vp.getViewportX() + 4) {
-                dataModel.getViewport().scroll(4, 0);
+                vp.scroll(4, 0);
             }
+        }else if (game.isCurrentScreenState(GAME_SCREEN_STATE)){
+            if (gameVp.getMaxViewportX() > gameVp.getViewportX() + 4)
+                gameVp.scroll(4, 0);
         }
     }
     
@@ -239,21 +255,13 @@ public class PathXEventHandler {
     void respondToKeyPress(int keyCode) {
         //Right key press on level select screen
         if (keyCode == KeyEvent.VK_RIGHT){
-            if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)){
-                scrollRightRequest();
-            }
+            scrollRightRequest();
         }else if (keyCode == KeyEvent.VK_LEFT){
-            if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)){
-                scrollLeftRequest();
-            }
+            scrollLeftRequest();
         }else if (keyCode == KeyEvent.VK_UP){
-            if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)){
-                scrollUpRequest();
-            }
+            scrollUpRequest();
         }else if (keyCode == KeyEvent.VK_DOWN){
-            if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)){
-                scrollDownRequest();
-            }
+            scrollDownRequest();
         }
     }
 }

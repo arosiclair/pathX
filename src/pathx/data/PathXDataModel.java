@@ -19,6 +19,7 @@ import mini_game.MiniGame;
 import mini_game.MiniGameDataModel;
 import mini_game.Sprite;
 import mini_game.SpriteType;
+import mini_game.Viewport;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -26,7 +27,10 @@ import pathx.PathX;
 import pathx.PathX.PathXPropertyType;
 import static pathx.PathX.PathXPropertyType.PATH_IMG;
 import pathx.PathXConstants;
+import static pathx.PathXConstants.GAME_VIEWPORT_X;
 import static pathx.PathXConstants.PATH_LEVEL_SCHEMA;
+import static pathx.PathXConstants.WINDOW_HEIGHT;
+import static pathx.PathXConstants.WINDOW_WIDTH;
 import pathx.file.PathXFileManager;
 import static pathx.file.PathXFileManager.ID_ATT;
 import static pathx.file.PathXFileManager.INTERSECTIONS_LIST_TAG;
@@ -46,6 +50,8 @@ import pathx.ui.PathXLevelSprite;
 import pathx.ui.PathXMiniGame;
 import pathx.ui.PathXNode;
 import pathx.ui.PathXSpriteState;
+import static pathx.ui.PathXSpriteState.MOUSE_OVER;
+import static pathx.ui.PathXSpriteState.VISIBLE;
 import pathx.ui.PlayerCar;
 import pathx.ui.Road;
 import pathx.ui.ZombieCar;
@@ -63,7 +69,8 @@ public class PathXDataModel extends MiniGameDataModel{
     private PathXLevel currentLevel;
     private PathXRecord record;
     
-    private PlayerCar player;
+    //The Player's Car Sprite
+    private PlayerCar playerCar;
     
     //References to all the opposing cars in the game.
     private ArrayList<CopCar> cops;
@@ -78,7 +85,10 @@ public class PathXDataModel extends MiniGameDataModel{
     private HashMap<String, Boolean> specials;
     private HashMap<String, PathXLevel> levels;
     
+    //References to the Sprites used to render Levels on the level select screen.
     private ArrayList<PathXLevelSprite> levelSprites;
+    
+    private Viewport gameViewport;
     
      public PathXDataModel(PathXMiniGame initMiniGame){
         miniGame = initMiniGame;
@@ -89,6 +99,10 @@ public class PathXDataModel extends MiniGameDataModel{
         zombies = new ArrayList();
         
         currentLevel = null;
+        
+        //Initialize the gameViewport
+        //gameViewport = new Viewport();
+        //initGameViewport();
         
         initSpecials();
         
@@ -119,6 +133,7 @@ public class PathXDataModel extends MiniGameDataModel{
     public void endGameAsLoss(){
         
     }
+    
     //Helper method that adds all of the game specials to the specials HashMap 
     //for management in game.
     private void initSpecials(){
@@ -249,7 +264,7 @@ public class PathXDataModel extends MiniGameDataModel{
             
             //Finish constructing the new PathXNode and add it to our temporary 
             //holding ArrayList.
-            PathXNode newNode = new PathXNode(sT, xPos, yPos, 0, 0, initState, graph.getVertex(idNum));
+            PathXNode newNode = new PathXNode(sT, xPos + GAME_VIEWPORT_X, yPos, 0, 0, initState, graph.getVertex(idNum));
             intersections.add(newNode);
         }
         
@@ -311,11 +326,11 @@ public class PathXDataModel extends MiniGameDataModel{
     }
 
     public PlayerCar getPlayer() {
-        return player;
+        return playerCar;
     }
 
-    public void setPlayer(PlayerCar player) {
-        this.player = player;
+    public void setPlayer(PlayerCar playerCar) {
+        this.playerCar = playerCar;
     }
 
     public PathXLevel getCurrentLevel() {
@@ -324,5 +339,39 @@ public class PathXDataModel extends MiniGameDataModel{
 
     public void setCurrentLevel(PathXLevel currentLevel) {
         this.currentLevel = currentLevel;
+    }
+
+    
+    public void constructPlayerCar(PathXLevel level) {
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String imgPath = props.getProperty(PathXPropertyType.PATH_IMG);
+        int x = level.getStartNode().getConstantXPos();
+        int y = level.getStartNode().getConstantYPos();
+        
+        SpriteType sT = new SpriteType(PathXConstants.PLAYER_TYPE);
+        BufferedImage img = miniGame.loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_PLAYER_CAR));
+        sT.addState(VISIBLE.toString(), img);
+        img = miniGame.loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_PLAYER_CAR_MOUSE_OVER));
+        sT.addState(MOUSE_OVER.toString(), img);
+        
+        playerCar = new PlayerCar(sT, x, y, 0, 0, VISIBLE.toString(), level, null);
+    }
+
+//    private void initGameViewport() {
+//        //Insets frameInsets = window.getInsets();
+//        int screenWidth = WINDOW_WIDTH;
+//        int screenHeight = WINDOW_HEIGHT;
+//        gameViewport.setScreenSize(screenWidth, screenHeight);
+//        
+//        gameViewport.setGameWorldSize(screenWidth, screenHeight);
+//        
+//    }
+
+    public Viewport getGameViewport() {
+        return gameViewport;
+    }
+
+    public void setGameViewport(Viewport gameViewport) {
+        this.gameViewport = gameViewport;
     }
 }

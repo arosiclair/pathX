@@ -33,7 +33,7 @@ public class PathXLevel {
     //The graph data structure.
     private Graph graph;
     
-    private PathXNode startNode;
+    //private PathXNode startNode;
     private PathXDataModel dataModel;
     
     private int numCops, numBandits, numZombies;
@@ -63,7 +63,7 @@ public class PathXLevel {
 //    }
     
     public PathXNode getStartNode(){
-        return startNode;
+        return dataModel.getNodes().get(0);
     }
 
     public String getLevelName() {

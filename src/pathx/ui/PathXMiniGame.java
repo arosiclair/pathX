@@ -51,12 +51,14 @@ public class PathXMiniGame extends MiniGame{
     //files images and other things.
     private PathXErrorHandler errorHandler;
     
-    private Viewport levelSelect;
+    private Viewport levelSelectViewport;
+    private Viewport gameViewport;
+    
     //Loads and saves player records.
     private PathXFileManager fileManager;
     
     //Indicates the current screen being displayed.
-    String screenState;
+    private String screenState;
     
     public PathXErrorHandler getErrorHandler(){
         return errorHandler;
@@ -180,10 +182,22 @@ public class PathXMiniGame extends MiniGame{
 //        for (PathXLevelSprite ls : levelSprites)
 //            guiButtons.remove(ls.getName());
         
+        //Update the Game Viewport to use the dimensions of the level's
+        //background image
+        BufferedImage bgImage = loadImage(PATH_DATA + "levels/" + level.getBgImage());
+        gameViewport.setGameWorldSize(bgImage.getWidth(), bgImage.getHeight());
+        gameViewport.setMaxViewportX(bgImage.getWidth() - GAME_VIEWPORT_WIDTH);
+        gameViewport.setMaxViewportY(bgImage.getHeight() - GAME_VIEWPORT_HEIGHT);
+
         //Construct the PathXNode Sprites.
         ((PathXDataModel)data).constructNodes(level);
         //Construct the Road Sprites.
         ((PathXDataModel)data).constructRoads(level);
+        
+        //Construct the PlayerCar.
+        ((PathXDataModel) data).constructPlayerCar(level);
+        
+        //Construct enemy cars.
         
         screenState = GAME_SCREEN_STATE;
     }
@@ -758,6 +772,9 @@ public class PathXMiniGame extends MiniGame{
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
         guiButtons.put(CLOSE_BUTTON_TYPE, s);
         
+        //GAME VIEWPORT
+        initGameViewport();
+        
     }
 
     private void initSettingsButtons(){
@@ -1111,18 +1128,18 @@ public class PathXMiniGame extends MiniGame{
 
     private void initLevelSelectViewport() {
         //Create the viewport
-        levelSelect = new Viewport();
+        levelSelectViewport = new Viewport();
         
         //Specify sizes and location for the viewport
-        levelSelect.setScreenSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-        levelSelect.setViewportSize(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
-        levelSelect.setGameWorldSize(MAP_WIDTH, MAP_HEIGHT);
-        levelSelect.setNorthPanelHeight(LEVEL_SELECT_NORTH_PANEL_HEIGHT);
+        levelSelectViewport.setScreenSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        levelSelectViewport.setViewportSize(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+        levelSelectViewport.setGameWorldSize(MAP_WIDTH, MAP_HEIGHT);
+        levelSelectViewport.setNorthPanelHeight(LEVEL_SELECT_NORTH_PANEL_HEIGHT);
         //levelSelect.initViewportMargins();
-        levelSelect.updateViewportBoundaries();
-        //levelSelect.setViewportSize(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+        levelSelectViewport.setMaxViewportX(MAP_WIDTH - VIEWPORT_WIDTH);
+        levelSelectViewport.setMaxViewportY(MAP_HEIGHT - VIEWPORT_HEIGHT);
         
-        data.setViewport(levelSelect);
+        data.setViewport(levelSelectViewport);
     }
 
     public PathXEventHandler getEventHandler() {
@@ -1201,6 +1218,21 @@ public class PathXMiniGame extends MiniGame{
         guiButtons.get(FLYING_BUTTON_TYPE).setEnabled(false);
         guiButtons.get(GOD_MODE_BUTTON_TYPE).setState(INVISIBLE.toString());
         guiButtons.get(GOD_MODE_BUTTON_TYPE).setEnabled(false);
+    }
+
+    private void initGameViewport() {
+        gameViewport = new Viewport();
+        
+        //Specify sizes and location for the viewport
+        gameViewport.setScreenSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        gameViewport.setViewportSize(GAME_VIEWPORT_WIDTH, GAME_VIEWPORT_HEIGHT);
+        //gameViewport.setGameWorldSize(MAP_WIDTH, MAP_HEIGHT);
+        gameViewport.setNorthPanelHeight(GAME_VIEWPORT_Y);
+        //levelSelect.initViewportMargins();
+        //gameViewport.updateViewportBoundaries();
+        //levelSelect.setViewportSize(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+        
+        ((PathXDataModel) data).setGameViewport(gameViewport);
     }
 
 }

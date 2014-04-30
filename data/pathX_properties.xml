@@ -92,6 +92,15 @@
         <property name="IMAGE_RED_INTERSECTION"         value="./RedNode.png"></property>
         <property name="IMAGE_RED_INTERSECTION_MOUSE_OVER"  value="./RedNodeMouseOver.png"></property>
 
+        <property name="IMAGE_PLAYER_CAR"               value="./PlayerCar.png"></property>
+        <property name="IMAGE_PLAYER_CAR_MOUSE_OVER"    value="./PlayerCarMouseOver.png"></property>
+        <property name="IMAGE_COP_CAR"                  value="./CopCar.png"></property>
+        <property name="IMAGE_COP_CAR_MOUSE_OVER"       value="./CopCarMouseOver.png"></property>
+        <property name="IMAGE_BANDIT_CAR"               value="./BanditCar.png"></property>
+        <property name="IMAGE_BANDIT_CAR_MOUSE_OVER"    value="./BanditCarMouseOver.png"></property>
+        <property name="IMAGE_ZOMBIE_CAR"               value="./ZombieCar.png"></property>
+        <property name="IMAGE_ZOMBIE_CAR_MOUSE_OVER"    value="./ZombieCarMouseOver.png"></property>               
+
         <property name="IMAGE_POPUP_BACKGROUND"         value="./GameOverlay.png"></property>
         <property name="IMAGE_BUTTON_CLOSE"             value="./ButtonClose.png"></property>
         <property name="IMAGE_BUTTON_CLOSE_MOUSE_OVER"  value="./ButtonCloseMouseOver.png"></property>

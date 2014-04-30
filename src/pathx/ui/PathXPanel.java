@@ -6,9 +6,12 @@
 
 package pathx.ui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -24,7 +27,12 @@ import pathx.PathXConstants;
 import static pathx.PathXConstants.BACKGROUND_TYPE;
 import static pathx.PathXConstants.FONT_TEXT_DISPLAY;
 import static pathx.PathXConstants.GAME_SCREEN_STATE;
+import static pathx.PathXConstants.GAME_VIEWPORT_HEIGHT;
+import static pathx.PathXConstants.GAME_VIEWPORT_WIDTH;
+import static pathx.PathXConstants.GAME_VIEWPORT_X;
+import static pathx.PathXConstants.GAME_VIEWPORT_Y;
 import static pathx.PathXConstants.LEVEL_SELECT_SCREEN_STATE;
+import static pathx.PathXConstants.PATH_DATA;
 import static pathx.PathXConstants.VIEWPORT_HEIGHT;
 import static pathx.PathXConstants.VIEWPORT_WIDTH;
 import static pathx.PathXConstants.VIEWPORT_X;
@@ -88,11 +96,12 @@ public class PathXPanel extends JPanel{
             // CLEAR THE PANEL
             super.paintComponent(g);
             
-            // RENDER THE BACKGROUND, WHICHEVER SCREEN WE'RE ON
-            renderBackground(g);
+            
             
             //Render these things if the player is at the Game Screen.
             if (((PathXMiniGame)game).isCurrentScreenState(GAME_SCREEN_STATE)){
+                
+                renderLevelBackground(g);
                 
                 //RENDER THE GRAPH, INCLUDING THE ROADS AND NODES.
                 renderGraph(g);
@@ -113,6 +122,9 @@ public class PathXPanel extends JPanel{
                 renderLevelSelectStats(g);
                 renderLevelSprites(g);
             }
+            
+            // RENDER THE BACKGROUND, WHICHEVER SCREEN WE'RE ON
+            renderBackground(g);
             
             //RENDER BUTTONS AND DECOR
             renderGUIControls(g);
@@ -163,37 +175,9 @@ public class PathXPanel extends JPanel{
         Viewport vp = dataModel.getViewport();
         int vpx = vp.getViewportX();
         int vpy = vp.getViewportY();
-        g.drawImage(map, VIEWPORT_X, VIEWPORT_Y, VIEWPORT_X + VIEWPORT_WIDTH, VIEWPORT_Y + VIEWPORT_HEIGHT, vpx, vpy, vpx + VIEWPORT_WIDTH , vpy + VIEWPORT_HEIGHT, this);
-        
-        //Render level nodes
-//        Collection<PathXLevel> levels = dataModel.getLevels().values();
-//        for (PathXLevel level : levels){
-//            int x = level.getxPos();
-//            int y = level.getyPos();
-//            
-//            // if the level is completed draw a green circle at the appropriate 
-//            //coordinates otherwise draw a red circle
-//            if (level.isCompleted()){
-//                SpriteType sT = new SpriteType(PathXConstants.COMPLETE_LEVEL_TYPE);
-//                sT.addState("VISIBLE", ((PathXMiniGame)game).getLevelNodeImage(PathXConstants.COMPLETE_LEVEL_TYPE));
-//                sT.addState("MOUSE_OVER", ((PathXMiniGame)game).getLevelNodeImage(PathXConstants.COMPLETE_LEVEL_TYPE));
-//
-//                Sprite s = new Sprite(sT, x, y, 0, 0, "VISIBLE");
-//                s
-////                s.setActionListener(new ActionListener(){
-////                    public void ActionPerformed()
-////                    {   eventHandler.
-////                });
-//                renderSprite(g, s);
-//            }else{
-//                SpriteType sT = new SpriteType(PathXConstants.INCOMPLETE_LEVEL_TYPE);
-//                sT.addState("VISIBLE", ((PathXMiniGame)game).getLevelNodeImage(PathXConstants.INCOMPLETE_LEVEL_TYPE));
-//                sT.addState("MOUSE_OVER", ((PathXMiniGame)game).getLevelNodeImage(PathXConstants.INCOMPLETE_LEVEL_TYPE));
-//
-//                Sprite s = new Sprite(sT, x, y, 0, 0, "VISIBLE");
-//                renderSprite(g, s);
-//            }
-//        }
+        g.drawImage(map, VIEWPORT_X, VIEWPORT_Y, VIEWPORT_X + VIEWPORT_WIDTH, 
+                VIEWPORT_Y + VIEWPORT_HEIGHT, vpx, vpy, vpx + VIEWPORT_WIDTH , 
+                vpy + VIEWPORT_HEIGHT, this);
     }
 
     private void renderLevelSelectStats(Graphics g) {
@@ -225,8 +209,8 @@ public class PathXPanel extends JPanel{
 
     private void renderGraph(Graphics g) {
         PathXDataModel data = (PathXDataModel) game.getDataModel();
-        Viewport vp = data.getViewport();
-        
+        Viewport vp = data.getGameViewport();
+        Graphics2D g2 = (Graphics2D) g;
         //Render the Roads first
         ArrayList<Road> roads = data.getRoads();
 
@@ -235,19 +219,21 @@ public class PathXPanel extends JPanel{
         int startX, startY, endX, endY;
         for(Road road: roads){
             PathXNode[] nodes = road.getNodes();
-            startX = VIEWPORT_X + (int) nodes[0].getX() - vp.getViewportX();
-            startY = VIEWPORT_Y + (int) nodes[0].getY() - vp.getViewportY();
-            endX = VIEWPORT_X + (int) nodes[1].getX() - vp.getViewportX();;
-            endY = VIEWPORT_Y + (int) nodes[1].getY() - vp.getViewportY();
+            startX = VIEWPORT_X + (int) nodes[0].getConstantXPos() - vp.getViewportX() + 15;
+            startY = VIEWPORT_Y + (int) nodes[0].getConstantYPos() - vp.getViewportY() + 15;
+            endX = VIEWPORT_X + (int) nodes[1].getConstantXPos() - vp.getViewportX() + 15;
+            endY = VIEWPORT_Y + (int) nodes[1].getConstantYPos() - vp.getViewportY() + 15;
             
             //Draw this road in either green or black depedning on its state.
             String state = road.getCurrentState();
             if (state.equals(PathXSpriteState.HIGHLIGHTED.toString()) || 
                     state.equals(PathXSpriteState.MOUSE_OVER.toString()))
-                g.setColor(new Color(34, 177, 76));
+                g2.setColor(new Color(34, 177, 76));
             else
-                g.setColor(Color.BLACK);
-            g.drawLine(startX, startY, endX, endY);
+                g2.setColor(Color.BLACK);
+            
+            g2.setStroke(new BasicStroke(10));
+            g2.draw(new Line2D.Float(startX, startY, endX, endY));
         }
         
         //Render the nodes. Taking account for the Viewport
@@ -261,7 +247,7 @@ public class PathXPanel extends JPanel{
 
     private void renderCars(Graphics g) {
         PathXDataModel data = (PathXDataModel) game.getDataModel();
-        Viewport vp = data.getViewport();
+        Viewport vp = data.getGameViewport();
         //Get our collection of Car Sprites
         ArrayList<CopCar> cops = data.getCops();
         ArrayList<BanditCar> bandits = data.getBandits();
@@ -294,7 +280,7 @@ public class PathXPanel extends JPanel{
         
         //Render the player's car
         playerCar.setX(VIEWPORT_X + playerCar.getConstantXPos() - vp.getViewportX());
-        playerCar.setY(VIEWPORT_Y + playerCar.getConstantYPos() - vp.getViewportX());
+        playerCar.setY(VIEWPORT_Y + playerCar.getConstantYPos() - vp.getViewportY());
         renderSprite(g, playerCar);
         
     }
@@ -302,6 +288,20 @@ public class PathXPanel extends JPanel{
     private void renderLevelName(Graphics g) {
         String levelName = dataModel.getCurrentLevel().getLevelName();
         g.setColor(Color.BLACK);
+        g.setFont(FONT_TEXT_DISPLAY);
         g.drawString(levelName, PathXConstants.GAME_CITY_LABEL_X, PathXConstants.GAME_CITY_LABEL_Y);
+    }
+
+    private void renderLevelBackground(Graphics g) {
+        PathXLevel level = dataModel.getCurrentLevel();
+        String levelBG = level.getBgImage();
+        Viewport vp = dataModel.getGameViewport();
+        int vpx = vp.getViewportX();
+        int vpy = vp.getViewportY();
+        BufferedImage bgImage = game.loadImage(PATH_DATA + "levels/" + levelBG);
+        g.drawImage(bgImage, GAME_VIEWPORT_X, GAME_VIEWPORT_Y, GAME_VIEWPORT_X + GAME_VIEWPORT_WIDTH, 
+                GAME_VIEWPORT_Y + GAME_VIEWPORT_HEIGHT, vpx, vpy, vpx + GAME_VIEWPORT_WIDTH , 
+                vpy + GAME_VIEWPORT_HEIGHT, this);
+        
     }
 }
