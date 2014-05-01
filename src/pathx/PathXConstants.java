@@ -95,6 +95,9 @@ public class PathXConstants {
     public static final String PLAYER_TYPE = "PLAYER_TYPE";
     public static final String NODE_TYPE = "NODE_TYPE";
     public static final String CAR_TYPE = "CAR_TYPE";
+    public static final String COP_CAR_TYPE = "COP_CAR_TYPE";
+    public static final String BANDIT_CAR_TYPE = "BANDIT_CAR_TYPE";
+    public static final String ZOMBIE_CAR_TYPE = "ZOMBIE_CAR_TYPE";
     public static final String ROAD_TYPE = "ROAD_TYPE";
     
     public static final String LEVEL_FAIL_DIALOG_TYPE = "LEVEL_FAIL_DIALOG_TYPE";

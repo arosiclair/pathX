@@ -141,6 +141,7 @@ public class PathXMiniGame extends MiniGame{
             guiButtons.get(START_BUTTON_TYPE).setEnabled(false);
             deactivateSpecialButtons();
             
+            ((PathXDataModel) data).resetGameViewport();
             screenState = LEVEL_SELECT_SCREEN_STATE;
         }
         //SONGS
@@ -198,6 +199,7 @@ public class PathXMiniGame extends MiniGame{
         ((PathXDataModel) data).constructPlayerCar(level);
         
         //Construct enemy cars.
+        ((PathXDataModel) data).constructEnemyCars(level);
         
         screenState = GAME_SCREEN_STATE;
     }
@@ -1109,15 +1111,13 @@ public class PathXMiniGame extends MiniGame{
                 Sprite button = gameButtonsIt.next();
 
                 // ARE WE ENTERING A BUTTON?
-                if (!button.getState().equals(PathXSpriteState.INVISIBLE.toString())) {
+                if (button.getState().indexOf("MOUSE_OVER") < 0) {
                     if (button.containsPoint(data.getLastMouseX(), data.getLastMouseY())) {
                         button.setState(button.getState() + "_MOUSE_OVER");
                     }
                 } // ARE WE EXITING A BUTTON?
                 else if (button.getState().indexOf("MOUSE_OVER") >= 0) {
                     if (!button.containsPoint(data.getLastMouseX(), data.getLastMouseY())) {
-                        //This operation truncates the state back to whatever it was
-                        //before "MOUSE_OVER" was added.
                         button.setState(button.getState().substring(0, button.getState().indexOf("_MOUSE_OVER")));
                     }
                 }

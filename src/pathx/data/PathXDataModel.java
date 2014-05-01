@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mini_game.MiniGame;
@@ -373,5 +374,115 @@ public class PathXDataModel extends MiniGameDataModel{
 
     public void setGameViewport(Viewport gameViewport) {
         this.gameViewport = gameViewport;
+    }
+
+    public void resetGameViewport() {
+        int scrollX = gameViewport.getViewportX() * -1;
+        int scrollY = gameViewport.getViewportY() * -1;
+        gameViewport.scroll(scrollX, scrollY);
+    }
+
+    public void constructEnemyCars(PathXLevel level) {
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String imgPath = props.getProperty(PathXPropertyType.PATH_IMG);
+        
+        //Images for each of the enemy car's and their states.
+        BufferedImage copImage = miniGame.loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_COP_CAR));
+        BufferedImage copMouseOverImage = miniGame.loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_COP_CAR_MOUSE_OVER));
+        BufferedImage banditImage = miniGame.loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_BANDIT_CAR));
+        BufferedImage banditMouseOverImage = miniGame.loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_BANDIT_CAR_MOUSE_OVER));
+        BufferedImage zombieImage = miniGame.loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_ZOMBIE_CAR));
+        BufferedImage zombieMouseOverImage = miniGame.loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_ZOMBIE_CAR_MOUSE_OVER));
+        SpriteType sT;
+        
+        ArrayList<PathXNode> nodes = getNodes();
+        
+        int numCops = level.getNumCops();
+        int numBandits = level.getNumBandits();
+        int numZombies = level.getNumZombies();
+        
+        //Used to get random numbers to randomly assign a starting node for each
+        //enemy car.
+        Random generator = new Random();
+        
+        //Keep track of all the nodes that are occupied by another car at the 
+        //start of a level.
+        boolean[] occupiedNode = new boolean[level.getGraph().size()];
+        for (int i = 0; i < occupiedNode.length; i++){
+            occupiedNode[i] = false;
+        }
+        
+        //Nodes at index 0 and 1 are the start and ending nodes for the level 
+        //so we cannot spawn cops on top of them.
+        occupiedNode[0] = true;
+        occupiedNode[1] = true;
+        
+        //We initialize this as 0 for now.
+        int startNodeIndex = 0;
+        
+        
+        
+        //Construct all of the CopCars
+        for (int i = 0; i < numCops; i++){
+            sT = new SpriteType(PathXConstants.COP_CAR_TYPE.toString());
+            sT.addState(VISIBLE.toString(), copImage);
+            sT.addState(MOUSE_OVER.toString(), copMouseOverImage);
+            
+            //Update the starting node index.
+            while (occupiedNode[startNodeIndex] == true)
+                startNodeIndex = generator.nextInt(nodes.size());
+            occupiedNode[startNodeIndex] = true;
+            
+            PathXNode startNode = nodes.get(startNodeIndex);
+            int x = startNode.getConstantXPos();
+            int y = startNode.getConstantYPos();
+            
+            CopCar newCop = new CopCar(sT, x, y, 0, 0, VISIBLE.toString(), level, startNode);
+            newCop.setIntersection(startNode);
+
+            cops.add(newCop);
+        }
+        
+        //Construct all of the BanditCars
+        for (int i = 0; i < numBandits; i++){
+            sT = new SpriteType(PathXConstants.COP_CAR_TYPE.toString());
+            sT.addState(VISIBLE.toString(), banditImage);
+            sT.addState(MOUSE_OVER.toString(), banditMouseOverImage);
+            
+            //Update the starting node index.
+            while (occupiedNode[startNodeIndex] == true)
+                startNodeIndex = generator.nextInt(nodes.size());
+            occupiedNode[startNodeIndex] = true;
+            
+            PathXNode startNode = nodes.get(startNodeIndex);
+            int x = startNode.getConstantXPos();
+            int y = startNode.getConstantYPos();
+            
+            BanditCar newBandit = new BanditCar(sT, x, y, 0, 0, VISIBLE.toString(), level, startNode);
+            newBandit.setIntersection(startNode);
+
+            bandits.add(newBandit);
+        }
+        
+        //Construct all of the ZombieCars
+        for (int i = 0; i < numZombies; i++){
+            sT = new SpriteType(PathXConstants.COP_CAR_TYPE.toString());
+            sT.addState(VISIBLE.toString(), zombieImage);
+            sT.addState(MOUSE_OVER.toString(), zombieMouseOverImage);
+            
+            //Update the starting node index.
+            while (occupiedNode[startNodeIndex] == true)
+                startNodeIndex = generator.nextInt(nodes.size());
+            occupiedNode[startNodeIndex] = true;
+            
+            PathXNode startNode = nodes.get(startNodeIndex);
+            int x = startNode.getConstantXPos();
+            int y = startNode.getConstantYPos();
+            
+            ZombieCar newZombie = new ZombieCar(sT, x, y, 0, 0, VISIBLE.toString(), level, startNode);
+            newZombie.setIntersection(startNode);
+
+            zombies.add(newZombie);
+        }
     }
 }
