@@ -1101,10 +1101,10 @@ public class PathXMiniGame extends MiniGame{
         if (screenState.equals(GAME_SCREEN_STATE)) {
             ArrayList<Sprite> gameSprites = new ArrayList();
             gameSprites.addAll(dataModel.getNodes());
-            gameSprites.addAll(dataModel.getCops());
-            gameSprites.addAll(dataModel.getBandits());
-            gameSprites.addAll(dataModel.getZombies());
-            //dataModel.getr;
+//            gameSprites.addAll(dataModel.getCops());
+//            gameSprites.addAll(dataModel.getBandits());
+//            gameSprites.addAll(dataModel.getZombies());
+            
             Iterator<Sprite> gameButtonsIt = gameSprites.iterator();
 
             while (gameButtonsIt.hasNext()) {
@@ -1123,7 +1123,32 @@ public class PathXMiniGame extends MiniGame{
                 }
             }
         }
+        
+        //Check for mouse overs of cars
+        if (screenState.equals(GAME_SCREEN_STATE)) {
+            ArrayList<Sprite> gameSprites = new ArrayList();
+            gameSprites.addAll(dataModel.getCops());
+            gameSprites.addAll(dataModel.getBandits());
+            gameSprites.addAll(dataModel.getZombies());
+            
+            Iterator<Sprite> gameButtonsIt = gameSprites.iterator();
 
+            while (gameButtonsIt.hasNext()) {
+                Sprite button = gameButtonsIt.next();
+
+                // ARE WE ENTERING A BUTTON?
+                if (button.getState().equals(VISIBLE.toString())) {
+                    if (button.containsPoint(data.getLastMouseX(), data.getLastMouseY())) {
+                        button.setState(MOUSE_OVER.toString());
+                    }
+                } // ARE WE EXITING A BUTTON?
+                else if (button.getState().equals(MOUSE_OVER.toString())) {
+                    if (!button.containsPoint(data.getLastMouseX(), data.getLastMouseY())) {
+                        button.setState(VISIBLE.toString());
+                    }
+                }
+            }
+        }
     }  
 
     private void initLevelSelectViewport() {
