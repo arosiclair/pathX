@@ -7,6 +7,8 @@
 package pathx.ui;
 
 import graph.Vertex;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import pathX.*;
 import mini_game.*;
 import java.util.ArrayList;
@@ -40,6 +42,7 @@ public class PathXNode extends Sprite {
         constantYPos = (int) initY;
         currentState = initState;
         vertex = initVertex;
+        
     }
     
 //    public PathXNode(Sprite s, String state, ArrayList<Road> roads){

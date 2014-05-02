@@ -6,7 +6,11 @@
 
 package pathx.ui;
 
+import graph.VertexNotFoundException;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mini_game.MiniGameDataModel;
 import mini_game.Sprite;
 import mini_game.Viewport;
@@ -180,6 +184,26 @@ public class PathXEventHandler {
     
     public void changeGameSpeed(double multiplier){
         
+    }
+    
+    public void respondToNodeSelection(PathXNode node){
+        PlayerCar player = dataModel.getPlayer();
+        ArrayList<PathXNode> path = null;
+        if (dataModel.isSpecialActive()){
+            
+        }
+        //If the player is not using a Special then navigate the Player to that 
+        //PathXNode
+        else{
+            try {
+                path = player.generatePath(node);
+            } catch (VertexNotFoundException ex) {
+                Logger.getLogger(PathXEventHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            player.changeDestination(path);
+            //player.startMovingToTarget(2, gameVp);
+            
+        }
     }
     
     //GAME SPECIALS

@@ -246,7 +246,7 @@ public class PathXPanel extends JPanel{
     }
 
     private void renderCars(Graphics g) {
-        PathXDataModel data = (PathXDataModel) game.getDataModel();
+          PathXDataModel data = (PathXDataModel) game.getDataModel();
         Viewport vp = data.getGameViewport();
         //Get our collection of Car Sprites
         ArrayList<CopCar> cops = data.getCops();

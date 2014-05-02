@@ -142,6 +142,7 @@ public class PathXMiniGame extends MiniGame{
             deactivateSpecialButtons();
             
             ((PathXDataModel) data).resetGameViewport();
+            ((PathXDataModel) data).resetLists();
             screenState = LEVEL_SELECT_SCREEN_STATE;
         }
         //SONGS
@@ -202,6 +203,8 @@ public class PathXMiniGame extends MiniGame{
         ((PathXDataModel) data).constructEnemyCars(level);
         
         screenState = GAME_SCREEN_STATE;
+        
+        ((PathXDataModel) data).beginGame();
     }
     
     public void switchToMainMenu(){

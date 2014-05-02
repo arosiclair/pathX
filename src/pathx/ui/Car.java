@@ -8,9 +8,13 @@ package pathx.ui;
 
 import graph.VertexNotFoundException;
 import java.util.ArrayList;
-import pathx.ui.PathXNode;
+import mini_game.MiniGame;
 import mini_game.Sprite;
 import mini_game.SpriteType;
+import mini_game.Viewport;
+import static pathx.PathXConstants.GAME_VIEWPORT_X;
+import static pathx.PathXConstants.GAME_VIEWPORT_Y;
+import pathx.data.PathXDataModel;
 import pathx.data.PathXLevel;
 
 /**
@@ -30,21 +34,22 @@ public abstract class Car extends Sprite{
     //We use these constant globals for a reference point when rendering in comparison to
     //a Viewport. Do NOT use getX or getY for rendering as those values will change
     //constantly as the Viewport changes.
-    private final int constantXPos, constantYPos;
+    private int constantXPos, constantYPos;
     
     //Intersection the sprite can be at at any time
     private PathXNode intersection;
 
     //The current state of the car. This is mostly used for special status.
     //private String currentState;
-    boolean movingToTarget;
+    protected boolean movingToTarget;
     
     //Path to take;
     private ArrayList<PathXNode> path;
     private int pathIndex;
     
     //Coordinates of the target this sprite will be moving to.
-    float targetX, targetY;
+    protected float targetX;
+    protected float targetY;
     
     public Car(SpriteType initSpriteType, float initX, float initY, float initVx, 
             float initVy, String initState, PathXLevel level, PathXNode startSpot){
@@ -89,14 +94,15 @@ public abstract class Car extends Sprite{
      * we'll then compute the x and y axis components for taking into
      * account the trajectory angle.
      */
-    public void startMovingToTarget(int maxVelocity)
+    public void startMovingToTarget(int maxVelocity, Viewport gameVP)
     {
+        
         // LET ITS POSITIONG GET UPDATED
-        movingToTarget = true;
+        setMovingToTarget(true);
         
         // CALCULATE THE ANGLE OF THE TRAJECTORY TO THE TARGET
-        float diffX = targetX - x;
-        float diffY = targetY - y;
+        float diffX = getTargetX() - x;
+        float diffY = getTargetY() - y;
         float tanResult = diffY/diffX;
         float angleInRadians = (float)Math.atan(tanResult);
         
@@ -113,6 +119,28 @@ public abstract class Car extends Sprite{
         // CLAMP THE VELOCITY IN CASE OF NEGATIVE ANGLES
         if ((diffY < 0) && (vY > 0)) vY *= -1;
         if ((diffY > 0) && (vY < 0)) vY *= -1;
+    }
+    
+    /**
+     * This method calculates the distance from this tile's current location
+     * to the target coordinates on a direct line.
+     * 
+     * @return The total distance on a direct line from where the tile is
+     * currently, to where its target is.
+     */
+    public float calculateDistanceToTarget()
+    {
+        // GET THE X-AXIS DISTANCE TO GO
+        float diffX = getTargetX() - x;
+        
+        // AND THE Y-AXIS DISTANCE TO GO
+        float diffY = getTargetY() - y;
+        
+        // AND EMPLOY THE PYTHAGOREAN THEOREM TO CALCULATE THE DISTANCE
+        float distance = (float)Math.sqrt((diffX * diffX) + (diffY * diffY));
+        
+        // AND RETURN THE DISTANCE
+        return distance;
     }
     
     /**
@@ -169,5 +197,77 @@ public abstract class Car extends Sprite{
 
     public int getConstantYPos() {
         return constantYPos;
+    }
+    
+    @Override
+    public void update(MiniGame game){
+        PathXDataModel dataModel = (PathXDataModel) game.getDataModel();
+        Viewport gameVP = dataModel.getGameViewport();
+        //If the game hasn't started than do nothing
+        if (!dataModel.inProgress()){
+            return;
+        }
+        
+        //Begin moving the car through its path if there are Nodes to go to.
+        if (path != null && !path.isEmpty()){
+            
+            //IF THIS TILE IS ALMOST AT ITS TARGET DESTINATION,
+            // JUST GO TO THE TARGET AND THEN STOP MOVING
+            if (calculateDistanceToTarget() < speed){
+                vX = 0;
+                vY = 0;
+                x = GAME_VIEWPORT_X + getTargetX() - gameVP.getViewportX();
+                y = GAME_VIEWPORT_Y + getTargetY() - gameVP.getViewportY(); 
+                
+                intersection = path.get(0);
+                
+                //Remove the Node that we just reached as it is no longer needed.
+                //This behavior just replicate a Queue.
+                path.remove(0);
+                
+                //If we have emptied the path list, indicating that we've reached,
+                //the target, then we can stop moving.
+                if (path.isEmpty()){
+                    speed = 0;
+                    targetX = 0;
+                    targetY = 0;
+                    movingToTarget = false;
+                    return;
+                }
+                
+                //targetX = GAME_VIEWPORT_X + path.get(0).getConstantXPos() - gameVP.getViewportX();
+                targetX = path.get(0).getX();
+                //targetY = GAME_VIEWPORT_Y + path.get(0).getConstantYPos() - gameVP.getViewportY();
+                targetY = path.get(0).getY();
+                
+                //Start moving to the target that we just defined. "10" is a 
+                //place holder speed for now.
+                startMovingToTarget(2, gameVP);
+                speed = 2;
+                
+            }
+            
+            else{
+                targetX = path.get(0).getX();
+                targetY = path.get(0).getY();
+                startMovingToTarget(2, gameVP);
+                speed = 2;
+                constantXPos += vX;
+                constantYPos += vY;
+            }
+        }
+
+    }
+
+    public float getTargetX() {
+        return targetX;
+    }
+
+    public float getTargetY() {
+        return targetY;
+    }
+
+    public void setMovingToTarget(boolean movingToTarget) {
+        this.movingToTarget = movingToTarget;
     }
 }

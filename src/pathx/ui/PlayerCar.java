@@ -51,12 +51,21 @@ public class PlayerCar extends Car{
         ArrayList<PathXNode> nodes = getLevel().getDataModel().getNodes();
         for (Vertex v : shortestPath){
             for (PathXNode node : nodes)
-                if (node.getVertex() == v) path.add(node);
+                if (node.getVertex() == v){
+                    path.add(node);
+                    break;
+                }
         }
-        
+        path.remove(0);
         return path;  
     }
 
+    /**
+     * Do NOT call this method for a PlayerCar. User input is required to move 
+     * the PlayerCar.
+     * @return
+     * @throws VertexNotFoundException 
+     */
     @Override
     public ArrayList<PathXNode> generatePath() throws VertexNotFoundException {
         return null;

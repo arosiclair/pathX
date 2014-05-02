@@ -143,6 +143,8 @@
             <option>./levels/Nevada2.xml</option>
             <option>./levels/Nevada3.xml</option>
             <option>./levels/Idaho1.xml</option>
+            <option>./levels/Idaho2.xml</option>
+            <option>./levels/Idaho3.xml</option>
         </property_options>
     </property_options_list>
 

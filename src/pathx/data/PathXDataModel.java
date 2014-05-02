@@ -9,6 +9,8 @@ package pathx.data;
 import graph.Graph;
 import graph.Vertex;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -70,6 +72,8 @@ public class PathXDataModel extends MiniGameDataModel{
     private PathXLevel currentLevel;
     private PathXRecord record;
     
+    private PathXNode newNode;
+    
     //The Player's Car Sprite
     private PlayerCar playerCar;
     
@@ -91,6 +95,8 @@ public class PathXDataModel extends MiniGameDataModel{
     
     private Viewport gameViewport;
     
+    protected boolean specialActive;
+    
      public PathXDataModel(PathXMiniGame initMiniGame){
         miniGame = initMiniGame;
         record = new PathXRecord();
@@ -100,6 +106,8 @@ public class PathXDataModel extends MiniGameDataModel{
         zombies = new ArrayList();
         
         currentLevel = null;
+        
+        specialActive = false;
         
         //Initialize the gameViewport
         //gameViewport = new Viewport();
@@ -122,6 +130,17 @@ public class PathXDataModel extends MiniGameDataModel{
      */
     @Override
     public void checkMousePressOnSprites(MiniGame game, int x, int y){
+        ArrayList<Sprite> sprites = new ArrayList();
+        
+        sprites.addAll(cops);
+        sprites.addAll(bandits);
+        sprites.addAll(zombies);
+        sprites.addAll(nodes);
+        
+        for (Sprite s : sprites){
+            if (s.containsPoint(x, y))
+                s.testForClick(game, x, y);
+        }
         
     }
     
@@ -153,9 +172,34 @@ public class PathXDataModel extends MiniGameDataModel{
         
     }
 
+    /**
+     * Called each frame, this method updates all the game objects.
+     *
+     * @param game The Sorting Hat game to be updated.
+     */
     @Override
     public void updateAll(MiniGame mg) {
         
+        ArrayList<Car> cars = new ArrayList();
+        cars.add(playerCar);
+        cars.addAll(cops);
+        cars.addAll(bandits);
+        cars.addAll(zombies);
+           
+        try{
+            miniGame.beginUsingData();
+            
+            //Iterate through the cars and update them if they should be moving
+            //to a target.
+            for (Car car : cars){
+                if(car.getPath() != null && !car.getPath().isEmpty()){
+                    car.update(miniGame);
+                }
+            }
+            
+        }finally {
+            miniGame.endUsingData();
+        }
     }
 
     @Override
@@ -265,7 +309,16 @@ public class PathXDataModel extends MiniGameDataModel{
             
             //Finish constructing the new PathXNode and add it to our temporary 
             //holding ArrayList.
-            PathXNode newNode = new PathXNode(sT, xPos + GAME_VIEWPORT_X, yPos, 0, 0, initState, graph.getVertex(idNum));
+            newNode = new PathXNode(sT, xPos + GAME_VIEWPORT_X, yPos, 0, 0, initState, graph.getVertex(idNum));
+            
+            //Configure event handling for the node.
+            newNode.setActionListener(new ActionListener(){
+                public void actionPerformed(ActionEvent ae)
+                { 
+                    miniGame.getEventHandler().respondToNodeSelection(newNode); 
+                }
+            });
+            
             intersections.add(newNode);
         }
         
@@ -355,7 +408,7 @@ public class PathXDataModel extends MiniGameDataModel{
         img = miniGame.loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_PLAYER_CAR_MOUSE_OVER));
         sT.addState(MOUSE_OVER.toString(), img);
         
-        playerCar = new PlayerCar(sT, x, y, 0, 0, VISIBLE.toString(), level, null);
+        playerCar = new PlayerCar(sT, x, y, 0, 0, VISIBLE.toString(), level, level.getStartNode());
     }
 
 //    private void initGameViewport() {
@@ -484,5 +537,23 @@ public class PathXDataModel extends MiniGameDataModel{
 
             zombies.add(newZombie);
         }
+    }
+
+    //Clears out the nodes, roads and cars arraylists. This is done after leaving
+    //a level.
+    public void resetLists() {
+        nodes.clear();
+        roads.clear();
+        cops.clear();
+        bandits.clear();
+        zombies.clear();
+    }
+
+    public boolean isSpecialActive() {
+        return specialActive;
+    }
+
+    public void setSpecialActive(boolean specialActive) {
+        this.specialActive = specialActive;
     }
 }
