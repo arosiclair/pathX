@@ -8,6 +8,7 @@ package pathx.data;
 
 import graph.Graph;
 import graph.Vertex;
+import graph.VertexNotFoundException;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import mini_game.MiniGame;
 import mini_game.MiniGameDataModel;
+import static mini_game.MiniGameState.NOT_STARTED;
 import mini_game.Sprite;
 import mini_game.SpriteType;
 import mini_game.Viewport;
@@ -151,7 +153,7 @@ public class PathXDataModel extends MiniGameDataModel{
     
     @Override
     public void endGameAsLoss(){
-        
+        setGameState(NOT_STARTED);
     }
     
     //Helper method that adds all of the game specials to the specials HashMap 
@@ -180,25 +182,45 @@ public class PathXDataModel extends MiniGameDataModel{
     @Override
     public void updateAll(MiniGame mg) {
         
-        ArrayList<Car> cars = new ArrayList();
-        cars.add(playerCar);
-        cars.addAll(cops);
-        cars.addAll(bandits);
-        cars.addAll(zombies);
-           
-        try{
-            miniGame.beginUsingData();
-            
-            //Iterate through the cars and update them if they should be moving
-            //to a target.
-            for (Car car : cars){
-                if(car.getPath() != null && !car.getPath().isEmpty()){
-                    car.update(miniGame);
+        if (inProgress()) {
+            ArrayList<Car> cars = new ArrayList();
+            //cars.add(playerCar);
+            cars.addAll(cops);
+            cars.addAll(bandits);
+            cars.addAll(zombies);
+
+            try {
+                miniGame.beginUsingData();
+
+                //Update the player's car if it should be moving to a target.
+                if (playerCar.getPath() != null && !playerCar.getPath().isEmpty()) {
+                    playerCar.update(miniGame);
                 }
+                
+                //Iterate through the cars and update them if they should be moving
+                //to a target. If the enemy car already has a path, generatePath
+                //should do nothing and return null.
+                for (Car car : cars) {
+                    ArrayList<PathXNode> path = null;
+                    
+                    try {
+                        path = car.generatePath();
+                    } catch (VertexNotFoundException ex) {
+                        Logger.getLogger(PathXDataModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    if (path != null) {
+                        car.setPath(path);
+                    }
+                    
+                    if (car.getPath() != null && !car.getPath().isEmpty()) {
+                        car.update(miniGame);
+                    }
+                }
+
+            } finally {
+                miniGame.endUsingData();
             }
-            
-        }finally {
-            miniGame.endUsingData();
         }
     }
 
@@ -315,7 +337,7 @@ public class PathXDataModel extends MiniGameDataModel{
             newNode.setActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent ae)
                 { 
-                    miniGame.getEventHandler().respondToNodeSelection(newNode); 
+                    miniGame.getEventHandler().respondToNodeSelection(getLastMouseX(), getLastMouseY()); 
                 }
             });
             

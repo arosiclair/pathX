@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<level image="Idaho.jpg" name="Idaho1">
+<level image="Utah.jpg" name="Utah1">
      <intersections>
           <intersection id="0" open="true" x="96" y="250"/>
           <intersection id="1" open="true" x="894" y="304"/>

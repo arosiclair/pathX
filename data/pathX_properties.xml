@@ -49,7 +49,8 @@
         <property name="IMAGE_BACKGROUND_GAME"			value="./GameBackground.png"></property>
         <property name="IMAGE_BUTTON_START"				value="./ButtonStart.png"></property>
         <property name="IMAGE_BUTTON_START_MOUSE_OVER"	value="./ButtonStartMouseOver.png"></property>
-        <property name="IMAGE_BANK_ICON"				value="./BankIcon.png"></property>
+        <property name="IMAGE_BUTTON_PAUSE"             value="./ButtonPause.png"></property>
+        <property name="IMAGE_BUTTON_UNPAUSE"              value="./ButtonUnpause.png"></property>
         <property name="IMAGE_MAKE_GREEN"				value="./MakeGreen.png"></property>
         <property name="IMAGE_MAKE_GREEN_ACTIVE"		value="./MakeGreenActive.png"></property>
         <property name="IMAGE_MAKE_RED"					value="./MakeRed.png"></property>
@@ -91,6 +92,8 @@
         <property name="IMAGE_CLOSED_INTERSECTION_MOUSE_OVER"    value="./ClosedNodeMouseOver.png"></property>
         <property name="IMAGE_RED_INTERSECTION"         value="./RedNode.png"></property>
         <property name="IMAGE_RED_INTERSECTION_MOUSE_OVER"  value="./RedNodeMouseOver.png"></property>
+        <property name="IMAGE_HOUSE"                    value="./House.png"></property>
+        <property name="IMAGE_BANK"                     value="./Bank.png"></property>
 
         <property name="IMAGE_PLAYER_CAR"               value="./PlayerCar.png"></property>
         <property name="IMAGE_PLAYER_CAR_MOUSE_OVER"    value="./PlayerCarMouseOver.png"></property>
@@ -141,10 +144,21 @@
             <option>./levels/California3.xml</option>
             <option>./levels/Nevada1.xml</option>
             <option>./levels/Nevada2.xml</option>
-            <option>./levels/Nevada3.xml</option>
             <option>./levels/Idaho1.xml</option>
             <option>./levels/Idaho2.xml</option>
-            <option>./levels/Idaho3.xml</option>
+            <option>./levels/Utah1.xml</option>
+            <option>./levels/Utah2.xml</option>
+            <option>./levels/Utah3.xml</option>
+            <option>./levels/Arizona1.xml</option>
+            <option>./levels/Arizona2.xml</option>
+            <option>./levels/NewMexico1.xml</option>
+            <option>./levels/NewMexico2.xml</option>
+            <option>./levels/NewMexico3.xml</option>
+            <option>./levels/Colorado1.xml</option>
+            <option>./levels/Colorado2.xml</option>
+            <option>./levels/Wyoming1.xml</option>
+            <option>./levels/Wyoming2.xml</option>
+            <option>./levels/Wyoming3.xml</option>
         </property_options>
     </property_options_list>
 

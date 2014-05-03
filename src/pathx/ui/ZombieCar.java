@@ -28,6 +28,10 @@ public class ZombieCar extends Car{
     @Override
     public ArrayList<PathXNode> generatePath(){
         
+        //Check if we are already on a path. If we are do nothing and return null.
+        if (getPath() != null && !getPath().isEmpty())
+            return null;
+        
         ArrayList<PathXNode> path = new ArrayList();
         
         //Get neighbors and choose a random one.

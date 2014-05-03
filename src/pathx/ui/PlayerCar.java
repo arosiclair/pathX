@@ -56,6 +56,10 @@ public class PlayerCar extends Car{
                     break;
                 }
         }
+        
+//        //Highlight the nodes.
+//        for (PathXNode node : nodes)
+//            node.setState(node.getState() + "_MOUSE_OVER");
         path.remove(0);
         return path;  
     }

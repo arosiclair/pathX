@@ -139,8 +139,11 @@ public class PathXMiniGame extends MiniGame{
             guiButtons.get(GAME_QUIT_BUTTON_TYPE).setEnabled(false);
             guiButtons.get(START_BUTTON_TYPE).setState(INVISIBLE.toString());
             guiButtons.get(START_BUTTON_TYPE).setEnabled(false);
+            guiButtons.get(PAUSE_BUTTON_TYPE).setState(INVISIBLE.toString());
+            guiButtons.get(PAUSE_BUTTON_TYPE).setEnabled(false);
             deactivateSpecialButtons();
             
+            ((PathXDataModel) data).endGameAsLoss();
             ((PathXDataModel) data).resetGameViewport();
             ((PathXDataModel) data).resetLists();
             screenState = LEVEL_SELECT_SCREEN_STATE;
@@ -165,6 +168,8 @@ public class PathXMiniGame extends MiniGame{
         guiButtons.get(GAME_QUIT_BUTTON_TYPE).setEnabled(true);
         guiButtons.get(START_BUTTON_TYPE).setState(VISIBLE.toString());
         guiButtons.get(START_BUTTON_TYPE).setEnabled(true);
+        guiButtons.get(PAUSE_BUTTON_TYPE).setState(UNPAUSED_STATE);
+        guiButtons.get(PAUSE_BUTTON_TYPE).setEnabled(true);
         activateSpecialButtons();
         
         //ACTIVATE POPUP DIALOG AND CLOSE BUTTON
@@ -204,7 +209,7 @@ public class PathXMiniGame extends MiniGame{
         
         screenState = GAME_SCREEN_STATE;
         
-        ((PathXDataModel) data).beginGame();
+        //((PathXDataModel) data).beginGame();
     }
     
     public void switchToMainMenu(){
@@ -551,6 +556,17 @@ public class PathXMiniGame extends MiniGame{
         y = PathXConstants.GAME_START_BUTTON_Y;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
         guiButtons.put(START_BUTTON_TYPE, s);
+        
+        //PAUSE BUTTON
+        sT = new SpriteType(PAUSE_BUTTON_TYPE);
+        img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_BUTTON_PAUSE));
+        sT.addState(UNPAUSED_STATE, img);
+        img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_BUTTON_UNPAUSE));
+        sT.addState(PAUSED_STATE, img);
+        x = PathXConstants.LEFT_ARROW_X + 30;
+        y = PathXConstants.LEFT_ARROW_Y;
+        s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        guiButtons.put(PAUSE_BUTTON_TYPE, s);
         
         //GAME SPECIALS GO HERE.
         //Make Light Green Button
@@ -939,6 +955,13 @@ public class PathXMiniGame extends MiniGame{
         startButton.setActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
                 {   getEventHandler().startLevelRequest();   }
+        });
+        
+        //PAUSE BUTTON
+        Sprite pauseButton = guiButtons.get(PAUSE_BUTTON_TYPE);
+        pauseButton.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   getEventHandler().pauseGame();  }
         });
         
         //CLOSE DIALOG BUTTON

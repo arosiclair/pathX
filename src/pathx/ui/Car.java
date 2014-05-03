@@ -44,7 +44,7 @@ public abstract class Car extends Sprite{
     protected boolean movingToTarget;
     
     //Path to take;
-    private ArrayList<PathXNode> path;
+    protected ArrayList<PathXNode> path;
     private int pathIndex;
     
     //Coordinates of the target this sprite will be moving to.
@@ -221,6 +221,18 @@ public abstract class Car extends Sprite{
                 
                 intersection = path.get(0);
                 
+//                if (intersection.getState().indexOf("MOUSE_OVER") >= 0){
+//                    intersection.setState(intersection.getState().substring(0, intersection.getState().indexOf("MOUSE_OVER")));
+//                }
+                
+                //If we just reached a red light then stop the car
+                if(intersection.getState().indexOf("RED") >= 0){
+                    speed = 0;
+                    movingToTarget = false;
+                    return;
+                }
+                    
+                    
                 //Remove the Node that we just reached as it is no longer needed.
                 //This behavior just replicate a Queue.
                 path.remove(0);
@@ -234,6 +246,7 @@ public abstract class Car extends Sprite{
                     movingToTarget = false;
                     return;
                 }
+
                 
                 //targetX = GAME_VIEWPORT_X + path.get(0).getConstantXPos() - gameVP.getViewportX();
                 targetX = path.get(0).getX();

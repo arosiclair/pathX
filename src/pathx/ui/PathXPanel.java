@@ -106,6 +106,8 @@ public class PathXPanel extends JPanel{
                 //RENDER THE GRAPH, INCLUDING THE ROADS AND NODES.
                 renderGraph(g);
                 
+                renderStartAndEnd(g);
+                
                 //RENDER THE CARS IF THE LEVEL HASN'T BEEN WON YET
                 if (!dataModel.won())
                     renderCars(g);
@@ -303,5 +305,19 @@ public class PathXPanel extends JPanel{
                 GAME_VIEWPORT_Y + GAME_VIEWPORT_HEIGHT, vpx, vpy, vpx + GAME_VIEWPORT_WIDTH , 
                 vpy + GAME_VIEWPORT_HEIGHT, this);
         
+    }
+
+    private void renderStartAndEnd(Graphics g) {
+        PathXDataModel data = (PathXDataModel) game.getDataModel();
+        Viewport vp = data.getGameViewport();
+        PathXNode start = data.getNodes().get(0);
+        PathXNode finish = data.getNodes().get(1);
+        String imgPath = props.getProperty(PathXPropertyType.PATH_IMG);
+        
+        BufferedImage img = game.loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_BANK));
+        g.drawImage(img, (int) start.getX() - 15, (int) start.getY() - 15, this);
+        
+        img = game.loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_HOUSE));
+        g.drawImage(img, (int) finish.getX() -15, (int) finish.getY() - 15, this);
     }
 }

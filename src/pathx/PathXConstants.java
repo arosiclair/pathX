@@ -66,6 +66,7 @@ public class PathXConstants {
     public static final String GAME_BACK_BUTTON_TYPE = "GAME_BACK_BUTTON_TYPE";
     public static final String GAME_POPUP_TYPE = "GAME_POPUP_TYPE";
     public static final String POPUP_CLOSE_BUTTON_TYPE = "POPUP_CLOSE_BUTTON_TYPE";
+    public static final String PAUSE_BUTTON_TYPE = "PAUSE_BUTTON_TYPE";
     
     //THE GAME'S VIEWPORT LOCATION
     public static final int GAME_VIEWPORT_X = 160;
@@ -107,6 +108,9 @@ public class PathXConstants {
     public static final String SETTINGS_SCREEN_STATE = "SETTINGS_SCREEN_STATE";
     public static final String GAME_SCREEN_STATE = "GAME_SCREEN_STATE";
     public static final String HELP_SCREEN_STATE = "HELP_SCREEN_STATE";
+    
+    public static final String UNPAUSED_STATE = "UNPAUSED_STATE";
+    public static final String PAUSED_STATE = "PAUSED_STATE";
     // ANIMATION SPEED
     public static final int FPS = 50;
     // UI CONTROL SIZE AND POSITION SETTINGS

@@ -10,6 +10,7 @@ import graph.Graph;
 import graph.Vertex;
 import graph.VertexNotFoundException;
 import java.util.ArrayList;
+import java.util.Random;
 import mini_game.SpriteType;
 import pathx.data.PathXLevel;
 
@@ -32,19 +33,42 @@ public class BanditCar extends Car{
      * @throws VertexNotFoundException 
      */
     @Override
-    public ArrayList<PathXNode> generatePath() throws VertexNotFoundException{
-        //Get a path to the farthest Vertex from this Bandit's current Vertex.
-        Graph g = getLevel().getGraph();       
-        Vertex start = getIntersection().getVertex();
-        ArrayList<Vertex> pathToFarthest = g.findLongestPath(start);
+    public ArrayList<PathXNode> generatePath() throws VertexNotFoundException{  
+        //Check if we are already on a path. If we are do nothing and return null.
+        if (getPath() != null && !getPath().isEmpty())
+            return null;
         
-        //Convert the shortestPath ArrayList of Vertices to PathXNodes.
         ArrayList<PathXNode> path = new ArrayList();
+        
+        //Get neighbors and choose a random one.
+        ArrayList<Vertex> neighbors = getIntersection().getVertex().getNeighbors();
+        Random r = new Random();
+        int next = r.nextInt(neighbors.size());
+        Vertex destination = neighbors.get(next);
+        
+        //Find the associated PathXNode
         ArrayList<PathXNode> nodes = getLevel().getDataModel().getNodes();
-        for (Vertex v : pathToFarthest){
-            for (PathXNode node : nodes)
-                if (node.getVertex() == v) path.add(node);
+        for (PathXNode node : nodes){
+            if (node.getVertex() == destination){ 
+                path.add(node);
+                break;
+            }
         }
+        
+//        //Get a path to the farthest Vertex from this Bandit's current Vertex.
+//        Graph g = getLevel().getGraph();       
+//        Vertex start = getIntersection().getVertex();
+//        ArrayList<Vertex> pathToFarthest = g.findLongestPath(start);
+//        
+//        //Convert the shortestPath ArrayList of Vertices to PathXNodes.
+//        ArrayList<PathXNode> path = new ArrayList();
+//        ArrayList<PathXNode> nodes = getLevel().getDataModel().getNodes();
+//        for (Vertex v : pathToFarthest){
+//            for (PathXNode node : nodes)
+//                if (node.getVertex() == v) path.add(node);
+//        }
+//        
+//        path.remove(0);
         
         return path;
     }

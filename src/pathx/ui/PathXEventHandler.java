@@ -9,9 +9,12 @@ package pathx.ui;
 import graph.VertexNotFoundException;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mini_game.MiniGameDataModel;
+import mini_game.MiniGameState;
 import mini_game.Sprite;
 import mini_game.Viewport;
 import pathx.PathXConstants;
@@ -108,7 +111,7 @@ public class PathXEventHandler {
     }
     
     public void startLevelRequest(){
-        
+        dataModel.beginGame();
     }
     
     //Triggered when the "try again" option is chosen after a level completion
@@ -186,8 +189,19 @@ public class PathXEventHandler {
         
     }
     
-    public void respondToNodeSelection(PathXNode node){
+    public void respondToNodeSelection(float xPos, float yPos){
         PlayerCar player = dataModel.getPlayer();
+        PathXNode dest = null;
+        Viewport vp = dataModel.getGameViewport();
+        //xPos = PathXConstants.GAME_VIEWPORT_X + xPos - vp.getViewportX();
+        //yPos = PathXConstants.GAME_VIEWPORT_Y + yPos - vp.getViewportY();
+        
+        ArrayList<PathXNode> nodes = dataModel.getNodes();
+        for (PathXNode node : nodes)
+            if (node.containsPoint(xPos, yPos)){
+                dest = node;
+                break;
+            }
         ArrayList<PathXNode> path = null;
         if (dataModel.isSpecialActive()){
             
@@ -196,7 +210,7 @@ public class PathXEventHandler {
         //PathXNode
         else{
             try {
-                path = player.generatePath(node);
+                path = player.generatePath(dest);
             } catch (VertexNotFoundException ex) {
                 Logger.getLogger(PathXEventHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -276,7 +290,7 @@ public class PathXEventHandler {
         
     }
 
-    void respondToKeyPress(int keyCode) {
+    public void respondToKeyPress(int keyCode) {
         //Right key press on level select screen
         if (keyCode == KeyEvent.VK_RIGHT){
             scrollRightRequest();
@@ -286,6 +300,17 @@ public class PathXEventHandler {
             scrollUpRequest();
         }else if (keyCode == KeyEvent.VK_DOWN){
             scrollDownRequest();
+        }
+    }
+
+    public void pauseGame() {
+        TreeMap<String, Sprite> buttons = game.getGUIButtons();
+        if(dataModel.inProgress()){
+            dataModel.setGameState(MiniGameState.NOT_STARTED);
+            buttons.get(PathXConstants.PAUSE_BUTTON_TYPE).setState(PathXConstants.PAUSED_STATE);
+        }else{
+            dataModel.setGameState(MiniGameState.IN_PROGRESS);
+            buttons.get(PathXConstants.PAUSE_BUTTON_TYPE).setState(PathXConstants.UNPAUSED_STATE);
         }
     }
 }
