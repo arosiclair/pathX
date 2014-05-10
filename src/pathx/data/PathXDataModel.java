@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import mini_game.MiniGame;
 import mini_game.MiniGameDataModel;
+import mini_game.MiniGameState;
 import static mini_game.MiniGameState.NOT_STARTED;
 import mini_game.Sprite;
 import mini_game.SpriteType;
@@ -150,6 +151,7 @@ public class PathXDataModel extends MiniGameDataModel{
     
     @Override
     public void endGameAsWin(){
+        setGameState(MiniGameState.WIN);
         
     }
     
@@ -582,6 +584,37 @@ public class PathXDataModel extends MiniGameDataModel{
     public void setSpecialActive(boolean specialActive) {
         this.specialActive = specialActive;
     }
+    
+    /**
+     * Creates a new specials HashMap for the data model which will label all of
+     * the specials as locked. This newly created Map is also returned.
+     * 
+     * @return 
+     * The newly created HashMap with all of the specials labeled as false.
+     */
+    public HashMap<String, Boolean> createSpecialsMap(){
+        HashMap<String, Boolean> newSpecials = new HashMap();
+        newSpecials.put(PathXConstants.MAKE_GREEN_SPECIAL_TYPE, false);
+        newSpecials.put(PathXConstants.MAKE_RED_SPECIAL_TYPE, false);
+        newSpecials.put(PathXConstants.FREEZE_SPECIAL_TYPE, false);
+        newSpecials.put(PathXConstants.INCREASE_SPEED_SPECIAL_TYPE, false);
+        newSpecials.put(PathXConstants.DECREASE_SPEED_SPECIAL_TYPE, false);
+        newSpecials.put(PathXConstants.INCREASE_PLAYER_SPEED_SPECIAL_TYPE, false);
+        newSpecials.put(PathXConstants.EMPTY_GAS_SPECIAL_TYPE, false);
+        newSpecials.put(PathXConstants.FLAT_TIRE_SPECIAL_TYPE, false);
+        newSpecials.put(PathXConstants.CLOSE_ROAD_SPECIAL_TYPE, false);
+        newSpecials.put(PathXConstants.CLOSE_INTERSECTION_SPECIAL_TYPE, false);
+        newSpecials.put(PathXConstants.OPEN_INTERSECTION_SPECIAL_TYPE, false);
+        newSpecials.put(PathXConstants.STEAL_SPECIAL_TYPE, false);
+        newSpecials.put(PathXConstants.MIND_CONTROL_SPECIAL_TYPE, false);
+        newSpecials.put(PathXConstants.INTANGIBILITY_SPECIAL_TYPE, false);
+        newSpecials.put(PathXConstants.MINDLESS_TERROR_SPECIAL_TYPE, false);
+        newSpecials.put(PathXConstants.FLYING_SPECIAL_TYPE, false);
+        newSpecials.put(PathXConstants.GOD_MODE_SPECIAL_TYPE, false);
+        
+        specials = newSpecials;
+        return newSpecials;
+    }
 
     //This method iterates through each of the currently constructed nodes, and
     //adds their neighbors based on the structure of the Graph and vertices they
@@ -598,4 +631,11 @@ public class PathXDataModel extends MiniGameDataModel{
 //            }
 //        }
 //    }
+
+    /**
+     * @param record the record to set
+     */
+    public void setRecord(PathXRecord record) {
+        this.record = record;
+    }
 }

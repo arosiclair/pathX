@@ -121,12 +121,15 @@ public class PathXPanel extends JPanel{
             }
             if (((PathXMiniGame) game).isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)) {
                 renderMap(g);
-                renderLevelSelectStats(g);
+                
                 renderLevelSprites(g);
             }
             
             // RENDER THE BACKGROUND, WHICHEVER SCREEN WE'RE ON
             renderBackground(g);
+            
+            if (((PathXMiniGame) game).isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE))
+                renderLevelSelectStats(g);
             
             //RENDER BUTTONS AND DECOR
             renderGUIControls(g);
@@ -184,10 +187,10 @@ public class PathXPanel extends JPanel{
 
     private void renderLevelSelectStats(Graphics g) {
         g.setFont(FONT_TEXT_DISPLAY);
-        String balance = "";
+        String balance = "$";
         balance += dataModel.getRecord().balance;
         g.drawString(balance, PathXConstants.LEVEL_SELECT_BALANCE_X, PathXConstants.LEVEL_SELECT_BALANCE_Y);
-        String goal = 50000 + "";
+        String goal = "$50000";
         g.drawString(goal, PathXConstants.LEVEL_SELECT_GOAL_X, PathXConstants.LEVEL_SELECT_GOAL_Y);
     }
     

@@ -88,6 +88,16 @@ public class PathXFileManager {
     
     public void loadRecord(){
         //@TODO Implement game record loading.
+        
+        //For now, create a new record each session with no money, unlocked levels, or specials
+        PathXRecord newRecord = new PathXRecord();
+        newRecord.setBalance(0);
+        newRecord.setLevels(data.getLevels());
+        HashMap<String, Boolean> newSpecials = data.createSpecialsMap();
+        newRecord.setSpecials(newSpecials);
+        data.setRecord(newRecord);
+        loadLevels();
+        
     }
     
     public void loadLevels(){

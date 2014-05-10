@@ -73,8 +73,27 @@ public class PathXConstants {
     public static final int GAME_VIEWPORT_Y = 20;
     public static final int GAME_VIEWPORT_WIDTH = 480;
     public static final int GAME_VIEWPORT_HEIGHT = 440;
-    
+        
     //GAME SPECIALS
+    public static final String MAKE_GREEN_SPECIAL_TYPE = "MAKE_GREEN_SPECIAL_TYPE";
+    public static final String MAKE_RED_SPECIAL_TYPE = "MAKE_RED_SPECIAL_TYPE";
+    public static final String FREEZE_SPECIAL_TYPE = "FREEZE_SPECIAL_TYPE";
+    public static final String INCREASE_SPEED_SPECIAL_TYPE = "INCREASE_SPEED_SPECIAL_TYPE";
+    public static final String DECREASE_SPEED_SPECIAL_TYPE = "DECREASE_SPEED_SPECIAL_TYPE";
+    public static final String INCREASE_PLAYER_SPEED_SPECIAL_TYPE = "INCREASE_PLAYER_SPEED_SPECIAL_TYPE";
+    public static final String EMPTY_GAS_SPECIAL_TYPE = "EMPTY_GAS_SPECIAL_TYPE";
+    public static final String FLAT_TIRE_SPECIAL_TYPE = "FLAT_TIRE_SPECIAL_TYPE";
+    public static final String CLOSE_ROAD_SPECIAL_TYPE = "CLOSE_ROAD_SPECIAL_TYPE";
+    public static final String CLOSE_INTERSECTION_SPECIAL_TYPE = "CLOSE_INTERSECTION_SPECIAL_TYPE";
+    public static final String OPEN_INTERSECTION_SPECIAL_TYPE = "OPEN_INTERSECTION_SPECIAL_TYPE";
+    public static final String STEAL_SPECIAL_TYPE = "STEAL_SPECIAL_TYPE";
+    public static final String MIND_CONTROL_SPECIAL_TYPE = "MIND_CONTROL_SPECIAL_TYPE";
+    public static final String INTANGIBILITY_SPECIAL_TYPE = "INTANGIBILITY_SPECIAL_TYPE";
+    public static final String MINDLESS_TERROR_SPECIAL_TYPE = "MINDLESS_TERROR_SPECIAL_TYPE";
+    public static final String FLYING_SPECIAL_TYPE = "FLYING_SPECIAL_TYPE";
+    public static final String GOD_MODE_SPECIAL_TYPE = "GOD_MODE_SPECIAL_TYPE";
+    
+    //GAME SPECIAL BUTTONS
     public static final String MAKE_GREEN_BUTTON_TYPE = "MAKE_GREEN_BUTTON_TYPE";
     public static final String MAKE_RED_BUTTON_TYPE = "MAKE_RED_BUTTON_TYPE";
     public static final String FREEZE_BUTTON_TYPE = "FREEZE_BUTTON_TYPE";
@@ -138,9 +157,9 @@ public class PathXConstants {
     public static final int LEVEL_SELECT_QUIT_BUTTON_Y = MAIN_QUIT_BUTTON_Y;
     public static final int LEVEL_SELECT_BACK_BUTTON_X = LEVEL_SELECT_QUIT_BUTTON_X - 5;
     public static final int LEVEL_SELECT_BALANCE_X = 320;
-    public static final int LEVEL_SELECT_BALANCE_Y = 58;
-    public static final int LEVEL_SELECT_GOAL_X = 275;
-    public static final int LEVEL_SELECT_GOAL_Y = 86;
+    public static final int LEVEL_SELECT_BALANCE_Y = 56;
+    public static final int LEVEL_SELECT_GOAL_X = 280;
+    public static final int LEVEL_SELECT_GOAL_Y = 84;
     public static final int LEVEL_SELECT_CITY_X = 430;
     public static final int LEVEL_SELECT_CITY_Y = 430;
     public static final int LEFT_ARROW_X = 30;
