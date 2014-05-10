@@ -52,29 +52,29 @@ public class PlayerCar extends Car{
         //intersection/vertex as an ArrayList of vertices.
         ArrayList<Vertex> shortestPath = graph.findPath(getIntersection().getVertex(), destination.getVertex());
         
-        ArrayList<PathXNode> path = new ArrayList();
+        ArrayList<PathXNode> newPath = new ArrayList();
         
         //Convert the shortestPath ArrayList of Vertices to PathXNodes.
         ArrayList<PathXNode> nodes = getLevel().getDataModel().getNodes();
         for (Vertex v : shortestPath){
             for (PathXNode node : nodes)
                 if (node.getVertex() == v){
-                    path.add(node);
+                    newPath.add(node);
                     break;
                 }
         }
         
         
-        path.remove(0);
+        newPath.remove(0);
         
         //Highlight the nodes.
-        for (PathXNode node : path)
+        for (PathXNode node : newPath)
             node.setState(node.getState() + "_HIGHLIGHTED");
         
         destination.setState(destState + "_HIGHLIGHTED");
-        targetX = path.get(0).getConstantXPos();
-        targetY = path.get(0).getConstantYPos();
-        return path;  
+        targetX = newPath.get(0).getConstantXPos();
+        targetY = newPath.get(0).getConstantYPos();
+        return newPath;  
     }
 
     /**

@@ -26,7 +26,8 @@ public class BanditCar extends Car{
     }
     
     /**
-     * Bandit Cars choose random Nodes at the "far ends of the graph" to go to. 
+     * Bandit Cars choose the node that Dijkstra's Algorithm finds has the 
+     * largest distance to go to. 
      * This is only repeated after they have reached their destination. 
      * @return
      * A path to a far PathXNode in the form of an ArrayList of PathXNodes.
@@ -38,41 +39,27 @@ public class BanditCar extends Car{
         if (getPath() != null && !getPath().isEmpty())
             return null;
         
-        ArrayList<PathXNode> path = new ArrayList();
+        Graph graph = getLevel().getGraph();
+        Vertex start = getIntersection().getVertex();
         
-        //Get neighbors and choose a random one.
-        ArrayList<Vertex> neighbors = getIntersection().getVertex().getNeighbors();
-        Random r = new Random();
-        int next = r.nextInt(neighbors.size());
-        Vertex destination = neighbors.get(next);
+        //Find the shortest path to the farthest vertex in the graph.
+        ArrayList<Vertex> longestPath = graph.findLongestPath(start);
+        ArrayList<PathXNode> newPath = new ArrayList();
         
-        //Find the associated PathXNode
+        //Convert the shortestPath ArrayList of Vertices to PathXNodes.
         ArrayList<PathXNode> nodes = getLevel().getDataModel().getNodes();
-        for (PathXNode node : nodes){
-            if (node.getVertex() == destination){ 
-                path.add(node);
-                break;
-            }
+        for (Vertex v : longestPath){
+            for (PathXNode node : nodes)
+                if (node.getVertex() == v){
+                    newPath.add(node);
+                    break;
+                }
         }
         
-//        //Get a path to the farthest Vertex from this Bandit's current Vertex.
-//        Graph g = getLevel().getGraph();       
-//        Vertex start = getIntersection().getVertex();
-//        ArrayList<Vertex> pathToFarthest = g.findLongestPath(start);
-//        
-//        //Convert the shortestPath ArrayList of Vertices to PathXNodes.
-//        ArrayList<PathXNode> path = new ArrayList();
-//        ArrayList<PathXNode> nodes = getLevel().getDataModel().getNodes();
-//        for (Vertex v : pathToFarthest){
-//            for (PathXNode node : nodes)
-//                if (node.getVertex() == v) path.add(node);
-//        }
-//        
-//        path.remove(0);
+        newPath.remove(0);
+        targetX = newPath.get(0).getConstantXPos();
+        targetY = newPath.get(0).getConstantYPos();
         
-        targetX = path.get(0).getConstantXPos();
-        targetY = path.get(0).getConstantYPos();
-        
-        return path;
+        return newPath;
     }
 }

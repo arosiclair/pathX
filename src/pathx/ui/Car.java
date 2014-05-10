@@ -238,9 +238,10 @@ public abstract class Car extends Sprite{
                 //Remove the Node that we just reached as it is no longer needed.
                 //This behavior just replicates a Queue.
                 PathXNode last = path.remove(0);
+                
                 //Un-highlight this node if it was highlighted from the player's
                 //path
-                if (last.getState().indexOf("_HIGHLIGHTED") >= 0)
+                if (this instanceof PlayerCar && last.getState().indexOf("_HIGHLIGHTED") >= 0)
                     last.setState(last.getState().substring(0, last.getState().indexOf("_HIGHLIGHTED")));
                 
                 //If we have emptied the path list, indicating that we've reached,
