@@ -49,6 +49,9 @@ public class ZombieCar extends Car{
             }
         }
         
+        targetX = path.get(0).getConstantXPos();
+        targetY = path.get(0).getConstantYPos();
+        
         return path;
     }
 }

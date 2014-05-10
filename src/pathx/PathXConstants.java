@@ -141,7 +141,7 @@ public class PathXConstants {
     public static final int LEVEL_SELECT_BALANCE_Y = 58;
     public static final int LEVEL_SELECT_GOAL_X = 275;
     public static final int LEVEL_SELECT_GOAL_Y = 86;
-    public static final int LEVEL_SELECT_CITY_X = 460;
+    public static final int LEVEL_SELECT_CITY_X = 430;
     public static final int LEVEL_SELECT_CITY_Y = 430;
     public static final int LEFT_ARROW_X = 30;
     public static final int LEFT_ARROW_Y = 370;

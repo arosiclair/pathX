@@ -31,6 +31,7 @@ public abstract class Car extends Sprite{
     //Speed of the sprite
     private double speed;
     
+    
     //We use these constant globals for a reference point when rendering in comparison to
     //a Viewport. Do NOT use getX or getY for rendering as those values will change
     //constantly as the Viewport changes.
@@ -101,10 +102,10 @@ public abstract class Car extends Sprite{
         setMovingToTarget(true);
         
         // CALCULATE THE ANGLE OF THE TRAJECTORY TO THE TARGET
-        float diffX = getTargetX() - x;
-        float diffY = getTargetY() - y;
+        float diffX = getTargetX() - constantXPos;
+        float diffY = getTargetY() - constantYPos;
         float tanResult = diffY/diffX;
-        float angleInRadians = (float)Math.atan(tanResult);
+        float angleInRadians = (float) Math.atan(tanResult);
         
         // COMPUTE THE X VELOCITY COMPONENT
         vX = (float)(maxVelocity * Math.cos(angleInRadians));
@@ -114,7 +115,7 @@ public abstract class Car extends Sprite{
         if ((diffX > 0) && (vX < 0)) vX *= -1;
         
         // COMPUTE THE Y VELOCITY COMPONENT
-        vY = (float)(maxVelocity * Math.sin(angleInRadians));        
+        vY = (float)(maxVelocity * Math.sin(angleInRadians));
         
         // CLAMP THE VELOCITY IN CASE OF NEGATIVE ANGLES
         if ((diffY < 0) && (vY > 0)) vY *= -1;
@@ -131,10 +132,10 @@ public abstract class Car extends Sprite{
     public float calculateDistanceToTarget()
     {
         // GET THE X-AXIS DISTANCE TO GO
-        float diffX = getTargetX() - x;
+        float diffX = getTargetX() - constantXPos;
         
         // AND THE Y-AXIS DISTANCE TO GO
-        float diffY = getTargetY() - y;
+        float diffY = getTargetY() - constantYPos;
         
         // AND EMPLOY THE PYTHAGOREAN THEOREM TO CALCULATE THE DISTANCE
         float distance = (float)Math.sqrt((diffX * diffX) + (diffY * diffY));
@@ -210,14 +211,15 @@ public abstract class Car extends Sprite{
         
         //Begin moving the car through its path if there are Nodes to go to.
         if (path != null && !path.isEmpty()){
+
             
             //IF THIS TILE IS ALMOST AT ITS TARGET DESTINATION,
             // JUST GO TO THE TARGET AND THEN STOP MOVING
             if (calculateDistanceToTarget() < speed){
                 vX = 0;
                 vY = 0;
-                x = GAME_VIEWPORT_X + getTargetX() - gameVP.getViewportX();
-                y = GAME_VIEWPORT_Y + getTargetY() - gameVP.getViewportY(); 
+                constantXPos = (int) targetX;
+                constantYPos = (int) targetY;
                 
                 intersection = path.get(0);
                 
@@ -234,13 +236,19 @@ public abstract class Car extends Sprite{
                     
                     
                 //Remove the Node that we just reached as it is no longer needed.
-                //This behavior just replicate a Queue.
-                path.remove(0);
+                //This behavior just replicates a Queue.
+                PathXNode last = path.remove(0);
+                //Un-highlight this node if it was highlighted from the player's
+                //path
+                if (last.getState().indexOf("_HIGHLIGHTED") >= 0)
+                    last.setState(last.getState().substring(0, last.getState().indexOf("_HIGHLIGHTED")));
                 
                 //If we have emptied the path list, indicating that we've reached,
                 //the target, then we can stop moving.
                 if (path.isEmpty()){
                     speed = 0;
+                    vX = 0;
+                    vY = 0;
                     targetX = 0;
                     targetY = 0;
                     movingToTarget = false;
@@ -249,11 +257,11 @@ public abstract class Car extends Sprite{
 
                 
                 //targetX = GAME_VIEWPORT_X + path.get(0).getConstantXPos() - gameVP.getViewportX();
-                targetX = path.get(0).getX();
+                targetX = path.get(0).getConstantXPos();
                 //targetY = GAME_VIEWPORT_Y + path.get(0).getConstantYPos() - gameVP.getViewportY();
-                targetY = path.get(0).getY();
+                targetY = path.get(0).getConstantYPos();
                 
-                //Start moving to the target that we just defined. "10" is a 
+                //Start moving to the target that we just defined. "2" is a 
                 //place holder speed for now.
                 startMovingToTarget(2, gameVP);
                 speed = 2;
@@ -261,8 +269,9 @@ public abstract class Car extends Sprite{
             }
             
             else{
-                targetX = path.get(0).getX();
-                targetY = path.get(0).getY();
+//                targetX = path.get(0).getConstantXPos();
+//                targetY = path.get(0).getConstantYPos();
+                
                 startMovingToTarget(2, gameVP);
                 speed = 2;
                 constantXPos += vX;

@@ -194,9 +194,10 @@ public class PathXPanel extends JPanel{
     public void renderLevelInfo(Graphics g, PathXLevel level){
         String name = level.getLevelName();
         int reward = level.getReward();
-        String info = name + " - " + reward;
+        String info = name + " - $" + reward;
         
         g.setFont(FONT_TEXT_DISPLAY);
+        g.setColor(Color.BLACK);
         g.drawString(info, PathXConstants.LEVEL_SELECT_CITY_X, PathXConstants.LEVEL_SELECT_CITY_Y);
         
     }
@@ -206,6 +207,11 @@ public class PathXPanel extends JPanel{
             ls.setEnabled(true);
             ls.update();
             renderSprite(g, ls);
+            
+            //Render the level's info on the level select screen if it's 
+            //moused-over
+            if (ls.getState().indexOf("MOUSE_OVER") >= 0)
+                renderLevelInfo(g, ls.getLevel());
         }          
     }
 
@@ -228,8 +234,7 @@ public class PathXPanel extends JPanel{
             
             //Draw this road in either green or black depedning on its state.
             String state = road.getCurrentState();
-            if (state.equals(PathXSpriteState.HIGHLIGHTED.toString()) || 
-                    state.equals(PathXSpriteState.MOUSE_OVER.toString()))
+            if (state.indexOf(PathXSpriteState.MOUSE_OVER.toString()) >= 0)
                 g2.setColor(new Color(34, 177, 76));
             else
                 g2.setColor(Color.BLACK);

@@ -33,7 +33,7 @@
      </roads>
      <start_intersection id="0" image="DefaultStartLocation.png"/>
      <destination_intersection id="1" image="DefaultDestination.png"/>
-     <money amount="1500"/>
+     <money amount="1000"/>
      <police num="3"/>
      <bandits num="1"/>
      <zombies num="0"/>

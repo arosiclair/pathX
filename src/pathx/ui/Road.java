@@ -17,8 +17,9 @@ public class Road {
     //Speed limit that cars will be restricted to.
     private double speedLimit;
     
-    //State of the Road which can either be OPEN or CLOSED.
-    private String currentState;
+    //State of the Road which can either be OPEN, CLOSED, or a highlighted 
+    //version of those two.
+    protected String currentState;
     
     //Associated sprite.
     //private Sprite s;
@@ -43,12 +44,12 @@ public class Road {
     
     //Open the road for use.
     public void open(){
-        currentState = PathXSpriteState.OPEN.toString();
+        setState(PathXSpriteState.OPEN.toString());
     }
     
     //Close the road for use.
     public void close(){
-        currentState = PathXSpriteState.CLOSED.toString();
+        setState(PathXSpriteState.CLOSED.toString());
     }
     
     //Activated by a special. Increases the speed limit by 50%
@@ -80,6 +81,10 @@ public class Road {
 
     public PathXNode[] getNodes() {
         return new PathXNode[]{n1, n2};
+    }
+
+    public void setState(String currentState) {
+        this.currentState = currentState;
     }
 }
 

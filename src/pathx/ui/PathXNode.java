@@ -31,6 +31,8 @@ public class PathXNode extends Sprite {
     //A list of roads this Node is connected to.
     private ArrayList<Road> roads;
     
+    private ArrayList<PathXNode> neighbors;
+    
     //The current state of this node be it GREEN, RED or CLOSED.
     private String currentState;
     
@@ -43,6 +45,7 @@ public class PathXNode extends Sprite {
         currentState = initState;
         vertex = initVertex;
         
+        neighbors = new ArrayList();
     }
     
 //    public PathXNode(Sprite s, String state, ArrayList<Road> roads){
@@ -67,6 +70,10 @@ public class PathXNode extends Sprite {
             if (road == r) return true;
         }
         return false;
+    }
+    
+    public void addNeighbor(PathXNode neighbor){
+        neighbors.add(neighbor);
     }
 
     public String getCurrentState() {

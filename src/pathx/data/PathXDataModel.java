@@ -111,6 +111,8 @@ public class PathXDataModel extends MiniGameDataModel{
         
         specialActive = false;
         
+         setGameState(NOT_STARTED);
+        
         //Initialize the gameViewport
         //gameViewport = new Viewport();
         //initGameViewport();
@@ -177,7 +179,7 @@ public class PathXDataModel extends MiniGameDataModel{
     /**
      * Called each frame, this method updates all the game objects.
      *
-     * @param game The Sorting Hat game to be updated.
+     * @param game pathX game to be updated.
      */
     @Override
     public void updateAll(MiniGame mg) {
@@ -193,7 +195,7 @@ public class PathXDataModel extends MiniGameDataModel{
                 miniGame.beginUsingData();
 
                 //Update the player's car if it should be moving to a target.
-                if (playerCar.getPath() != null && !playerCar.getPath().isEmpty()) {
+                if (playerCar.getTargetX() != 0) {
                     playerCar.update(miniGame);
                 }
                 
@@ -320,14 +322,17 @@ public class PathXDataModel extends MiniGameDataModel{
             sT.addState(PathXSpriteState.GREEN.toString(), img);
             img = miniGame.loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_GREEN_INTERSECTION_MOUSE_OVER));
             sT.addState(PathXSpriteState.GREEN_MOUSE_OVER.toString(), img);
+            sT.addState(PathXSpriteState.GREEN_HIGHLIGHTED.toString(), img);
             img = miniGame.loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_RED_INTERSECTION));
             sT.addState(PathXSpriteState.RED.toString(), img);
             img = miniGame.loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_RED_INTERSECTION_MOUSE_OVER));
             sT.addState(PathXSpriteState.RED_MOUSE_OVER.toString(), img);
+            sT.addState(PathXSpriteState.RED_HIGHLIGHTED.toString(), img);
             img = miniGame.loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_CLOSED_INTERSECTION));
             sT.addState(PathXSpriteState.CLOSED.toString(), img);
             img = miniGame.loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_CLOSED_INTERSECTION_MOUSE_OVER));
             sT.addState(PathXSpriteState.CLOSED_MOUSE_OVER.toString(), img);
+            sT.addState(PathXSpriteState.CLOSED_HIGHLIGHTED.toString(), img);
             
             //Finish constructing the new PathXNode and add it to our temporary 
             //holding ArrayList.
@@ -353,7 +358,6 @@ public class PathXDataModel extends MiniGameDataModel{
     public void constructRoads(PathXLevel level) {
         //Needed for loading and analyzing the PathXLevel's XML file.s
         XMLUtilities xmlUtil = new XMLUtilities();
-        Graph graph = level.getGraph();
         ArrayList<Road> connections = new ArrayList();
         
         Document levelXML = null;
@@ -578,4 +582,20 @@ public class PathXDataModel extends MiniGameDataModel{
     public void setSpecialActive(boolean specialActive) {
         this.specialActive = specialActive;
     }
+
+    //This method iterates through each of the currently constructed nodes, and
+    //adds their neighbors based on the structure of the Graph and vertices they
+    //are associated with. Very slow.
+//    public void updateNodeNeighbors(PathXLevel level) {
+//        for (PathXNode node : nodes){
+//            Vertex vertex = node.getVertex();
+//            ArrayList<Vertex> neighborVertices= vertex.getNeighbors();
+//            for(Vertex v : neighborVertices){
+//                for (PathXNode n : nodes){
+//                    if (n.getVertex() == v)
+//                        node.addNeighbor(n);
+//                }
+//            }
+//        }
+//    }
 }

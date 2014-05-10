@@ -12,6 +12,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -200,6 +201,8 @@ public class PathXMiniGame extends MiniGame{
         ((PathXDataModel)data).constructNodes(level);
         //Construct the Road Sprites.
         ((PathXDataModel)data).constructRoads(level);
+        //Update neighbors for each PathXNode
+        //((PathXDataModel)data).updateNodeNeighbors(level);
         
         //Construct the PlayerCar.
         ((PathXDataModel) data).constructPlayerCar(level);
@@ -1097,9 +1100,7 @@ public class PathXMiniGame extends MiniGame{
                     button.setState(PathXSpriteState.VISIBLE.toString());
                 }
             }
-//            Is it a settings toggle?
-//            else if (button.getState().equals(PathXSpriteState.DISABLED) || 
-//                    button.getState().equals(PathXSpriteState.ENABLED))
+
         }
         
         //Check for mouse overs of the PathXLevelSprites
@@ -1123,28 +1124,58 @@ public class PathXMiniGame extends MiniGame{
             }
         }
         
-        //Check for mouse overs of Game Nodes and roads
+        //Check for mouse overs of Game Nodes
         if (screenState.equals(GAME_SCREEN_STATE)) {
             ArrayList<Sprite> gameSprites = new ArrayList();
             gameSprites.addAll(dataModel.getNodes());
-//            gameSprites.addAll(dataModel.getCops());
-//            gameSprites.addAll(dataModel.getBandits());
-//            gameSprites.addAll(dataModel.getZombies());
+
             
             Iterator<Sprite> gameButtonsIt = gameSprites.iterator();
 
             while (gameButtonsIt.hasNext()) {
                 Sprite button = gameButtonsIt.next();
 
-                // ARE WE ENTERING A BUTTON?
-                if (button.getState().indexOf("MOUSE_OVER") < 0) {
+                // ARE WE ENTERING A NODE?
+                if (button.getState().indexOf("MOUSE_OVER") < 0 && button.getState().indexOf("HIGHLIGHTED") < 0) {
                     if (button.containsPoint(data.getLastMouseX(), data.getLastMouseY())) {
                         button.setState(button.getState() + "_MOUSE_OVER");
                     }
-                } // ARE WE EXITING A BUTTON?
+                } // ARE WE EXITING A NODE?
                 else if (button.getState().indexOf("MOUSE_OVER") >= 0) {
                     if (!button.containsPoint(data.getLastMouseX(), data.getLastMouseY())) {
                         button.setState(button.getState().substring(0, button.getState().indexOf("_MOUSE_OVER")));
+                    }
+                }
+            }
+        }
+        
+        //Check for mouse overs of Roads
+        if (screenState.equals(GAME_SCREEN_STATE)){
+            
+            ArrayList<Road> roads = ((PathXDataModel) data).getRoads();
+            
+            for (Road road : roads){
+                
+                double mouseX = GAME_VIEWPORT_X + data.getLastMouseX() - dataModel.getGameViewport().getViewportX();
+                    double mouseY = GAME_VIEWPORT_Y + data.getLastMouseY() - dataModel.getGameViewport().getViewportY();
+                    PathXNode[] nodes = road.getNodes();
+                    Line2D.Double tempLine = new Line2D.Double();
+                    tempLine.x1 = nodes[0].getX() + 15;
+                    tempLine.y1 = nodes[0].getY() + 15;
+                    tempLine.x2 = nodes[1].getX() + 15;
+                    tempLine.y2 = nodes[1].getY() + 15;
+                    float distance = (float) tempLine.ptSegDist(data.getLastMouseX(), data.getLastMouseY());
+                    
+                //If we haven't moused over this road, check if we are now moused over.
+                if (road.getCurrentState().indexOf(MOUSE_OVER.toString()) < 0){
+                    if (distance <= 7){
+                        road.setState(road.getCurrentState() + "_MOUSE_OVER");
+                    }
+                }
+                //If we have moused over this road check if we have left it or not.
+                else{
+                    if (distance > 8){
+                        road.setState(road.getCurrentState().substring(0, road.getCurrentState().indexOf("_MOUSE_OVER")));
                     }
                 }
             }

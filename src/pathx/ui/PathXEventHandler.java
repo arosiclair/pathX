@@ -197,11 +197,12 @@ public class PathXEventHandler {
         //yPos = PathXConstants.GAME_VIEWPORT_Y + yPos - vp.getViewportY();
         
         ArrayList<PathXNode> nodes = dataModel.getNodes();
-        for (PathXNode node : nodes)
-            if (node.containsPoint(xPos, yPos)){
+        for (PathXNode node : nodes) {
+            if (node.containsPoint(xPos, yPos)) {
                 dest = node;
                 break;
             }
+        }
         ArrayList<PathXNode> path = null;
         if (dataModel.isSpecialActive()){
             
@@ -214,7 +215,8 @@ public class PathXEventHandler {
             } catch (VertexNotFoundException ex) {
                 Logger.getLogger(PathXEventHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
-            player.changeDestination(path);
+            if (path != null)
+                player.changeDestination(path);
             //player.startMovingToTarget(2, gameVp);
             
         }

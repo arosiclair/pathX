@@ -39,6 +39,13 @@ public class PlayerCar extends Car{
      * current level's graph, then this exception is thrown.
      */
     public ArrayList<PathXNode> generatePath(PathXNode destination)throws VertexNotFoundException{
+        
+        String destState = destination.getState();
+        destState = destState.substring(0, destState.indexOf("_MOUSE_OVER"));
+        
+        if (path != null && !path.isEmpty())
+            return null;
+        
         Graph graph = getLevel().getGraph();
         
         //The shortest path from the current intersection/vertex to the destination
@@ -57,10 +64,16 @@ public class PlayerCar extends Car{
                 }
         }
         
-//        //Highlight the nodes.
-//        for (PathXNode node : nodes)
-//            node.setState(node.getState() + "_MOUSE_OVER");
+        
         path.remove(0);
+        
+        //Highlight the nodes.
+        for (PathXNode node : path)
+            node.setState(node.getState() + "_HIGHLIGHTED");
+        
+        destination.setState(destState + "_HIGHLIGHTED");
+        targetX = path.get(0).getConstantXPos();
+        targetY = path.get(0).getConstantYPos();
         return path;  
     }
 

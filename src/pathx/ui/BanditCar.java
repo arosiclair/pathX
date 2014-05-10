@@ -70,6 +70,9 @@ public class BanditCar extends Car{
 //        
 //        path.remove(0);
         
+        targetX = path.get(0).getConstantXPos();
+        targetY = path.get(0).getConstantYPos();
+        
         return path;
     }
 }
