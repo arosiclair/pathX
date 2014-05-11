@@ -468,6 +468,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.LEVEL_SELECT_BACK_BUTTON_X - 60;
         y = PathXConstants.MAIN_QUIT_BUTTON_Y;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(BACK_BUTTON_TYPE, s);
         
         //ARROW BUTTONS
@@ -479,6 +480,7 @@ public class PathXMiniGame extends MiniGame{
         x = UP_ARROW_X;
         y = UP_ARROW_Y;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(UP_ARROW_BUTTON_TYPE, s);
         
         //DOWN ARROW
@@ -487,6 +489,7 @@ public class PathXMiniGame extends MiniGame{
         sT.addState(VISIBLE.toString(), img);
         sT.addState(MOUSE_OVER.toString(), img);
         s = new Sprite(sT, DOWN_ARROW_X, DOWN_ARROW_Y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(DOWN_ARROW_BUTTON_TYPE, s);
         
         //LEFT ARROW
@@ -495,6 +498,7 @@ public class PathXMiniGame extends MiniGame{
         sT.addState(VISIBLE.toString(), img);
         sT.addState(MOUSE_OVER.toString(), img);
         s = new Sprite(sT, LEFT_ARROW_X, LEFT_ARROW_Y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(LEFT_ARROW_BUTTON_TYPE, s);
         
         //RIGHT ARROW
@@ -503,6 +507,7 @@ public class PathXMiniGame extends MiniGame{
         sT.addState(VISIBLE.toString(), img);
         sT.addState(MOUSE_OVER.toString(), img);
         s = new Sprite(sT, RIGHT_ARROW_X, RIGHT_ARROW_Y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(RIGHT_ARROW_BUTTON_TYPE, s);
         
         //THE VIEWPORT
@@ -537,6 +542,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.GAME_BACK_BUTTON_X;
         y = PathXConstants.GAME_BACK_BUTTON_Y;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(GAME_BACK_BUTTON_TYPE, s);
         
         //QUIT BUTTON
@@ -548,6 +554,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.GAME_QUIT_BUTTON_X;
         y = PathXConstants.GAME_QUIT_BUTTON_Y;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(GAME_QUIT_BUTTON_TYPE, s);
         
         //START BUTTON
@@ -559,6 +566,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.GAME_START_BUTTON_X;
         y = PathXConstants.GAME_START_BUTTON_Y;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(START_BUTTON_TYPE, s);
         
         //PAUSE BUTTON
@@ -570,6 +578,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.LEFT_ARROW_X + 30;
         y = PathXConstants.LEFT_ARROW_Y;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(PAUSE_BUTTON_TYPE, s);
         
         //GAME SPECIALS GO HERE.
@@ -583,6 +592,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.FIRST_SPECIAL_X;
         y = PathXConstants.FIRST_SPECIAL_Y;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(MAKE_GREEN_BUTTON_TYPE, s);
         
         //Make Light Red Button
@@ -595,6 +605,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.FIRST_SPECIAL_X + GAME_SPECIAL_WIDTH;
         y = PathXConstants.FIRST_SPECIAL_Y;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(MAKE_RED_BUTTON_TYPE, s);
         
         //Freeze Time Button
@@ -607,6 +618,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 2);
         y = PathXConstants.FIRST_SPECIAL_Y;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(FREEZE_BUTTON_TYPE, s);
         
         //INCREASE SPEED BUTTON
@@ -619,6 +631,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 3);
         y = PathXConstants.FIRST_SPECIAL_Y;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(INCREASE_SPEED_BUTTON_TYPE, s);
         
         //DECREASE SPEED BUTTON
@@ -631,6 +644,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.FIRST_SPECIAL_X;
         y = PathXConstants.FIRST_SPECIAL_Y + GAME_SPECIAL_HEIGHT;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(DECREASE_SPEED_BUTTON_TYPE, s);
         
         //INCREASE PLAYER SPEED BUTTON
@@ -641,6 +655,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.FIRST_SPECIAL_X + GAME_SPECIAL_WIDTH;
         y = PathXConstants.FIRST_SPECIAL_Y + GAME_SPECIAL_HEIGHT;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(INCREASE_PLAYER_SPEED_BUTTON_TYPE, s);
         
         //FLAT TIRE BUTTON
@@ -653,6 +668,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 2);
         y = PathXConstants.FIRST_SPECIAL_Y + GAME_SPECIAL_HEIGHT;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(FLAT_TIRE_BUTTON_TYPE, s);
         
         //EMPTY GAS BUTTON
@@ -665,6 +681,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 3);
         y = PathXConstants.FIRST_SPECIAL_Y + GAME_SPECIAL_HEIGHT;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(EMPTY_GAS_BUTTON_TYPE, s);
         
         //CLOSE ROAD BUTTON
@@ -677,6 +694,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.FIRST_SPECIAL_X;
         y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_HEIGHT * 2);
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(CLOSE_ROAD_BUTTON_TYPE, s);
         
         //OPEN INTERSECTION BUTTON
@@ -689,6 +707,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.FIRST_SPECIAL_X + GAME_SPECIAL_WIDTH;
         y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_WIDTH * 2);
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(OPEN_INTERSECTION_BUTTON_TYPE, s);
         
         //CLOSE INTERSECTION BUTTON
@@ -701,6 +720,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 2);
         y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_WIDTH * 2);
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(CLOSE_INTERSECTION_BUTTON_TYPE, s);
         
         //STEALING BUTTON
@@ -713,6 +733,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 3);
         y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_WIDTH * 2);
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(STEAL_BUTTON_TYPE, s);
         
         //MIND CONTROL BUTTON
@@ -725,6 +746,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.FIRST_SPECIAL_X;
         y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_HEIGHT * 3);
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(MIND_CONTROL_BUTTON_TYPE, s);
         
         //INTANGIBILITY BUTTON
@@ -737,6 +759,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH);
         y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_HEIGHT * 3);
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(INTANGIBILITY_BUTTON_TYPE, s);
         
         //MINDLESS TERROR BUTTON
@@ -749,6 +772,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 2);
         y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_WIDTH * 3);
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(MINDLESS_TERROR_BUTTON_TYPE, s);
         
         //FLYING BUTTON
@@ -761,6 +785,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 3);
         y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_WIDTH * 3);
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(FLYING_BUTTON_TYPE, s);
         
         //INVINCIBILITY BUTTON
@@ -773,6 +798,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.FIRST_SPECIAL_X + GAME_SPECIAL_WIDTH + 15;
         y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_HEIGHT * 4);
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(GOD_MODE_BUTTON_TYPE, s);
         
         //LEVEL SELECT ARROWS WILL BE USED FOR THE GAME SCREEN AS WELL.

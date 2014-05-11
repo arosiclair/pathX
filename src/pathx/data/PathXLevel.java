@@ -167,4 +167,8 @@ public class PathXLevel {
     public void setReward(int reward) {
         this.reward = reward;
     }
+    
+    public void decreaseReward(){
+        reward = (int) (reward * 0.90);
+    }
 }

@@ -9,7 +9,9 @@ package pathx.ui;
 import graph.Vertex;
 import java.util.ArrayList;
 import java.util.Random;
+import mini_game.MiniGame;
 import mini_game.SpriteType;
+import pathx.data.PathXDataModel;
 import pathx.data.PathXLevel;
 
 /**
@@ -17,6 +19,8 @@ import pathx.data.PathXLevel;
  * @author Andrew
  */
 public class ZombieCar extends Car{
+    
+    private boolean hasHit;
 
     public ZombieCar(SpriteType initSpriteType, float initX, float initY, float initVx, 
             float initVy, String initState, PathXLevel level, PathXNode startSpot){
@@ -53,5 +57,16 @@ public class ZombieCar extends Car{
         targetY = path.get(0).getConstantYPos();
         
         return path;
+    }
+    
+    @Override
+    public void update(MiniGame game){
+        PathXDataModel data = (PathXDataModel) game.getDataModel();
+        if(aabbsOverlap(data.getPlayer()) && !hasHit){
+            data.getPlayer().decreaseMaxSpeed();
+            hasHit = true;
+        }
+        
+        super.update(game);
     }
 }

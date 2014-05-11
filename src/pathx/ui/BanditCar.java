@@ -71,9 +71,7 @@ public class BanditCar extends Car{
     public void update(MiniGame game){
         PathXDataModel data = (PathXDataModel) game.getDataModel();
         if(aabbsOverlap(data.getPlayer()) && !hasRobbed){
-            int reward = getLevel().getReward();
-            int newReward = (int) (reward - (reward * 0.10));
-            getLevel().setReward(newReward);
+            getLevel().decreaseReward(); 
             hasRobbed = true;
         }
         

@@ -30,6 +30,7 @@ public abstract class Car extends Sprite{
     
     //Speed of the sprite
     private double speed;
+    private double maxSpeed;
     
     
     //We use these constant globals for a reference point when rendering in comparison to
@@ -61,6 +62,7 @@ public abstract class Car extends Sprite{
         intersection = startSpot;
         movingToTarget = false;
         this.level = level;
+        maxSpeed = 2;
     }
     
     //This method will be overidden and defined for other, AI-driven cars in game.
@@ -95,7 +97,7 @@ public abstract class Car extends Sprite{
      * we'll then compute the x and y axis components for taking into
      * account the trajectory angle.
      */
-    public void startMovingToTarget(int maxVelocity, Viewport gameVP)
+    public void startMovingToTarget(double maxVelocity, Viewport gameVP)
     {
         
         // LET ITS POSITIONG GET UPDATED
@@ -174,6 +176,10 @@ public abstract class Car extends Sprite{
 
     public void setSpeed(double speed) {
         this.speed = speed;
+    }
+    
+    public void decreaseMaxSpeed(){
+        maxSpeed = maxSpeed * 0.90;
     }
 
     public void setIntersection(PathXNode intersection) {
@@ -264,8 +270,8 @@ public abstract class Car extends Sprite{
                 
                 //Start moving to the target that we just defined. "2" is a 
                 //place holder speed for now.
-                startMovingToTarget(2, gameVP);
-                speed = 2;
+                startMovingToTarget(maxSpeed, gameVP);
+                speed = maxSpeed;
                 
             }
             
@@ -273,8 +279,8 @@ public abstract class Car extends Sprite{
 //                targetX = path.get(0).getConstantXPos();
 //                targetY = path.get(0).getConstantYPos();
                 
-                startMovingToTarget(2, gameVP);
-                speed = 2;
+                startMovingToTarget(maxSpeed, gameVP);
+                speed = maxSpeed;
                 constantXPos += vX;
                 constantYPos += vY;
             }
