@@ -11,7 +11,9 @@ import graph.Vertex;
 import graph.VertexNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
+import mini_game.MiniGame;
 import mini_game.SpriteType;
+import pathx.data.PathXDataModel;
 import pathx.data.PathXLevel;
 
 /**
@@ -19,6 +21,8 @@ import pathx.data.PathXLevel;
  * @author Andrew
  */
 public class BanditCar extends Car{
+    
+    private boolean hasRobbed = false;
 
     public BanditCar(SpriteType initSpriteType, float initX, float initY, float initVx, 
             float initVy, String initState, PathXLevel level, PathXNode startSpot){
@@ -61,5 +65,19 @@ public class BanditCar extends Car{
         targetY = newPath.get(0).getConstantYPos();
         
         return newPath;
+    }
+    
+    @Override
+    public void update(MiniGame game){
+        PathXDataModel data = (PathXDataModel) game.getDataModel();
+        if(aabbsOverlap(data.getPlayer()) && !hasRobbed){
+            int reward = getLevel().getReward();
+            int newReward = (int) (reward - (reward * 0.10));
+            getLevel().setReward(newReward);
+            hasRobbed = true;
+        }
+        
+        super.update(game);
+            
     }
 }

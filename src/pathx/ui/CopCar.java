@@ -9,8 +9,9 @@ package pathx.ui;
 import graph.Vertex;
 import java.util.ArrayList;
 import java.util.Random;
-import mini_game.Sprite;
+import mini_game.MiniGame;
 import mini_game.SpriteType;
+import pathx.data.PathXDataModel;
 import pathx.data.PathXLevel;
 
 /**
@@ -59,5 +60,14 @@ public class CopCar extends Car{
         targetX = path.get(0).getConstantXPos();
         targetY = path.get(0).getConstantYPos();
         return path;
+    }
+    
+    @Override
+    public void update(MiniGame game){
+        PathXDataModel data = (PathXDataModel) game.getDataModel();
+        if(aabbsOverlap(data.getPlayer()))
+            data.endGameAsLoss();
+        
+        super.update(game);
     }
 }

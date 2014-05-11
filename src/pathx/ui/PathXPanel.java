@@ -344,8 +344,10 @@ public class PathXPanel extends JPanel{
             String dialog = "YOU WIN! \n Reward: $" + dataModel.getCurrentLevel().getReward();
             g.drawString(dialog, PathXConstants.OVERLAY_LEVEL_DIALOG_X, PathXConstants.OVERLAY_LEVEL_DIALOG_Y);
         }else if (gameState.equals(MiniGameState.LOSS)){
-            String dialog = "YOU LOSE! \n Your balance is now $" + dataModel.getRecord().balance;
+            String dialog = "YOU LOSE!";
+            String dialog2 = "Your balance is now $" + dataModel.getRecord().balance;
             g.drawString(dialog, PathXConstants.OVERLAY_LEVEL_DIALOG_X, PathXConstants.OVERLAY_LEVEL_DIALOG_Y);
+            g.drawString(dialog2, PathXConstants.OVERLAY_LEVEL_DIALOG_X, PathXConstants.OVERLAY_LEVEL_DIALOG_Y + 30);
         }
     }
 }

@@ -27,7 +27,7 @@ public class PathXLevel {
     //The directory to the background image to be loaded.
     private String bgImage, startNodeImage, destinationNodeImage;
     
-    private int reward;
+    protected int reward;
     //Coordinates of the level on the level select map.
     private int xPos, yPos;
     
@@ -162,5 +162,9 @@ public class PathXLevel {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public void setReward(int reward) {
+        this.reward = reward;
     }
 }
