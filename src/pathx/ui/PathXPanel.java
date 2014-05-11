@@ -206,6 +206,7 @@ public class PathXPanel extends JPanel{
         int reward = level.getReward();
         String info = name + " - $" + reward;
         
+        //g.
         g.setFont(FONT_TEXT_DISPLAY);
         g.setColor(Color.BLACK);
         g.drawString(info, PathXConstants.LEVEL_SELECT_CITY_X, PathXConstants.LEVEL_SELECT_CITY_Y);

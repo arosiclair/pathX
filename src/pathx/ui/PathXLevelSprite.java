@@ -56,7 +56,9 @@ public class PathXLevelSprite extends Sprite{
     
     @Override
     public boolean testForClick(MiniGame game, int x, int y){
-        if (level.getPrevious() == null || level.getPrevious().isCompleted())
+        if (state.indexOf("COMPLETED") >= 0)
+            return super.testForClick(game, x, y);
+        else if (level.getPrevious() == null || level.getPrevious().isCompleted())
             return super.testForClick(game, x, y);
         else
             return false;

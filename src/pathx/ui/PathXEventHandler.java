@@ -9,6 +9,8 @@ package pathx.ui;
 import graph.VertexNotFoundException;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.logging.Level;
@@ -117,6 +119,17 @@ public class PathXEventHandler {
     //Triggered when the "try again" option is chosen after a level completion
     //or failure.
     public void resetLevel(){
+        //Delete/clear all of the cars, nodes, and roads
+        dataModel.resetLists();
+        dataModel.resetGameViewport();
+        dataModel.setGameState(MiniGameState.NOT_STARTED);
+        
+        //Reconstruct everything needed for the level. This will rearrange the 
+        //starting position of the cops.
+        dataModel.constructNodes(dataModel.getCurrentLevel());
+        dataModel.constructRoads(dataModel.getCurrentLevel());
+        dataModel.constructEnemyCars(dataModel.getCurrentLevel());
+        dataModel.constructPlayerCar(dataModel.getCurrentLevel());
         
     }
     //Will either scroll the level select or game level view.
@@ -302,6 +315,17 @@ public class PathXEventHandler {
             scrollUpRequest();
         }else if (keyCode == KeyEvent.VK_DOWN){
             scrollDownRequest();
+        }
+        
+        //Pressing U unlocks and completes all of the levels on the level select screen.
+        else if (keyCode == KeyEvent.VK_U){
+            if (game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)){
+                Collection<PathXLevel> levels = dataModel.getLevels().values();
+                for(PathXLevel level : levels)
+                    level.setCompleted(true);
+                for(PathXLevelSprite ls : dataModel.getLevelSprites())
+                    ls.setState(PathXSpriteState.COMPLETED.toString());
+            }
         }
     }
 

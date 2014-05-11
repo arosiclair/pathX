@@ -600,7 +600,7 @@ public class PathXDataModel extends MiniGameDataModel{
     }
 
     //Clears out the nodes, roads and cars arraylists. This is done after leaving
-    //a level.
+    //or reseting a level.
     public void resetLists() {
         nodes.clear();
         roads.clear();

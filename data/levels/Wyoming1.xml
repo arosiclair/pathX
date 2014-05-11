@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<level image="Wyoming.jpg" name="Wyoming">
+<level image="Wyoming.jpg" name="Wyoming1">
      <intersections>
           <intersection id="0" open="true" x="201" y="181"/>
           <intersection id="1" open="true" x="566" y="678"/>

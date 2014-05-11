@@ -1022,7 +1022,19 @@ public class PathXMiniGame extends MiniGame{
         Sprite tryAgainButton = guiButtons.get(TRY_AGAIN_BUTTON_TYPE);
         tryAgainButton.setActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
-            {   getEventHandler().resetLevel(); }
+            {   
+                //Reset everything relavent for the level and prep it for replay.
+                getEventHandler().resetLevel();
+                
+                //Disable the Overlay and it's buttons
+                getGUIDecor().get(GAME_POPUP_TYPE).setEnabled(false);
+                getGUIDecor().get(GAME_POPUP_TYPE).setState(INVISIBLE.toString());
+                getGUIButtons().get(LEAVE_TOWN_BUTTON_TYPE).setEnabled(false);
+                getGUIButtons().get(LEAVE_TOWN_BUTTON_TYPE).setState(INVISIBLE.toString());
+                getGUIButtons().get(TRY_AGAIN_BUTTON_TYPE).setEnabled(false);
+                getGUIButtons().get(TRY_AGAIN_BUTTON_TYPE).setState(INVISIBLE.toString());
+                
+            }
         });
         //SPECIALS EVENT HANDLERS GO HERE
     }
