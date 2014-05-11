@@ -66,6 +66,8 @@ public class PathXConstants {
     public static final String GAME_BACK_BUTTON_TYPE = "GAME_BACK_BUTTON_TYPE";
     public static final String GAME_POPUP_TYPE = "GAME_POPUP_TYPE";
     public static final String POPUP_CLOSE_BUTTON_TYPE = "POPUP_CLOSE_BUTTON_TYPE";
+    public static final String LEAVE_TOWN_BUTTON_TYPE = "LEAVE_TOWN_BUTTON_TYPE";
+    public static final String TRY_AGAIN_BUTTON_TYPE = "TRY_AGAIN_BUTTON_TYPE";
     public static final String PAUSE_BUTTON_TYPE = "PAUSE_BUTTON_TYPE";
     
     //THE GAME'S VIEWPORT LOCATION
@@ -193,12 +195,16 @@ public class PathXConstants {
     
     public static final int GAME_OVERLAY_X = 200;
     public static final int GAME_OVERLAY_Y = 90;
-    public static final int OVERLAY_CITY_LABEL_X = GAME_OVERLAY_X + 20;
+    public static final int OVERLAY_CITY_LABEL_X = GAME_OVERLAY_X + 50;
     public static final int OVERLAY_CITY_LABEL_Y = GAME_OVERLAY_Y + 20;
     public static final int OVERLAY_LEVEL_DIALOG_X = OVERLAY_CITY_LABEL_X;
     public static final int OVERLAY_LEVEL_DIALOG_Y = OVERLAY_CITY_LABEL_Y + 50;
     public static final int OVERLAY_BUTTON_CLOSE_X = GAME_OVERLAY_X + 150;
     public static final int OVERLAY_BUTTON_CLOSE_Y = GAME_OVERLAY_Y + 200;
+    public static final int OVERLAY_BUTTON_TRY_AGAIN_X = GAME_OVERLAY_X + 75;
+    public static final int OVERLAY_BUTTON_TRY_AGAIN_Y = OVERLAY_BUTTON_CLOSE_Y;
+    public static final int OVERLAY_BUTTON_LEAVE_TOWN_X = OVERLAY_BUTTON_TRY_AGAIN_X + 150;
+    public static final int OVERLAY_BUTTON_LEAVE_TOWN_Y = OVERLAY_BUTTON_TRY_AGAIN_Y;
     
     
     

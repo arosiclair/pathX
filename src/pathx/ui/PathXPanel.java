@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import javax.swing.JPanel;
 import mini_game.MiniGame;
+import mini_game.MiniGameState;
 import mini_game.Sprite;
 import mini_game.SpriteType;
 import mini_game.Viewport;
@@ -134,6 +135,11 @@ public class PathXPanel extends JPanel{
             //RENDER BUTTONS AND DECOR
             renderGUIControls(g);
             
+            if(dataModel.getGameState().equals(MiniGameState.WIN) || dataModel.getGameState().equals(MiniGameState.LOSS)){
+                
+                renderDialog(dataModel.getGameState(), g);
+            }
+            
 //          renderStats(g);
             
             
@@ -172,7 +178,8 @@ public class PathXPanel extends JPanel{
         
         Collection<Sprite> buttonSprites = game.getGUIButtons().values();
         for (Sprite s : buttonSprites)
-            renderSprite(g, s);
+            if (s.isEnabled())
+                renderSprite(g, s);
         
     }
 
@@ -327,5 +334,17 @@ public class PathXPanel extends JPanel{
         
         img = game.loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_HOUSE));
         g.drawImage(img, (int) finish.getX() -15, (int) finish.getY() - 15, this);
+    }
+
+    private void renderDialog(MiniGameState gameState, Graphics g) {
+        g.setFont(FONT_TEXT_DISPLAY);
+        g.setColor(Color.BLACK);
+        if (gameState.equals(MiniGameState.WIN)){
+            String dialog = "YOU WIN! \n Reward: $" + dataModel.getCurrentLevel().getReward();
+            g.drawString(dialog, PathXConstants.OVERLAY_LEVEL_DIALOG_X, PathXConstants.OVERLAY_LEVEL_DIALOG_Y);
+        }else if (gameState.equals(MiniGameState.LOSS)){
+            String dialog = "YOU LOSE! \n Your balance is now $" + dataModel.getRecord().balance;
+            g.drawString(dialog, PathXConstants.OVERLAY_LEVEL_DIALOG_X, PathXConstants.OVERLAY_LEVEL_DIALOG_Y);
+        }
     }
 }

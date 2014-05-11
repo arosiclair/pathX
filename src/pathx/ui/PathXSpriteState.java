@@ -59,7 +59,7 @@ public enum PathXSpriteState {
     INCOMPLETE,
     INCOMPLETE_MOUSE_OVER,
     COMPLETED,
-    COMPLETE_MOUSE_OVER,
+    COMPLETED_MOUSE_OVER,
     
     VISIBLE,
     INVISIBLE,

@@ -10,7 +10,9 @@ import graph.Graph;
 import graph.Vertex;
 import graph.VertexNotFoundException;
 import java.util.ArrayList;
+import mini_game.MiniGame;
 import mini_game.SpriteType;
+import pathx.data.PathXDataModel;
 import pathx.data.PathXLevel;
 
 /**
@@ -41,7 +43,8 @@ public class PlayerCar extends Car{
     public ArrayList<PathXNode> generatePath(PathXNode destination)throws VertexNotFoundException{
         
         String destState = destination.getState();
-        destState = destState.substring(0, destState.indexOf("_MOUSE_OVER"));
+        if (destState.indexOf("MOUSE_OVER") >= 0)
+            destState = destState.substring(0, destState.indexOf("_MOUSE_OVER"));
         
         if (path != null && !path.isEmpty())
             return null;
@@ -86,5 +89,17 @@ public class PlayerCar extends Car{
     @Override
     public ArrayList<PathXNode> generatePath() throws VertexNotFoundException {
         return null;
+    }
+    
+    //We perform a check to see if the current intersection is the SafeHouse 
+    //PathXNode before updating the Player's Car as usual.
+    @Override
+    public void update(MiniGame game){
+        super.update(game);
+        
+        PathXDataModel dataModel = (PathXDataModel) game.getDataModel();
+        PathXNode safeHouse = dataModel.getNodes().get(1);
+        if (getIntersection() == safeHouse)
+            dataModel.endGameAsWin();
     }
 }

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mini_game.MiniGame;
@@ -151,13 +152,44 @@ public class PathXDataModel extends MiniGameDataModel{
     
     @Override
     public void endGameAsWin(){
+        TreeMap<String, Sprite> guiDecor = miniGame.getGUIDecor();
+        TreeMap<String, Sprite> guiButtons = miniGame.getGUIButtons();
         setGameState(MiniGameState.WIN);
+        //Award the player the appropriate amount of money.
+        record.balance += currentLevel.getReward();
+        currentLevel.setCompleted(true);
         
+        //Update the level sprites on the Map to reflect the level completion.
+        for (PathXLevelSprite ls : levelSprites)
+            ls.updateState();
+        
+        //Bring up the level dialog and buttons to display the win message.
+        Sprite overlay = guiDecor.get(PathXConstants.GAME_POPUP_TYPE);
+        overlay.setState(VISIBLE.toString());
+        overlay.setEnabled(true);
+        guiButtons.get(PathXConstants.TRY_AGAIN_BUTTON_TYPE).setEnabled(true);
+        guiButtons.get(PathXConstants.TRY_AGAIN_BUTTON_TYPE).setState(VISIBLE.toString());
+        guiButtons.get(PathXConstants.LEAVE_TOWN_BUTTON_TYPE).setEnabled(true);
+        guiButtons.get(PathXConstants.LEAVE_TOWN_BUTTON_TYPE).setState(VISIBLE.toString());
     }
     
     @Override
     public void endGameAsLoss(){
-        setGameState(NOT_STARTED);
+        TreeMap<String, Sprite> guiDecor = miniGame.getGUIDecor();
+        TreeMap<String, Sprite> guiButtons = miniGame.getGUIButtons();
+        setGameState(MiniGameState.LOSS);
+        //Deduct 10% from the player's current balance
+        if (record.balance != 0)
+            record.balance -= (int) record.balance * 0.10;
+        
+        //Bring up the level dialog and buttons to display the win message.
+        Sprite overlay = guiDecor.get(PathXConstants.GAME_POPUP_TYPE);
+        overlay.setState(VISIBLE.toString());
+        overlay.setEnabled(true);
+        guiButtons.get(PathXConstants.TRY_AGAIN_BUTTON_TYPE).setEnabled(true);
+        guiButtons.get(PathXConstants.TRY_AGAIN_BUTTON_TYPE).setState(VISIBLE.toString());
+        guiButtons.get(PathXConstants.LEAVE_TOWN_BUTTON_TYPE).setEnabled(true);
+        guiButtons.get(PathXConstants.LEAVE_TOWN_BUTTON_TYPE).setState(VISIBLE.toString());
     }
     
     //Helper method that adds all of the game specials to the specials HashMap 
@@ -197,7 +229,7 @@ public class PathXDataModel extends MiniGameDataModel{
                 miniGame.beginUsingData();
 
                 //Update the player's car if it should be moving to a target.
-                if (playerCar.getTargetX() != 0) {
+                if (playerCar != null && playerCar.getTargetX() != 0) {
                     playerCar.update(miniGame);
                 }
                 

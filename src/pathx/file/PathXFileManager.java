@@ -35,7 +35,7 @@ import static pathx.PathXConstants.LEVEL_Y_POS;
 import static pathx.PathXConstants.VIEWPORT_Y;
 import pathx.ui.PathXSpriteState;
 import static pathx.ui.PathXSpriteState.COMPLETED;
-import static pathx.ui.PathXSpriteState.COMPLETE_MOUSE_OVER;
+import static pathx.ui.PathXSpriteState.COMPLETED_MOUSE_OVER;
 import static pathx.ui.PathXSpriteState.INCOMPLETE;
 import static pathx.ui.PathXSpriteState.INCOMPLETE_MOUSE_OVER;
 import static pathx.ui.PathXSpriteState.LOCKED;
@@ -118,12 +118,18 @@ public class PathXFileManager {
         //are used for level select map rendering.
         ArrayList<String> levelDetails = props.getPropertyOptionsList(PathXPropertyType.LEVEL_OPTIONS);
         StringTokenizer st;
+        int i = 0;
+        String[] levelNames = new String[20];
+        PathXLevel newLevel = null;
+        PathXLevel previous = null;
         for (String s : levelDetails){
             try {
+                previous = newLevel;
                 Document levelDoc = xmlUtil.loadXMLDocument(PATH_DATA + s, PATH_LEVEL_SCHEMA);
                 String path = PATH_DATA + s;
-                PathXLevel newLevel = createLevel(path, levelDoc, xmlUtil);
+                newLevel = createLevel(path, levelDoc, xmlUtil, previous);
                 levels.put(newLevel.getLevelName(), newLevel);
+                levelNames[i] = newLevel.getLevelName();
                 PathXLevelSprite newSprite = createLevelSprite(newLevel);
                 levelSprites.add(newSprite);
                 
@@ -138,7 +144,7 @@ public class PathXFileManager {
         data.setLevelSprites(levelSprites);
     }
     
-    private PathXLevel createLevel(String path, Document levelDoc, XMLUtilities xmlUtil){
+    private PathXLevel createLevel(String path, Document levelDoc, XMLUtilities xmlUtil, PathXLevel previousLevel){
 
         //Get the level name and background Image.
         Node levelNode = levelDoc.getElementsByTagName(LEVEL_NODE_TAG).item(0);
@@ -184,16 +190,7 @@ public class PathXFileManager {
         Node intersectionsList = levelDoc.getElementsByTagName(INTERSECTIONS_LIST_TAG).item(0);
         ArrayList<Node> intersections = xmlUtil.getChildNodesWithName(intersectionsList, INTERSECTION_TAG); 
         for (Node intersection : intersections){
-//            NamedNodeMap attrs = intersection.getAttributes();
-//            int idNum = Integer.parseInt(attrs.getNamedItem(ID_ATT).getNodeValue());
-//            boolean open = Boolean.parseBoolean(attrs.getNamedItem(OPEN_ATT).getNodeValue());
-//            int xPos = Integer.parseInt(attrs.getNamedItem(X_ATT).getNodeValue());
-//            int yPos = Integer.parseInt(attrs.getNamedItem(Y_ATT).getNodeValue());
-//            
-//            //Creat a PathXNode for the level.
-//            SpriteType st = createIntersectionSpriteType();
-//            PathXNode newNode = new PathXNode();
-            
+
             //Create the new Vertex and add it to the graph.
             Vertex newVertex = new Vertex();
             newGraph.addVertex(newVertex);
@@ -223,7 +220,10 @@ public class PathXFileManager {
         }
 
         //Create the PathXLevel and add all relevant information.
-        PathXLevel newLevel = new PathXLevel(levelName, path, bgImageName, newGraph, reward, LEVEL_X_POS[levelsLoaded], LEVEL_Y_POS[levelsLoaded], data);
+        PathXLevel newLevel = new PathXLevel(levelName, path, bgImageName, 
+                newGraph, reward, LEVEL_X_POS[levelsLoaded], LEVEL_Y_POS[levelsLoaded],
+                data, previousLevel);
+        
         levelsLoaded++;
         newLevel.setNumCops(numPolice);
         newLevel.setNumBandits(numBandits);
@@ -249,12 +249,16 @@ public class PathXFileManager {
         sT.addState(INCOMPLETE_MOUSE_OVER.toString(), images[1]);
         images = game.getLevelNodeImage(PathXConstants.COMPLETE_LEVEL_TYPE);
         sT.addState(COMPLETED.toString(), images[0]);
-        sT.addState(COMPLETE_MOUSE_OVER.toString(), images[1]);
+        sT.addState(COMPLETED_MOUSE_OVER.toString(), images[1]);
         String state;
-        if (newLevel.isCompleted())
-            state = PathXSpriteState.COMPLETED.toString();
-        else
+        
+        //Assign a state based on the completion of the previous level.
+        if (newLevel.getPrevious() != null && !newLevel.getPrevious().isCompleted())
+            state = PathXSpriteState.LOCKED.toString();
+        else if (!newLevel.isCompleted())
             state = PathXSpriteState.INCOMPLETE.toString();
+        else
+            state = PathXSpriteState.COMPLETED.toString();
         PathXLevelSprite newSprite = new PathXLevelSprite(sT, newLevel.getxPos(), newLevel.getyPos() - VIEWPORT_Y, 0, 0, state, newLevel, game);
         
         //Set the event handler

@@ -21,6 +21,7 @@ public class PathXLevel {
     
     private String levelName;
     
+    //Directory of the corresponding XML file.
     private String xmlFile;
     
     //The directory to the background image to be loaded.
@@ -38,10 +39,14 @@ public class PathXLevel {
     
     private int numCops, numBandits, numZombies;
     
-    private boolean completed;
+    protected boolean completed;
+    
+    protected PathXLevel previous;
     
     
-    public PathXLevel(String levelName, String xmlFile, String bgImage, Graph graph, int reward, int xPos, int yPos, PathXDataModel data){
+    public PathXLevel(String levelName, String xmlFile, String bgImage, 
+            Graph graph, int reward, int xPos, int yPos, PathXDataModel data, 
+            PathXLevel prevLevel){
         this.dataModel = data;
         this.levelName = levelName;
         this.xmlFile = xmlFile;
@@ -53,6 +58,7 @@ public class PathXLevel {
         this.bgImage = bgImage;
         
         this.completed = false;
+        previous = prevLevel;
     }
 //    public ArrayList<Node> findPath(Node from, Node to){{
 //        
@@ -144,5 +150,17 @@ public class PathXLevel {
 
     public String getXmlFile() {
         return xmlFile;
+    }
+
+    public PathXLevel getPrevious() {
+        return previous;
+    }
+
+    public void setPrevious(PathXLevel previous) {
+        this.previous = previous;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }

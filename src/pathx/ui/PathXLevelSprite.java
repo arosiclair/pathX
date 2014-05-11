@@ -8,18 +8,13 @@ package pathx.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.util.TreeMap;
+import mini_game.MiniGame;
 import mini_game.Sprite;
 import mini_game.SpriteType;
 import mini_game.Viewport;
-import static pathx.PathXConstants.COMPLETE_LEVEL_TYPE;
-import static pathx.PathXConstants.INCOMPLETE_LEVEL_TYPE;
 import static pathx.PathXConstants.VIEWPORT_X;
 import static pathx.PathXConstants.VIEWPORT_Y;
 import pathx.data.PathXLevel;
-import static pathx.ui.PathXSpriteState.MOUSE_OVER;
-import static pathx.ui.PathXSpriteState.VISIBLE;
 /**
  *
  * @author Andrew
@@ -59,13 +54,43 @@ public class PathXLevelSprite extends Sprite{
         return level;
     }
     
+    @Override
+    public boolean testForClick(MiniGame game, int x, int y){
+        if (level.getPrevious() == null || level.getPrevious().isCompleted())
+            return super.testForClick(game, x, y);
+        else
+            return false;
+    }
+    
+//    @Override
+//    public String getState(){
+//        if (level.getPrevious() != null && !level.getPrevious().isCompleted())
+//            return PathXSpriteState.LOCKED.toString();
+//        else if (!level.isCompleted())
+//            return PathXSpriteState.INCOMPLETE.toString();
+//        else
+//            return PathXSpriteState.COMPLETED.toString();
+//    }
+//    
     public void update(){
-        //TreeMap<String, Sprite> buttons = game.getGUIButtons();
         Viewport vp = game.getDataModel().getViewport();
-        
         setX(VIEWPORT_X + constantX - vp.getViewportX());
         setY(VIEWPORT_Y + constantY - vp.getViewportY());
+        
+//        if (level.getPrevious() != null && !level.getPrevious().isCompleted())
+//             setState(PathXSpriteState.LOCKED.toString());
+//        else if (!level.isCompleted())
+//            setState(PathXSpriteState.INCOMPLETE.toString());
+//        else
+//            setState(PathXSpriteState.COMPLETED.toString());
+    }
 
-        //buttons.put(level.getLevelName(), s);
+    public void updateState() {
+        if (level.getPrevious() != null && !level.getPrevious().isCompleted())
+             setState(PathXSpriteState.LOCKED.toString());
+        else if (!level.isCompleted())
+            setState(PathXSpriteState.INCOMPLETE.toString());
+        else
+            setState(PathXSpriteState.COMPLETED.toString());
     }
 }

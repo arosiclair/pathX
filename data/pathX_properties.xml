@@ -107,6 +107,11 @@
         <property name="IMAGE_POPUP_BACKGROUND"         value="./GameOverlay.png"></property>
         <property name="IMAGE_BUTTON_CLOSE"             value="./ButtonClose.png"></property>
         <property name="IMAGE_BUTTON_CLOSE_MOUSE_OVER"  value="./ButtonCloseMouseOver.png"></property>
+        <property name="IMAGE_BUTTON_LEAVE_TOWN"       value="./ButtonLeaveTown.png"></property>
+        <property name="IMAGE_BUTTON_LEAVE_TOWN_MOUSE_OVER" value="./ButtonLeaveTownMouseOver.png"></property>
+        <property name="IMAGE_BUTTON_TRY_AGAIN"         value="./ButtonTryAgain.png"></property>
+        <property name="IMAGE_BUTTON_TRY_AGAIN_MOUSE_OVER"  value="./ButtonTryAgainMouseOver.png"></property>
+
         <property name="IMAGE_BACKGROUND_SETTINGS"      value="./SettingsBackground.png"></property>
         <property name="IMAGE_BUTTON_TOGGLE_OFF"        value="./ButtonToggleOff.png"></property>
         <property name="IMAGE_BUTTON_TOGGLE_ON"         value="./ButtonToggleOn.png"></property>

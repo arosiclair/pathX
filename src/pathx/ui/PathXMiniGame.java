@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import javax.swing.JFrame;
 import mini_game.MiniGame;
+import mini_game.MiniGameState;
 import mini_game.Sprite;
 import mini_game.SpriteType;
 import mini_game.Viewport;
@@ -144,7 +145,7 @@ public class PathXMiniGame extends MiniGame{
             guiButtons.get(PAUSE_BUTTON_TYPE).setEnabled(false);
             deactivateSpecialButtons();
             
-            ((PathXDataModel) data).endGameAsLoss();
+            //((PathXDataModel) data).endGameAsLoss();
             ((PathXDataModel) data).resetGameViewport();
             ((PathXDataModel) data).resetLists();
             screenState = LEVEL_SELECT_SCREEN_STATE;
@@ -796,6 +797,28 @@ public class PathXMiniGame extends MiniGame{
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
         guiButtons.put(CLOSE_BUTTON_TYPE, s);
         
+        //POPUP TRY AGAIN BUTTON
+        sT = new SpriteType(TRY_AGAIN_BUTTON_TYPE);
+        img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_BUTTON_TRY_AGAIN));
+        sT.addState(VISIBLE.toString(), img);
+        img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_BUTTON_TRY_AGAIN_MOUSE_OVER));
+        sT.addState(MOUSE_OVER.toString(), img);
+        x = PathXConstants.OVERLAY_BUTTON_TRY_AGAIN_X;
+        y = PathXConstants.OVERLAY_BUTTON_TRY_AGAIN_Y;
+        s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        guiButtons.put(TRY_AGAIN_BUTTON_TYPE, s);
+        
+        //POPUP LEAVE TOWN BUTTON
+        sT = new SpriteType(LEAVE_TOWN_BUTTON_TYPE);
+        img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_BUTTON_LEAVE_TOWN));
+        sT.addState(VISIBLE.toString(), img);
+        img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_BUTTON_LEAVE_TOWN_MOUSE_OVER));
+        sT.addState(MOUSE_OVER.toString(), img);
+        x = PathXConstants.OVERLAY_BUTTON_LEAVE_TOWN_X;
+        y = PathXConstants.OVERLAY_BUTTON_LEAVE_TOWN_Y;
+        s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        guiButtons.put(LEAVE_TOWN_BUTTON_TYPE, s);
+        
         //GAME VIEWPORT
         initGameViewport();
         
@@ -975,10 +998,36 @@ public class PathXMiniGame extends MiniGame{
                 {   getEventHandler().closeLevelDialog();   }
         });
         
+        //LEAVE TOWN BUTTON
+        Sprite leaveButton = guiButtons.get(LEAVE_TOWN_BUTTON_TYPE);
+        leaveButton.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+                //Disable the Overlay and it's buttons
+                getGUIDecor().get(GAME_POPUP_TYPE).setEnabled(false);
+                getGUIDecor().get(GAME_POPUP_TYPE).setState(INVISIBLE.toString());
+                getGUIButtons().get(LEAVE_TOWN_BUTTON_TYPE).setEnabled(false);
+                getGUIButtons().get(LEAVE_TOWN_BUTTON_TYPE).setState(INVISIBLE.toString());
+                getGUIButtons().get(TRY_AGAIN_BUTTON_TYPE).setEnabled(false);
+                getGUIButtons().get(TRY_AGAIN_BUTTON_TYPE).setState(INVISIBLE.toString());
+                
+                //Switch the state to not started.
+                data.setGameState(MiniGameState.NOT_STARTED);
+                //Switch to the level select screen.
+                getEventHandler().switchToLevelSelectScreen();  
+            }
+        });
+        
+        //TRY AGAIN BUTTON
+        Sprite tryAgainButton = guiButtons.get(TRY_AGAIN_BUTTON_TYPE);
+        tryAgainButton.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   getEventHandler().resetLevel(); }
+        });
         //SPECIALS EVENT HANDLERS GO HERE
     }
     
-    private void initSettingsHandlers(){
+    private void initSettingsHandlers() {
         //Sound toggle
         Sprite soundToggle = guiButtons.get(SOUND_TOGGLE_BUTTON_TYPE);
         soundToggle.setActionListener(new ActionListener(){
@@ -1076,21 +1125,6 @@ public class PathXMiniGame extends MiniGame{
                 if (button.containsPoint(data.getLastMouseX(), data.getLastMouseY()))
                 {
                     button.setState(PathXSpriteState.MOUSE_OVER.toString());
-                    
-//                    //Check if its a level on the level select screen
-//                    if(button.getSpriteType().getSpriteTypeID().indexOf("LEVEL_TYPE") >= 0){
-//                        
-//                        //Find out which level it is
-//                        Collection<PathXLevel> levels = ((PathXDataModel)data).getLevels().values();
-//                        for (PathXLevel level : levels){
-//                            if (level.getxPos() == (int)button.getX() + VIEWPORT_X - data.getViewport().getViewportX() &&
-//                                    level.getyPos() == (int)button.getY() + VIEWPORT_Y - data.getViewport().getViewportY()){
-//                                ((PathXPanel)canvas).renderLevelInfo(canvas.getGraphics(), level);
-//                                break;
-//                            }
-//                        }
-//                        
-//                    }
                 }
             }
             // ARE WE EXITING A BUTTON?
@@ -1126,7 +1160,7 @@ public class PathXMiniGame extends MiniGame{
         }
         
         //Check for mouse overs of Game Nodes
-        if (screenState.equals(GAME_SCREEN_STATE)) {
+        if (screenState.equals(GAME_SCREEN_STATE) && data.inProgress()) {
             ArrayList<Sprite> gameSprites = new ArrayList();
             gameSprites.addAll(dataModel.getNodes());
 
