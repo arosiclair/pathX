@@ -385,6 +385,11 @@ public class PathXDataModel extends MiniGameDataModel{
             intersections.add(newNode);
         }
         
+        //Update our list of nodes to reflect whether or not certain nodes & roads
+        //are closed.
+        for (PathXNode n : intersections)
+            if (n.getState().equals(PathXSpriteState.CLOSED.toString())) n.close();
+        
         //Update our global ArrayList of PathXNodes
         nodes = intersections;
     }
@@ -420,10 +425,14 @@ public class PathXDataModel extends MiniGameDataModel{
             int nodeID2 = Integer.parseInt(attrs.getNamedItem(PathXFileManager.INT_ID2_ATT).getNodeValue());
             boolean oneWay = Boolean.parseBoolean(attrs.getNamedItem(ONE_WAY_ATT).getNodeValue());
             int speedLimit = Integer.parseInt(attrs.getNamedItem(SPEED_LIMIT_ATT).getNodeValue());
+            PathXNode n1 = nodes.get(nodeID1);
+            PathXNode n2 = nodes.get(nodeID2);
             
             //Create the road with this information.
-            Road newRoad = new Road(nodes.get(nodeID1), nodes.get(nodeID2), oneWay, speedLimit, PathXSpriteState.OPEN.toString());
-            connections.add(newRoad);   
+            Road newRoad = new Road(n1, n2, oneWay, speedLimit, PathXSpriteState.OPEN.toString());
+            connections.add(newRoad);
+            n1.addRoad(newRoad);
+            n2.addRoad(newRoad);
         }
         
         roads = connections;
@@ -554,6 +563,13 @@ public class PathXDataModel extends MiniGameDataModel{
             
             CopCar newCop = new CopCar(sT, x, y, 0, 0, VISIBLE.toString(), level, startNode);
             newCop.setIntersection(startNode);
+            
+            newCop.setActionListener(new ActionListener(){
+                public void actionPerformed(ActionEvent ae)
+                { 
+                    miniGame.getEventHandler().respondToCarSelection(getLastMouseX(), getLastMouseY()); 
+                }
+            });
 
             cops.add(newCop);
         }
@@ -575,6 +591,13 @@ public class PathXDataModel extends MiniGameDataModel{
             
             BanditCar newBandit = new BanditCar(sT, x, y, 0, 0, VISIBLE.toString(), level, startNode);
             newBandit.setIntersection(startNode);
+            
+            newBandit.setActionListener(new ActionListener(){
+                public void actionPerformed(ActionEvent ae)
+                { 
+                    miniGame.getEventHandler().respondToCarSelection(getLastMouseX(), getLastMouseY()); 
+                }
+            });
 
             bandits.add(newBandit);
         }
@@ -596,6 +619,13 @@ public class PathXDataModel extends MiniGameDataModel{
             
             ZombieCar newZombie = new ZombieCar(sT, x, y, 0, 0, VISIBLE.toString(), level, startNode);
             newZombie.setIntersection(startNode);
+            
+            newZombie.setActionListener(new ActionListener(){
+                public void actionPerformed(ActionEvent ae)
+                { 
+                    miniGame.getEventHandler().respondToCarSelection(getLastMouseX(), getLastMouseY()); 
+                }
+            });
 
             zombies.add(newZombie);
         }

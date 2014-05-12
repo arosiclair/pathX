@@ -246,11 +246,13 @@ public class PathXPanel extends JPanel{
             endX = VIEWPORT_X + (int) nodes[1].getConstantXPos() - vp.getViewportX() + 15;
             endY = VIEWPORT_Y + (int) nodes[1].getConstantYPos() - vp.getViewportY() + 15;
             
-            //Draw this road in either green or black depedning on its state.
+            //Draw this road in either green, black, or white depedning on its state.
             String state = road.getCurrentState();
             if (state.indexOf(PathXSpriteState.MOUSE_OVER.toString()) >= 0)
                 g2.setColor(new Color(34, 177, 76));
-            else
+            else if (state.indexOf(PathXSpriteState.CLOSED.toString()) >= 0)
+                g2.setColor(Color.GRAY);
+            else 
                 g2.setColor(Color.BLACK);
             
             g2.setStroke(new BasicStroke(10));

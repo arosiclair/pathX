@@ -7,6 +7,9 @@
 package pathx.ui;
 
 import graph.Vertex;
+import graph.VertexNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mini_game.Sprite;
 
 /**
@@ -46,14 +49,26 @@ public class Road {
     //Open the road for use.
     public void open(){
         setState(PathXSpriteState.OPEN.toString());
+        
+        Vertex v1 = n1.getVertex();
+        Vertex v2 = n2.getVertex();
+        v1.addNeighbor(v2);
+        v2.addNeighbor(v1);
     }
     
     //Close the road for use.
     public void close(){
         setState(PathXSpriteState.CLOSED.toString());
         
+        
         Vertex v1 = n1.getVertex();
-        Vertex v2 = n2.getVertex(); 
+        Vertex v2 = n2.getVertex();
+        try {
+            v1.removeNeighbor(v2);
+            v2.removeNeighbor(v1);
+        } catch (VertexNotFoundException ex) {
+            Logger.getLogger(Road.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     

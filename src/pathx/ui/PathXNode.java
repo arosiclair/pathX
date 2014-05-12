@@ -46,6 +46,7 @@ public class PathXNode extends Sprite {
         vertex = initVertex;
         
         neighbors = new ArrayList();
+        roads = new ArrayList();
     }
     
 //    public PathXNode(Sprite s, String state, ArrayList<Road> roads){
@@ -64,13 +65,23 @@ public class PathXNode extends Sprite {
     }
     
     //This changes the state of the Node to Closed and also modifies the underlying
-    //Graph data structure so that connections too and from this node are removed.
+    //Graph data structure so that connections to and from this node are removed.
     public void close(){
         setState(PathXSpriteState.CLOSED.toString());
         setCurrentState(PathXSpriteState.CLOSED.toString());
         
         for (Road road : roads)
             road.close(); 
+    }
+    
+    //This changes the state of the Node to Closed and also modifies the underlying
+    //Graph data structure so that connections to and from this node are reestablished.
+    public void open(){
+        for (Road road : roads)
+            road.open();
+        
+        setState(PathXSpriteState.GREEN.toString());
+        setCurrentState(PathXSpriteState.GREEN.toString());
     }
     
     public boolean hasRoad(Road r){
@@ -86,6 +97,10 @@ public class PathXNode extends Sprite {
 
     public String getCurrentState() {
         return currentState;
+    }
+    
+    public void addRoad(Road road){
+        roads.add(road);
     }
 
     public void setRoads(ArrayList<Road> roads) {

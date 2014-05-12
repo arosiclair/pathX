@@ -1214,11 +1214,14 @@ public class PathXMiniGame extends MiniGame{
                 String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
                 String specialButton;
                 PathXDataModel dataModel = (PathXDataModel) getDataModel();
+                //If this special was active and were trying to deactivate it
                 if (activeSpecial.equals(INCREASE_PLAYER_SPEED_SPECIAL_TYPE)) {
                     ((PathXDataModel) getDataModel()).setActivatedSpecial("");
                     ((PathXDataModel) getDataModel()).setSpecialActive(false);
                     getGUIButtons().get(INCREASE_PLAYER_SPEED_BUTTON_TYPE).setState(VISIBLE.toString());
-                } else if (!activeSpecial.equals("")) {
+                } 
+                //If there was another special active and we want to activate this one.
+                else if (!activeSpecial.equals("")) {
                     specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
                     getGUIButtons().get(specialButton).setState(VISIBLE.toString());
                     dataModel.setActivatedSpecial(INCREASE_PLAYER_SPEED_SPECIAL_TYPE);
@@ -1230,6 +1233,8 @@ public class PathXMiniGame extends MiniGame{
                     ((PathXDataModel) getDataModel()).setActivatedSpecial(INCREASE_PLAYER_SPEED_SPECIAL_TYPE);
                     getGUIButtons().get(INCREASE_PLAYER_SPEED_BUTTON_TYPE).setState(ENABLED.toString());
                 }
+                
+                getEventHandler().increasePlayerSpeed();
             }
         });
         

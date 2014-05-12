@@ -8,10 +8,12 @@ package pathx.ui;
 
 import graph.VertexNotFoundException;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import mini_game.MiniGame;
 import mini_game.Sprite;
 import mini_game.SpriteType;
 import mini_game.Viewport;
+import pathx.PathXConstants;
 import static pathx.PathXConstants.GAME_VIEWPORT_X;
 import static pathx.PathXConstants.GAME_VIEWPORT_Y;
 import pathx.data.PathXDataModel;
@@ -53,6 +55,9 @@ public abstract class Car extends Sprite{
     protected float targetX;
     protected float targetY;
     
+    private GregorianCalendar specialTimer;
+    private String specialState;
+    
     public Car(SpriteType initSpriteType, float initX, float initY, float initVx, 
             float initVy, String initState, PathXLevel level, PathXNode startSpot){
         super(initSpriteType, initX, initY, initVx, initVy, initState);
@@ -63,6 +68,8 @@ public abstract class Car extends Sprite{
         movingToTarget = false;
         this.level = level;
         maxSpeed = 2;
+        speed = maxSpeed;
+        specialState = "";
     }
     
     //This method will be overidden and defined for other, AI-driven cars in game.
@@ -179,7 +186,7 @@ public abstract class Car extends Sprite{
     }
     
     public void decreaseMaxSpeed(){
-        maxSpeed = maxSpeed * 0.90;
+        setMaxSpeed(getMaxSpeed() * 0.90);
     }
 
     public void setIntersection(PathXNode intersection) {
@@ -215,13 +222,40 @@ public abstract class Car extends Sprite{
             return;
         }
         
+        //Check if this car's tires were flattened or if its gas was emptied.
+        //If enough time has past since the tires were flattened or the gas
+        //emptied, then the specialState and timer get reset and the car is allowed
+        //to update.
+        if (!specialState.equals("")){
+            if (specialState.equals(PathXConstants.FLAT_TIRE_SPECIAL_TYPE)){
+                GregorianCalendar newTime = new GregorianCalendar();
+                long timePast = newTime.getTimeInMillis() - specialTimer.getTimeInMillis();
+                if((timePast/1000) <= 10)
+                    return;
+                else{
+                    specialState = "";
+                    specialTimer = null;
+                }
+            }else if (specialState.equals(PathXConstants.EMPTY_GAS_SPECIAL_TYPE)){
+                GregorianCalendar newTime = new GregorianCalendar();
+                long timePast = newTime.getTimeInMillis() - specialTimer.getTimeInMillis();
+                if((timePast/1000) <= 20)
+                    return;
+                else{
+                    specialState = "";
+                    specialTimer = null;
+                }
+            }
+        }
+        
         //Begin moving the car through its path if there are Nodes to go to.
         if (path != null && !path.isEmpty()){
 
+            speed = maxSpeed;
             
             //IF THIS TILE IS ALMOST AT ITS TARGET DESTINATION,
             // JUST GO TO THE TARGET AND THEN STOP MOVING
-            if (calculateDistanceToTarget() < speed){
+            if (calculateDistanceToTarget() <= speed){
                 vX = 0;
                 vY = 0;
                 constantXPos = (int) targetX;
@@ -229,13 +263,10 @@ public abstract class Car extends Sprite{
                 
                 intersection = path.get(0);
                 
-//                if (intersection.getState().indexOf("MOUSE_OVER") >= 0){
-//                    intersection.setState(intersection.getState().substring(0, intersection.getState().indexOf("MOUSE_OVER")));
-//                }
-                
+
                 //If we just reached a red light then stop the car
                 if(intersection.getState().indexOf("RED") >= 0){
-                    maxSpeed = 0;
+                    speed = 0;
                     movingToTarget = false;
                     return;
                 }
@@ -244,7 +275,7 @@ public abstract class Car extends Sprite{
                 //Remove the Node that we just reached as it is no longer needed.
                 //This behavior just replicates a Queue.
                 PathXNode last = path.remove(0);
-                maxSpeed = 2;
+                speed = maxSpeed;
                 
                 //Un-highlight this node if it was highlighted from the player's
                 //path
@@ -254,7 +285,7 @@ public abstract class Car extends Sprite{
                 //If we have emptied the path list, indicating that we've reached,
                 //the target, then we can stop moving.
                 if (path.isEmpty()){
-                    speed = 0;
+                    //speed = 0;
                     vX = 0;
                     vY = 0;
                     targetX = 0;
@@ -271,8 +302,8 @@ public abstract class Car extends Sprite{
                 
                 //Start moving to the target that we just defined. "2" is a 
                 //place holder speed for now.
-                startMovingToTarget(maxSpeed, gameVP);
-                speed = maxSpeed;
+                startMovingToTarget(speed, gameVP);
+                //speed = getMaxSpeed();
                 
             }
             
@@ -281,8 +312,8 @@ public abstract class Car extends Sprite{
 //                targetY = path.get(0).getConstantYPos();
                 
                 //if (vX == 0 && vX == 0)
-                startMovingToTarget(maxSpeed, gameVP);
-                speed = maxSpeed;
+                startMovingToTarget(speed, gameVP);
+                //speed = getMaxSpeed();
                 constantXPos += vX;
                 constantYPos += vY;
             }
@@ -300,5 +331,26 @@ public abstract class Car extends Sprite{
 
     public void setMovingToTarget(boolean movingToTarget) {
         this.movingToTarget = movingToTarget;
+    }
+
+    public double getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    public void setMaxSpeed(double maxSpeed) {
+        this.maxSpeed = maxSpeed;
+    }
+
+    /**
+     * Prevents the car from moving for 10 seconds.
+     */
+    public void flattenTires() {
+        specialTimer = new GregorianCalendar();
+        specialState = PathXConstants.FLAT_TIRE_SPECIAL_TYPE;
+    }
+    
+    public void emptyGas(){
+        specialTimer = new GregorianCalendar();
+        specialState = PathXConstants.EMPTY_GAS_SPECIAL_TYPE;
     }
 }

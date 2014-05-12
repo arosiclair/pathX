@@ -45,6 +45,9 @@ public class CopCar extends Car{
         //Get neighbors and choose a random one.
         ArrayList<Vertex> neighbors = getIntersection().getVertex().getNeighbors();
         Random r = new Random();
+        //Do this if the car gets stuck on a closed node.
+        if (neighbors.size() <= 0)
+            return null;
         int next = r.nextInt(neighbors.size());
         Vertex destination = neighbors.get(next);
         

@@ -75,8 +75,10 @@ public class PlayerCar extends Car{
             node.setState(node.getState() + "_HIGHLIGHTED");
         
         destination.setState(destState + "_HIGHLIGHTED");
-        targetX = newPath.get(0).getConstantXPos();
-        targetY = newPath.get(0).getConstantYPos();
+        if (newPath != null && !newPath.isEmpty()) {
+            targetX = newPath.get(0).getConstantXPos();
+            targetY = newPath.get(0).getConstantYPos();
+        }
         return newPath;  
     }
 

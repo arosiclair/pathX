@@ -205,9 +205,6 @@ public class PathXEventHandler {
     public void respondToNodeSelection(float xPos, float yPos){
         PlayerCar player = dataModel.getPlayer();
         PathXNode node = null;
-        Viewport vp = dataModel.getGameViewport();
-        //xPos = PathXConstants.GAME_VIEWPORT_X + xPos - vp.getViewportX();
-        //yPos = PathXConstants.GAME_VIEWPORT_Y + yPos - vp.getViewportY();
         
         ArrayList<PathXNode> nodes = dataModel.getNodes();
         for (PathXNode n : nodes) {
@@ -252,6 +249,52 @@ public class PathXEventHandler {
         }
     }
     
+    /**
+     * This method does nothing if there is no special active. If there is, then
+     * it searches for the car using the mouse's last known coordinates and the
+     * coordinates of every car currently in the game.
+     * 
+     * @param xPos
+     * @param yPos 
+     */
+    public void respondToCarSelection(float xPos, float yPos){
+        
+        if (dataModel.isSpecialActive()) {
+            Car car = null;
+
+            ArrayList<Car> enemies = new ArrayList();
+            enemies.addAll(dataModel.getCops());
+            enemies.addAll(dataModel.getBandits());
+            enemies.addAll(dataModel.getZombies());
+
+            //Find the car that we just clicked.
+            for (Car c : enemies) {
+                if (c.containsPoint(xPos, yPos)) {
+                    car = c;
+                    break;
+                }
+            }
+
+            String activatedSpecial = dataModel.getActivatedSpecial();
+
+            switch (activatedSpecial) {
+                case PathXConstants.FLAT_TIRE_SPECIAL_TYPE:
+                    flattenTires(car);
+                    break;
+                case PathXConstants.EMPTY_GAS_SPECIAL_TYPE:
+                    emptyGasTank(car);
+                    break;
+                case PathXConstants.MIND_CONTROL_SPECIAL_TYPE:
+                    mindControl(car);
+                    break;
+                case PathXConstants.MINDLESS_TERROR_SPECIAL_TYPE:
+                    mindlessTerror(car);
+                    break;
+            }
+
+        }
+    }
+    
     //GAME SPECIALS
     public void makeLightGreen(PathXNode node){
         if(node.getState().indexOf("GREEN") < 0)
@@ -276,15 +319,25 @@ public class PathXEventHandler {
     }
     
     public void increasePlayerSpeed(){
-        
+        double newSpeed = dataModel.getPlayer().getMaxSpeed() * 1.20;
+        dataModel.getPlayer().setMaxSpeed(newSpeed);
+        game.getGUIButtons().get(PathXConstants.INCREASE_PLAYER_SPEED_BUTTON_TYPE).setState(PathXSpriteState.VISIBLE.toString());
+        dataModel.setSpecialActive(false);
+        dataModel.setActivatedSpecial("");
     }
     
     public void flattenTires(Car car){
-        
+        car.flattenTires();
+        game.getGUIButtons().get(PathXConstants.FLAT_TIRE_BUTTON_TYPE).setState(PathXSpriteState.VISIBLE.toString());
+        dataModel.setSpecialActive(false);
+        dataModel.setActivatedSpecial("");
     }
     
     public void emptyGasTank(Car car){
-        
+        car.emptyGas();
+        game.getGUIButtons().get(PathXConstants.EMPTY_GAS_BUTTON_TYPE).setState(PathXSpriteState.VISIBLE.toString());
+        dataModel.setSpecialActive(false);
+        dataModel.setActivatedSpecial("");
     }
     
     public void closeRoad(Road road){
@@ -297,7 +350,8 @@ public class PathXEventHandler {
     }
     
     public void openIntersection(PathXNode node){
-        node.makeGreen();
+        if(node.getState().indexOf("CLOSE") >= 0)
+            node.open();
     }
     
     public void steal(){
