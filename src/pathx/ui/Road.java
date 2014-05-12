@@ -6,6 +6,7 @@
 
 package pathx.ui;
 
+import graph.Vertex;
 import mini_game.Sprite;
 
 /**
@@ -50,6 +51,10 @@ public class Road {
     //Close the road for use.
     public void close(){
         setState(PathXSpriteState.CLOSED.toString());
+        
+        Vertex v1 = n1.getVertex();
+        Vertex v2 = n2.getVertex(); 
+        
     }
     
     //Activated by a special. Increases the speed limit by 50%

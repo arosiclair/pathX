@@ -190,8 +190,10 @@ public class PathXConstants {
     public static final int FIRST_SPECIAL_Y = 187;
     public static final int GAME_CITY_LABEL_X = 165;
     public static final int GAME_CITY_LABEL_Y = 55;
-    public static final int GAME_REWARD_LABEL_X = 165;
-    public static final int GAME_REWARD_LABEL_Y = 55;
+    public static final int GAME_BALANCE_LABEL_X = 170;
+    public static final int GAME_BALANCE_LABEL_Y = 425;
+    public static final int GAME_REWARD_LABEL_X = GAME_BALANCE_LABEL_X;
+    public static final int GAME_REWARD_LABEL_Y = GAME_BALANCE_LABEL_Y + 25;
     
     public static final int GAME_OVERLAY_X = 200;
     public static final int GAME_OVERLAY_Y = 90;

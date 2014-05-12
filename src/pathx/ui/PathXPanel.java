@@ -132,6 +132,9 @@ public class PathXPanel extends JPanel{
             if (((PathXMiniGame) game).isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE))
                 renderLevelSelectStats(g);
             
+            if (((PathXMiniGame) game).isCurrentScreenState(GAME_SCREEN_STATE))
+                    renderGameBalanceReward(g);
+            
             //RENDER BUTTONS AND DECOR
             renderGUIControls(g);
             
@@ -349,5 +352,16 @@ public class PathXPanel extends JPanel{
             g.drawString(dialog, PathXConstants.OVERLAY_LEVEL_DIALOG_X, PathXConstants.OVERLAY_LEVEL_DIALOG_Y);
             g.drawString(dialog2, PathXConstants.OVERLAY_LEVEL_DIALOG_X, PathXConstants.OVERLAY_LEVEL_DIALOG_Y + 30);
         }
+    }
+
+    private void renderGameBalanceReward(Graphics g) {
+        int balance = dataModel.getRecord().balance;
+        int reward = dataModel.getCurrentLevel().getReward();
+        String currentBalance = "Balance: $" + balance;
+        String currentReward = "Reward: $" + reward;
+        g.setFont(FONT_TEXT_DISPLAY);
+        g.setColor(Color.WHITE);
+        g.drawString(currentBalance, PathXConstants.GAME_BALANCE_LABEL_X, PathXConstants.GAME_BALANCE_LABEL_Y);
+        g.drawString(currentReward, PathXConstants.GAME_REWARD_LABEL_X, PathXConstants.GAME_REWARD_LABEL_Y);
     }
 }

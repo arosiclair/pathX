@@ -63,9 +63,14 @@ public class PathXNode extends Sprite {
         setCurrentState(PathXSpriteState.RED.toString());
     }
     
+    //This changes the state of the Node to Closed and also modifies the underlying
+    //Graph data structure so that connections too and from this node are removed.
     public void close(){
         setState(PathXSpriteState.CLOSED.toString());
         setCurrentState(PathXSpriteState.CLOSED.toString());
+        
+        for (Road road : roads)
+            road.close(); 
     }
     
     public boolean hasRoad(Road r){
