@@ -99,7 +99,8 @@ public class PathXDataModel extends MiniGameDataModel{
     
     private Viewport gameViewport;
     
-    protected boolean specialActive;
+    private boolean specialActive;
+    private String activatedSpecial;
     
      public PathXDataModel(PathXMiniGame initMiniGame){
         miniGame = initMiniGame;
@@ -112,6 +113,7 @@ public class PathXDataModel extends MiniGameDataModel{
         currentLevel = null;
         
         specialActive = false;
+        activatedSpecial = "";
         
          setGameState(NOT_STARTED);
         
@@ -249,7 +251,7 @@ public class PathXDataModel extends MiniGameDataModel{
                         car.setPath(path);
                     }
                     
-                    if (car.getPath() != null && !car.getPath().isEmpty()) {
+                    if (car.getPath() != null && !car.getPath().isEmpty() && car.getTargetX() != 0) {
                         car.update(miniGame);
                     }
                 }
@@ -669,5 +671,13 @@ public class PathXDataModel extends MiniGameDataModel{
      */
     public void setRecord(PathXRecord record) {
         this.record = record;
+    }
+
+    public String getActivatedSpecial() {
+        return activatedSpecial;
+    }
+
+    public void setActivatedSpecial(String activatedSpecial) {
+        this.activatedSpecial = activatedSpecial;
     }
 }

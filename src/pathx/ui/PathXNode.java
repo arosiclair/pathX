@@ -54,15 +54,18 @@ public class PathXNode extends Sprite {
 //    }
     
     public void makeGreen(){
+        setState(PathXSpriteState.GREEN.toString());
         setCurrentState(PathXSpriteState.GREEN.toString());
     }
     
     public void makeRed(){
+        setState(PathXSpriteState.RED.toString());
         setCurrentState(PathXSpriteState.RED.toString());
     }
     
     public void close(){
-        setCurrentState(PathXSpriteState.CLOSED.toString());       
+        setState(PathXSpriteState.CLOSED.toString());
+        setCurrentState(PathXSpriteState.CLOSED.toString());
     }
     
     public boolean hasRoad(Road r){

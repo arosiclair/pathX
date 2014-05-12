@@ -62,6 +62,7 @@
         <property name="IMAGE_INCREASE_SPEED"			value="./IncreaseSpeed.png"></property>
         <property name="IMAGE_INCREASE_SPEED_ACTIVE"	value="./IncreaseSpeedActive.png"></property>
         <property name="IMAGE_INCREASE_PLAYER_SPEED"	value="./IncreasePlayerSpeed.png"></property>
+        <property name="IMAGE_INCREASE_PLAYER_SPEED_ACTIVE"    value="./IncreasePlayerSpeedActive.png"></property>
         <property name="IMAGE_FLAT_TIRE"				value="./FlatTire.png"></property>
         <property name="IMAGE_FLAT_TIRE_ACTIVE"			value="./FlatTireActive.png"></property>
         <property name="IMAGE_EMPTY_GAS"				value="./EmptyGas.png"></property>

@@ -15,7 +15,6 @@ import java.awt.event.WindowEvent;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import javax.swing.JFrame;
 import mini_game.MiniGame;
@@ -99,6 +98,7 @@ public class PathXMiniGame extends MiniGame{
         
         // CHANGE THE BACKGROUND
         guiDecor.get(BACKGROUND_TYPE).setState(LEVEL_SELECT_SCREEN_STATE);
+        data.setGameState(MiniGameState.NOT_STARTED);
         
         //ACTIVE NORTH PANEL CONTROLS
         guiButtons.get(BACK_BUTTON_TYPE).setState(PathXSpriteState.VISIBLE.toString());
@@ -652,6 +652,8 @@ public class PathXMiniGame extends MiniGame{
         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_INCREASE_PLAYER_SPEED));
         sT.addState(VISIBLE.toString(), img);
         sT.addState(MOUSE_OVER.toString(), img);
+        img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_INCREASE_PLAYER_SPEED_ACTIVE));
+        sT.addState(ENABLED.toString(), img);
         x = PathXConstants.FIRST_SPECIAL_X + GAME_SPECIAL_WIDTH;
         y = PathXConstants.FIRST_SPECIAL_Y + GAME_SPECIAL_HEIGHT;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
@@ -810,6 +812,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.GAME_OVERLAY_X;
         y = PathXConstants.GAME_OVERLAY_Y;
         s = new Sprite(sT, x, y, 0, 0,INVISIBLE.toString());
+        s.setEnabled(false);
         guiDecor.put(GAME_POPUP_TYPE, s);
         
         //POPUP CLOSE BUTTON
@@ -821,6 +824,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.OVERLAY_BUTTON_CLOSE_X;
         y = PathXConstants.OVERLAY_BUTTON_CLOSE_Y;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(CLOSE_BUTTON_TYPE, s);
         
         //POPUP TRY AGAIN BUTTON
@@ -832,6 +836,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.OVERLAY_BUTTON_TRY_AGAIN_X;
         y = PathXConstants.OVERLAY_BUTTON_TRY_AGAIN_Y;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(TRY_AGAIN_BUTTON_TYPE, s);
         
         //POPUP LEAVE TOWN BUTTON
@@ -843,6 +848,7 @@ public class PathXMiniGame extends MiniGame{
         x = PathXConstants.OVERLAY_BUTTON_LEAVE_TOWN_X;
         y = PathXConstants.OVERLAY_BUTTON_LEAVE_TOWN_Y;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+        s.setEnabled(false);
         guiButtons.put(LEAVE_TOWN_BUTTON_TYPE, s);
         
         //GAME VIEWPORT
@@ -1062,7 +1068,467 @@ public class PathXMiniGame extends MiniGame{
                 
             }
         });
+        
         //SPECIALS EVENT HANDLERS GO HERE
+        
+        //MAKE GREEN HANDLING
+        Sprite makeGreen = guiButtons.get(MAKE_GREEN_BUTTON_TYPE);
+        makeGreen.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
+                String specialButton;
+                PathXDataModel dataModel = (PathXDataModel) getDataModel();
+                if (activeSpecial.equals(MAKE_GREEN_SPECIAL_TYPE)) {
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
+                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
+                    getGUIButtons().get(MAKE_GREEN_BUTTON_TYPE).setState(VISIBLE.toString());
+                } else if (!activeSpecial.equals("")) {
+                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
+                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
+                    dataModel.setActivatedSpecial(MAKE_GREEN_SPECIAL_TYPE);
+                    dataModel.setSpecialActive(true);
+                    getGUIButtons().get(MAKE_GREEN_BUTTON_TYPE).setState(ENABLED.toString());
+                } else {
+
+                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial(MAKE_GREEN_SPECIAL_TYPE);
+                    getGUIButtons().get(MAKE_GREEN_BUTTON_TYPE).setState(ENABLED.toString());
+                }
+            }
+        });
+        
+        //MAKE RED HANDLING
+        Sprite makeRed = guiButtons.get(MAKE_RED_BUTTON_TYPE);
+        makeRed.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
+                String specialButton;
+                PathXDataModel dataModel = (PathXDataModel) getDataModel();
+                if (activeSpecial.equals(MAKE_RED_SPECIAL_TYPE)) {
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
+                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
+                    getGUIButtons().get(MAKE_RED_BUTTON_TYPE).setState(VISIBLE.toString());
+                } else if (!activeSpecial.equals("")) {
+                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
+                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
+                    dataModel.setActivatedSpecial(MAKE_RED_SPECIAL_TYPE);
+                    dataModel.setSpecialActive(true);
+                    getGUIButtons().get(MAKE_RED_BUTTON_TYPE).setState(ENABLED.toString());
+                } else {
+
+                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial(MAKE_RED_SPECIAL_TYPE);
+                    getGUIButtons().get(MAKE_RED_BUTTON_TYPE).setState(ENABLED.toString());
+                }
+            }
+        });
+        
+        //FREEZE TIME HANDLING
+        Sprite freeze = guiButtons.get(FREEZE_BUTTON_TYPE);
+        freeze.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
+                String specialButton;
+                PathXDataModel dataModel = (PathXDataModel) getDataModel();
+                if (activeSpecial.equals(FREEZE_SPECIAL_TYPE)) {
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
+                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
+                    getGUIButtons().get(FREEZE_BUTTON_TYPE).setState(VISIBLE.toString());
+                } else if (!activeSpecial.equals("")) {
+                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
+                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
+                    dataModel.setActivatedSpecial(FREEZE_SPECIAL_TYPE);
+                    dataModel.setSpecialActive(true);
+                    getGUIButtons().get(FREEZE_BUTTON_TYPE).setState(ENABLED.toString());
+                } else {
+
+                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial(FREEZE_SPECIAL_TYPE);
+                    getGUIButtons().get(FREEZE_BUTTON_TYPE).setState(ENABLED.toString());
+                }
+            }
+        });
+        
+        //DECREASE SPEED LIMIT
+        Sprite decrSpeed = guiButtons.get(DECREASE_SPEED_BUTTON_TYPE);
+        decrSpeed.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
+                String specialButton;
+                PathXDataModel dataModel = (PathXDataModel) getDataModel();
+                if (activeSpecial.equals(DECREASE_SPEED_SPECIAL_TYPE)) {
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
+                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
+                    getGUIButtons().get(DECREASE_SPEED_BUTTON_TYPE).setState(VISIBLE.toString());
+                } else if (!activeSpecial.equals("")) {
+                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
+                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
+                    dataModel.setActivatedSpecial(DECREASE_SPEED_SPECIAL_TYPE);
+                    dataModel.setSpecialActive(true);
+                    getGUIButtons().get(DECREASE_SPEED_BUTTON_TYPE).setState(ENABLED.toString());
+                } else {
+
+                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial(DECREASE_SPEED_SPECIAL_TYPE);
+                    getGUIButtons().get(DECREASE_SPEED_BUTTON_TYPE).setState(ENABLED.toString());
+                }
+            }
+        });
+        
+        //INCREASE SPEED LIMIT
+        Sprite incrSpeed = guiButtons.get(INCREASE_SPEED_BUTTON_TYPE);
+        incrSpeed.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
+                String specialButton;
+                PathXDataModel dataModel = (PathXDataModel) getDataModel();
+                if (activeSpecial.equals(INCREASE_SPEED_SPECIAL_TYPE)) {
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
+                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
+                    getGUIButtons().get(INCREASE_SPEED_BUTTON_TYPE).setState(VISIBLE.toString());
+                } else if (!activeSpecial.equals("")) {
+                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
+                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
+                    dataModel.setActivatedSpecial(INCREASE_SPEED_SPECIAL_TYPE);
+                    dataModel.setSpecialActive(true);
+                    getGUIButtons().get(INCREASE_SPEED_BUTTON_TYPE).setState(ENABLED.toString());
+                } else {
+
+                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial(INCREASE_SPEED_SPECIAL_TYPE);
+                    getGUIButtons().get(INCREASE_SPEED_BUTTON_TYPE).setState(ENABLED.toString());
+                }
+            }
+        });
+        
+        //INCREASE PLAYER SPEED
+        Sprite incrPlayerSpeed = guiButtons.get(INCREASE_PLAYER_SPEED_BUTTON_TYPE);
+        incrPlayerSpeed.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
+                String specialButton;
+                PathXDataModel dataModel = (PathXDataModel) getDataModel();
+                if (activeSpecial.equals(INCREASE_PLAYER_SPEED_SPECIAL_TYPE)) {
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
+                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
+                    getGUIButtons().get(INCREASE_PLAYER_SPEED_BUTTON_TYPE).setState(VISIBLE.toString());
+                } else if (!activeSpecial.equals("")) {
+                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
+                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
+                    dataModel.setActivatedSpecial(INCREASE_PLAYER_SPEED_SPECIAL_TYPE);
+                    dataModel.setSpecialActive(true);
+                    getGUIButtons().get(INCREASE_PLAYER_SPEED_BUTTON_TYPE).setState(ENABLED.toString());
+                } else {
+
+                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial(INCREASE_PLAYER_SPEED_SPECIAL_TYPE);
+                    getGUIButtons().get(INCREASE_PLAYER_SPEED_BUTTON_TYPE).setState(ENABLED.toString());
+                }
+            }
+        });
+        
+        //FLAT TIRE
+        Sprite flatTire = guiButtons.get(FLAT_TIRE_BUTTON_TYPE);
+        flatTire.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
+                String specialButton;
+                PathXDataModel dataModel = (PathXDataModel) getDataModel();
+                if (activeSpecial.equals(FLAT_TIRE_SPECIAL_TYPE)) {
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
+                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
+                    getGUIButtons().get(FLAT_TIRE_BUTTON_TYPE).setState(VISIBLE.toString());
+                } else if (!activeSpecial.equals("")) {
+                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
+                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
+                    dataModel.setActivatedSpecial(FLAT_TIRE_SPECIAL_TYPE);
+                    dataModel.setSpecialActive(true);
+                    getGUIButtons().get(FLAT_TIRE_BUTTON_TYPE).setState(ENABLED.toString());
+                } else {
+
+                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial(FLAT_TIRE_SPECIAL_TYPE);
+                    getGUIButtons().get(FLAT_TIRE_BUTTON_TYPE).setState(ENABLED.toString());
+                }
+            }
+        });
+        
+        //EMPTY GAS
+        Sprite emptyGas = guiButtons.get(EMPTY_GAS_BUTTON_TYPE);
+        emptyGas.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
+                String specialButton;
+                PathXDataModel dataModel = (PathXDataModel) getDataModel();
+                if (activeSpecial.equals(EMPTY_GAS_SPECIAL_TYPE)) {
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
+                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
+                    getGUIButtons().get(EMPTY_GAS_BUTTON_TYPE).setState(VISIBLE.toString());
+                } else if (!activeSpecial.equals("")) {
+                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
+                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
+                    dataModel.setActivatedSpecial(EMPTY_GAS_SPECIAL_TYPE);
+                    dataModel.setSpecialActive(true);
+                    getGUIButtons().get(EMPTY_GAS_BUTTON_TYPE).setState(ENABLED.toString());
+                } else {
+
+                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial(EMPTY_GAS_SPECIAL_TYPE);
+                    getGUIButtons().get(EMPTY_GAS_BUTTON_TYPE).setState(ENABLED.toString());
+                }
+            }
+        });
+        
+        //CLOSE ROAD
+        Sprite closeRoad = guiButtons.get(CLOSE_ROAD_BUTTON_TYPE);
+        closeRoad.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
+                String specialButton;
+                PathXDataModel dataModel = (PathXDataModel) getDataModel();
+                if (activeSpecial.equals(CLOSE_ROAD_SPECIAL_TYPE)) {
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
+                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
+                    getGUIButtons().get(CLOSE_ROAD_BUTTON_TYPE).setState(VISIBLE.toString());
+                } else if (!activeSpecial.equals("")) {
+                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
+                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
+                    dataModel.setActivatedSpecial(CLOSE_ROAD_SPECIAL_TYPE);
+                    dataModel.setSpecialActive(true);
+                    getGUIButtons().get(CLOSE_ROAD_BUTTON_TYPE).setState(ENABLED.toString());
+                } else {
+
+                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial(CLOSE_ROAD_SPECIAL_TYPE);
+                    getGUIButtons().get(CLOSE_ROAD_BUTTON_TYPE).setState(ENABLED.toString());
+                }
+            }
+        });
+        
+        //CLOSE INTERSECTION
+        Sprite closeNode = guiButtons.get(CLOSE_INTERSECTION_BUTTON_TYPE);
+        closeNode.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
+                String specialButton;
+                PathXDataModel dataModel = (PathXDataModel) getDataModel();
+                if (activeSpecial.equals(CLOSE_INTERSECTION_SPECIAL_TYPE)) {
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
+                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
+                    getGUIButtons().get(CLOSE_INTERSECTION_BUTTON_TYPE).setState(VISIBLE.toString());
+                } else if (!activeSpecial.equals("")) {
+                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
+                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
+                    dataModel.setActivatedSpecial(CLOSE_INTERSECTION_SPECIAL_TYPE);
+                    dataModel.setSpecialActive(true);
+                    getGUIButtons().get(CLOSE_INTERSECTION_BUTTON_TYPE).setState(ENABLED.toString());
+                } else {
+
+                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial(CLOSE_INTERSECTION_SPECIAL_TYPE);
+                    getGUIButtons().get(CLOSE_INTERSECTION_BUTTON_TYPE).setState(ENABLED.toString());
+                }
+            }
+        });
+        
+        //OPEN INTERSECTION
+        Sprite openNode = guiButtons.get(OPEN_INTERSECTION_BUTTON_TYPE);
+        openNode.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
+                String specialButton;
+                PathXDataModel dataModel = (PathXDataModel) getDataModel();
+                if (activeSpecial.equals(OPEN_INTERSECTION_SPECIAL_TYPE)) {
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
+                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
+                    getGUIButtons().get(OPEN_INTERSECTION_BUTTON_TYPE).setState(VISIBLE.toString());
+                } else if (!activeSpecial.equals("")) {
+                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
+                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
+                    dataModel.setActivatedSpecial(OPEN_INTERSECTION_SPECIAL_TYPE);
+                    dataModel.setSpecialActive(true);
+                    getGUIButtons().get(OPEN_INTERSECTION_BUTTON_TYPE).setState(ENABLED.toString());
+                } else {
+
+                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial(OPEN_INTERSECTION_SPECIAL_TYPE);
+                    getGUIButtons().get(OPEN_INTERSECTION_BUTTON_TYPE).setState(ENABLED.toString());
+                }
+            }
+        });
+        
+        //STEAL
+        Sprite steal = guiButtons.get(STEAL_BUTTON_TYPE);
+        steal.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
+                String specialButton;
+                PathXDataModel dataModel = (PathXDataModel) getDataModel();
+                if (activeSpecial.equals(STEAL_SPECIAL_TYPE)) {
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
+                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
+                    getGUIButtons().get(STEAL_BUTTON_TYPE).setState(VISIBLE.toString());
+                } else if (!activeSpecial.equals("")) {
+                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
+                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
+                    dataModel.setActivatedSpecial(STEAL_SPECIAL_TYPE);
+                    dataModel.setSpecialActive(true);
+                    getGUIButtons().get(STEAL_BUTTON_TYPE).setState(ENABLED.toString());
+                } else {
+
+                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial(STEAL_SPECIAL_TYPE);
+                    getGUIButtons().get(STEAL_BUTTON_TYPE).setState(ENABLED.toString());
+                }
+            }
+        });
+        
+        //MIND CONTROL
+        Sprite mindControl = guiButtons.get(MIND_CONTROL_BUTTON_TYPE);
+        mindControl.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
+                String specialButton;
+                PathXDataModel dataModel = (PathXDataModel) getDataModel();
+                if (activeSpecial.equals(MIND_CONTROL_SPECIAL_TYPE)) {
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
+                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
+                    getGUIButtons().get(MIND_CONTROL_BUTTON_TYPE).setState(VISIBLE.toString());
+                } else if (!activeSpecial.equals("")) {
+                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
+                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
+                    dataModel.setActivatedSpecial(MIND_CONTROL_SPECIAL_TYPE);
+                    dataModel.setSpecialActive(true);
+                    getGUIButtons().get(MIND_CONTROL_BUTTON_TYPE).setState(ENABLED.toString());
+                } else {
+
+                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial(MIND_CONTROL_SPECIAL_TYPE);
+                    getGUIButtons().get(MIND_CONTROL_BUTTON_TYPE).setState(ENABLED.toString());
+                }
+            }
+        });
+        
+        //INTANGIBILITY
+        Sprite intangibility = guiButtons.get(INTANGIBILITY_BUTTON_TYPE);
+        intangibility.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
+                String specialButton;
+                PathXDataModel dataModel = (PathXDataModel) getDataModel();
+                if (activeSpecial.equals(INTANGIBILITY_SPECIAL_TYPE)) {
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
+                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
+                    getGUIButtons().get(INTANGIBILITY_BUTTON_TYPE).setState(VISIBLE.toString());
+                } else if (!activeSpecial.equals("")) {
+                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
+                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
+                    dataModel.setActivatedSpecial(INTANGIBILITY_SPECIAL_TYPE);
+                    dataModel.setSpecialActive(true);
+                    getGUIButtons().get(INTANGIBILITY_BUTTON_TYPE).setState(ENABLED.toString());
+                } else {
+
+                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial(INTANGIBILITY_SPECIAL_TYPE);
+                    getGUIButtons().get(INTANGIBILITY_BUTTON_TYPE).setState(ENABLED.toString());
+                }
+            }
+        });
+        
+        //MINDLESS TERROR
+        Sprite mindlessTerror = guiButtons.get(MINDLESS_TERROR_BUTTON_TYPE);
+        mindlessTerror.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
+                String specialButton;
+                PathXDataModel dataModel = (PathXDataModel) getDataModel();
+                if (activeSpecial.equals(MINDLESS_TERROR_SPECIAL_TYPE)) {
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
+                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
+                    getGUIButtons().get(MINDLESS_TERROR_BUTTON_TYPE).setState(VISIBLE.toString());
+                } else if (!activeSpecial.equals("")) {
+                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
+                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
+                    dataModel.setActivatedSpecial(MINDLESS_TERROR_SPECIAL_TYPE);
+                    dataModel.setSpecialActive(true);
+                    getGUIButtons().get(MINDLESS_TERROR_BUTTON_TYPE).setState(ENABLED.toString());
+                } else {
+
+                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial(MINDLESS_TERROR_SPECIAL_TYPE);
+                    getGUIButtons().get(MINDLESS_TERROR_BUTTON_TYPE).setState(ENABLED.toString());
+                }
+            }
+        });
+        
+        //FLYING
+        Sprite flying = guiButtons.get(FLYING_BUTTON_TYPE);
+        flying.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
+                String specialButton;
+                PathXDataModel dataModel = (PathXDataModel) getDataModel();
+                if (activeSpecial.equals(FLYING_SPECIAL_TYPE)) {
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
+                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
+                    getGUIButtons().get(FLYING_BUTTON_TYPE).setState(VISIBLE.toString());
+                } else if (!activeSpecial.equals("")) {
+                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
+                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
+                    dataModel.setActivatedSpecial(FLYING_SPECIAL_TYPE);
+                    dataModel.setSpecialActive(true);
+                    getGUIButtons().get(FLYING_BUTTON_TYPE).setState(ENABLED.toString());
+                } else {
+
+                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial(FLYING_SPECIAL_TYPE);
+                    getGUIButtons().get(FLYING_BUTTON_TYPE).setState(ENABLED.toString());
+                }
+            }
+        });
+        
+        //GOD MODE
+        Sprite godMode = guiButtons.get(GOD_MODE_BUTTON_TYPE);
+        godMode.setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {
+                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
+                String specialButton;
+                PathXDataModel dataModel = (PathXDataModel) getDataModel();
+                if (activeSpecial.equals(GOD_MODE_SPECIAL_TYPE)) {
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
+                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
+                    getGUIButtons().get(GOD_MODE_BUTTON_TYPE).setState(VISIBLE.toString());
+                } else if (!activeSpecial.equals("")) {
+                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
+                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
+                    dataModel.setActivatedSpecial(GOD_MODE_SPECIAL_TYPE);
+                    dataModel.setSpecialActive(true);
+                    getGUIButtons().get(GOD_MODE_BUTTON_TYPE).setState(ENABLED.toString());
+                } else {
+
+                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
+                    ((PathXDataModel) getDataModel()).setActivatedSpecial(GOD_MODE_SPECIAL_TYPE);
+                    getGUIButtons().get(GOD_MODE_BUTTON_TYPE).setState(ENABLED.toString());
+                }
+            }
+        });
     }
     
     private void initSettingsHandlers() {

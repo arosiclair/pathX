@@ -204,27 +204,44 @@ public class PathXEventHandler {
     
     public void respondToNodeSelection(float xPos, float yPos){
         PlayerCar player = dataModel.getPlayer();
-        PathXNode dest = null;
+        PathXNode node = null;
         Viewport vp = dataModel.getGameViewport();
         //xPos = PathXConstants.GAME_VIEWPORT_X + xPos - vp.getViewportX();
         //yPos = PathXConstants.GAME_VIEWPORT_Y + yPos - vp.getViewportY();
         
         ArrayList<PathXNode> nodes = dataModel.getNodes();
-        for (PathXNode node : nodes) {
-            if (node.containsPoint(xPos, yPos)) {
-                dest = node;
+        for (PathXNode n : nodes) {
+            if (n.containsPoint(xPos, yPos)) {
+                node = n;
                 break;
             }
         }
         ArrayList<PathXNode> path = null;
+        
+        //Check if the player is trying to use a special
         if (dataModel.isSpecialActive()){
+            String activatedSpecial = dataModel.getActivatedSpecial();
             
+            switch (activatedSpecial){
+                case PathXConstants.MAKE_GREEN_SPECIAL_TYPE:
+                    makeLightGreen(node);
+                    break;
+                case PathXConstants.MAKE_RED_SPECIAL_TYPE:
+                    makeLightRed(node);
+                    break;
+                case PathXConstants.CLOSE_INTERSECTION_SPECIAL_TYPE:
+                    closeIntersection(node);
+                    break;
+                case PathXConstants.OPEN_INTERSECTION_SPECIAL_TYPE:
+                    openIntersection(node);
+                    break;
+            }
         }
         //If the player is not using a Special then navigate the Player to that 
         //PathXNode
         else{
             try {
-                path = player.generatePath(dest);
+                path = player.generatePath(node);
             } catch (VertexNotFoundException ex) {
                 Logger.getLogger(PathXEventHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -237,11 +254,13 @@ public class PathXEventHandler {
     
     //GAME SPECIALS
     public void makeLightGreen(PathXNode node){
-        
+        if(node.getState().indexOf("GREEN") < 0)
+            node.makeGreen();
     }
     
     public void makeLightRed(PathXNode node){
-        
+        if(node.getState().indexOf("RED") < 0)
+            node.makeRed();
     }
     
     public void freezeTime(){
@@ -273,11 +292,12 @@ public class PathXEventHandler {
     }
     
     public void closeIntersection(PathXNode node){
-        
+        if(node.getState().indexOf("CLOSE") < 0)
+            node.close();
     }
     
     public void openIntersection(PathXNode node){
-        
+        node.makeGreen();
     }
     
     public void steal(){

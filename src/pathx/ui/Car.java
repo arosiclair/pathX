@@ -235,7 +235,7 @@ public abstract class Car extends Sprite{
                 
                 //If we just reached a red light then stop the car
                 if(intersection.getState().indexOf("RED") >= 0){
-                    speed = 0;
+                    maxSpeed = 0;
                     movingToTarget = false;
                     return;
                 }
@@ -244,6 +244,7 @@ public abstract class Car extends Sprite{
                 //Remove the Node that we just reached as it is no longer needed.
                 //This behavior just replicates a Queue.
                 PathXNode last = path.remove(0);
+                maxSpeed = 2;
                 
                 //Un-highlight this node if it was highlighted from the player's
                 //path
@@ -279,6 +280,7 @@ public abstract class Car extends Sprite{
 //                targetX = path.get(0).getConstantXPos();
 //                targetY = path.get(0).getConstantYPos();
                 
+                //if (vX == 0 && vX == 0)
                 startMovingToTarget(maxSpeed, gameVP);
                 speed = maxSpeed;
                 constantXPos += vX;
