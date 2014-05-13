@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import mini_game.MiniGame;
 import mini_game.SpriteType;
+import pathx.PathXConstants;
 import pathx.data.PathXDataModel;
 import pathx.data.PathXLevel;
 
@@ -70,7 +71,31 @@ public class BanditCar extends Car{
     @Override
     public void update(MiniGame game){
         PathXDataModel data = (PathXDataModel) game.getDataModel();
-        if(aabbsOverlap(data.getPlayer()) && !hasRobbed){
+        if (getSpecialState().equals(PathXConstants.MINDLESS_TERROR_SPECIAL_TYPE)) {
+            ArrayList<Car> otherCars = new ArrayList();
+            otherCars.addAll(data.getCops());
+            otherCars.addAll(data.getBandits());
+            otherCars.addAll(data.getZombies());
+            otherCars.remove(this);
+
+            for (Car car : otherCars) {
+                if (aabbsOverlap(car) && car.getSpecialState().equals("")) {
+                    car.incapacitate();
+                }
+            }
+        }
+        PlayerCar player = data.getPlayer();
+        
+        //If we collide with the player while God Mode is active. Remove this
+        //car from the game.
+        if (aabbsOverlap(player) && player.getSpecialState().equals(PathXSpriteState.GOD_MODE.toString())){
+            data.getBandits().remove(this);
+            return;
+        }
+        
+        if(aabbsOverlap(data.getPlayer()) 
+                && !data.getPlayer().getSpecialState().equals(PathXSpriteState.STEALING.toString())
+                && !data.getPlayer().getSpecialState().equals(PathXSpriteState.INTANGIBLE.toString())){
             getLevel().decreaseReward(); 
             hasRobbed = true;
         }

@@ -124,6 +124,11 @@ public class PathXEventHandler {
         dataModel.resetGameViewport();
         dataModel.setGameState(MiniGameState.NOT_STARTED);
         
+        //This uses a reference Graph within the PathXLevel that allows us to replay
+        //A level, whose underlying Graph was previously modified by specials,
+        //once more.
+        dataModel.getCurrentLevel().resetGraph();
+        
         //Reconstruct everything needed for the level. This will rearrange the 
         //starting position of the cops.
         dataModel.constructNodes(dataModel.getCurrentLevel());
@@ -227,9 +232,11 @@ public class PathXEventHandler {
                     makeLightRed(node);
                     break;
                 case PathXConstants.CLOSE_INTERSECTION_SPECIAL_TYPE:
+                    dataModel.getCurrentLevel().getGraph().removeVertex(node.getVertex());
                     closeIntersection(node);
                     break;
                 case PathXConstants.OPEN_INTERSECTION_SPECIAL_TYPE:
+                    dataModel.getCurrentLevel().getGraph().addVertex(node.getVertex());
                     openIntersection(node);
                     break;
             }
@@ -297,13 +304,17 @@ public class PathXEventHandler {
     
     //GAME SPECIALS
     public void makeLightGreen(PathXNode node){
-        if(node.getState().indexOf("GREEN") < 0)
+        if(node.getState().indexOf("GREEN") < 0 && dataModel.getRecord().balance >= 5){
             node.makeGreen();
+            dataModel.getRecord().balance -= 5;
+        }
     }
     
     public void makeLightRed(PathXNode node){
-        if(node.getState().indexOf("RED") < 0)
+        if(node.getState().indexOf("RED") < 0 && dataModel.getRecord().balance >= 5){
             node.makeRed();
+            dataModel.getRecord().balance -= 5;
+        }
     }
     
     public void freezeTime(){
@@ -319,25 +330,32 @@ public class PathXEventHandler {
     }
     
     public void increasePlayerSpeed(){
-        double newSpeed = dataModel.getPlayer().getMaxSpeed() * 1.20;
-        dataModel.getPlayer().setMaxSpeed(newSpeed);
-        game.getGUIButtons().get(PathXConstants.INCREASE_PLAYER_SPEED_BUTTON_TYPE).setState(PathXSpriteState.VISIBLE.toString());
-        dataModel.setSpecialActive(false);
-        dataModel.setActivatedSpecial("");
+        if (dataModel.getRecord().balance >= 20) {
+            dataModel.getRecord().balance -= 20;
+            double newSpeed = dataModel.getPlayer().getMaxSpeed() * 1.20;
+            dataModel.getPlayer().setMaxSpeed(newSpeed);
+            game.getGUIButtons().get(PathXConstants.INCREASE_PLAYER_SPEED_BUTTON_TYPE).setState(PathXSpriteState.VISIBLE.toString());
+            dataModel.setSpecialActive(false);
+            dataModel.setActivatedSpecial("");
+        }
     }
     
-    public void flattenTires(Car car){
-        car.flattenTires();
-        game.getGUIButtons().get(PathXConstants.FLAT_TIRE_BUTTON_TYPE).setState(PathXSpriteState.VISIBLE.toString());
-        dataModel.setSpecialActive(false);
-        dataModel.setActivatedSpecial("");
+    public void flattenTires(Car car) {
+        if (dataModel.getRecord().balance >= 20) {
+            car.flattenTires();
+            game.getGUIButtons().get(PathXConstants.FLAT_TIRE_BUTTON_TYPE).setState(PathXSpriteState.VISIBLE.toString());
+            dataModel.setSpecialActive(false);
+            dataModel.setActivatedSpecial("");
+        }
     }
-    
-    public void emptyGasTank(Car car){
-        car.emptyGas();
-        game.getGUIButtons().get(PathXConstants.EMPTY_GAS_BUTTON_TYPE).setState(PathXSpriteState.VISIBLE.toString());
-        dataModel.setSpecialActive(false);
-        dataModel.setActivatedSpecial("");
+
+    public void emptyGasTank(Car car) {
+        if (dataModel.getRecord().balance >= 20) {
+            car.emptyGas();
+            game.getGUIButtons().get(PathXConstants.EMPTY_GAS_BUTTON_TYPE).setState(PathXSpriteState.VISIBLE.toString());
+            dataModel.setSpecialActive(false);
+            dataModel.setActivatedSpecial("");
+        }
     }
     
     public void closeRoad(Road road){
@@ -345,38 +363,63 @@ public class PathXEventHandler {
     }
     
     public void closeIntersection(PathXNode node){
-        if(node.getState().indexOf("CLOSE") < 0)
+        if(node.getState().indexOf("CLOSE") < 0 && dataModel.getRecord().balance >= 25){
             node.close();
+            dataModel.getRecord().balance -= 25;
+        }
     }
     
     public void openIntersection(PathXNode node){
-        if(node.getState().indexOf("CLOSE") >= 0)
+        if(node.getState().indexOf("CLOSE") >= 0 && dataModel.getRecord().balance >= 25){
             node.open();
+            dataModel.getRecord().balance -= 25;
+        }
     }
     
-    public void steal(){
-        
+    public void steal() {
+        if (dataModel.getRecord().balance >= 30) {
+            dataModel.getRecord().balance -= 30;
+            dataModel.getPlayer().steal();
+            dataModel.setSpecialActive(false);
+            dataModel.setActivatedSpecial("");
+        }
     }
-    
+
     //Will use changeDestination within the car class.
     public void mindControl(Car car){
         
     }
     
     public void intangibility(){
-        
+        if (dataModel.getRecord().balance >= 30) {
+            dataModel.getRecord().balance -= 30;
+            dataModel.getPlayer().intangibility();
+            dataModel.setSpecialActive(false);
+            dataModel.setActivatedSpecial("");
+        }
     }
-    
-    public void mindlessTerror(Car car){
-        
+
+    public void mindlessTerror(Car car) {
+        if (dataModel.getRecord().balance >= 30) {
+            dataModel.getRecord().balance -= 30;
+            car.mindlessTerror();
+            game.getGUIButtons().get(PathXConstants.MINDLESS_TERROR_BUTTON_TYPE).setState(PathXSpriteState.VISIBLE.toString());
+            dataModel.setSpecialActive(false);
+            dataModel.setActivatedSpecial("");
+        }
     }
-    
+
     public void fly(){
         
     }
-    
-    public void godMode(){
-        
+
+    public void godMode() {
+        if (dataModel.getRecord().balance >= 40) {
+            dataModel.getRecord().balance -= 40;
+            dataModel.getPlayer().godMode();
+            dataModel.setSpecialActive(false);
+            dataModel.setActivatedSpecial("");
+        }
     }
 
     public void respondToKeyPress(int keyCode) {
@@ -401,14 +444,24 @@ public class PathXEventHandler {
                     ls.setState(PathXSpriteState.COMPLETED.toString());
             }
         }
+        
+        //Pressing J adds $50 to the player's balance. You can only do this on
+        //the level select screen and game screen.
+        else if (keyCode == KeyEvent.VK_J){
+            if (game.isCurrentScreenState(GAME_SCREEN_STATE) || game.isCurrentScreenState(LEVEL_SELECT_SCREEN_STATE)){
+                dataModel.getRecord().balance += 50;
+            }
+        }
     }
 
     public void pauseGame() {
         TreeMap<String, Sprite> buttons = game.getGUIButtons();
-        if(dataModel.inProgress()){
+        if(dataModel.inProgress() && dataModel.getRecord().balance >= 10){
+            dataModel.getRecord().balance -= 10;
             dataModel.setGameState(MiniGameState.NOT_STARTED);
             buttons.get(PathXConstants.PAUSE_BUTTON_TYPE).setState(PathXConstants.PAUSED_STATE);
-        }else{
+        }else if (dataModel.getRecord().balance >= 10){
+            dataModel.getRecord().balance -= 10;
             dataModel.setGameState(MiniGameState.IN_PROGRESS);
             buttons.get(PathXConstants.PAUSE_BUTTON_TYPE).setState(PathXConstants.UNPAUSED_STATE);
         }

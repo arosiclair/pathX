@@ -384,12 +384,7 @@ public class PathXDataModel extends MiniGameDataModel{
             
             intersections.add(newNode);
         }
-        
-        //Update our list of nodes to reflect whether or not certain nodes & roads
-        //are closed.
-        for (PathXNode n : intersections)
-            if (n.getState().equals(PathXSpriteState.CLOSED.toString())) n.close();
-        
+
         //Update our global ArrayList of PathXNodes
         nodes = intersections;
     }
@@ -433,6 +428,16 @@ public class PathXDataModel extends MiniGameDataModel{
             connections.add(newRoad);
             n1.addRoad(newRoad);
             n2.addRoad(newRoad);
+        }
+        
+        //Update our list of nodes to reflect whether or not certain nodes & roads
+        //are closed.
+        for (PathXNode n : nodes){
+            if (n.getState().equals(PathXSpriteState.CLOSED.toString())){
+                n.close();
+                currentLevel.getGraph().removeVertex(n.getVertex());
+            }
+            
         }
         
         roads = connections;
@@ -531,7 +536,7 @@ public class PathXDataModel extends MiniGameDataModel{
         
         //Keep track of all the nodes that are occupied by another car at the 
         //start of a level.
-        boolean[] occupiedNode = new boolean[level.getGraph().size()];
+        boolean[] occupiedNode = new boolean[nodes.size()];
         for (int i = 0; i < occupiedNode.length; i++){
             occupiedNode[i] = false;
         }
@@ -553,8 +558,12 @@ public class PathXDataModel extends MiniGameDataModel{
             sT.addState(MOUSE_OVER.toString(), copMouseOverImage);
             
             //Update the starting node index.
-            while (occupiedNode[startNodeIndex] == true)
+            while (occupiedNode[startNodeIndex] == true){
                 startNodeIndex = generator.nextInt(nodes.size());
+                if (nodes.get(startNodeIndex).getState().equals(PathXSpriteState.CLOSED.toString())){
+                    startNodeIndex = 0;
+                }
+            }
             occupiedNode[startNodeIndex] = true;
             
             PathXNode startNode = nodes.get(startNodeIndex);

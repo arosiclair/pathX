@@ -10,8 +10,10 @@ import graph.Graph;
 import graph.Vertex;
 import graph.VertexNotFoundException;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import mini_game.MiniGame;
 import mini_game.SpriteType;
+import pathx.PathXConstants;
 import pathx.data.PathXDataModel;
 import pathx.data.PathXLevel;
 
@@ -97,11 +99,86 @@ public class PlayerCar extends Car{
     //PathXNode before updating the Player's Car as usual.
     @Override
     public void update(MiniGame game){
+        PathXDataModel data = (PathXDataModel) game.getDataModel();
+        
+        //Check if 10 seconds has past since activating steal
+        if (getSpecialState().equals(PathXSpriteState.STEALING.toString())){
+            GregorianCalendar newTime = new GregorianCalendar();
+            long timePast = newTime.getTimeInMillis() - getSpecialTimer().getTimeInMillis();
+            if ((timePast / 1000) >= 10){
+                game.getGUIButtons().get(PathXConstants.STEAL_BUTTON_TYPE).setState(PathXSpriteState.VISIBLE.toString());
+                setSpecialState("");
+                setSpecialTimer(null);
+            }
+                
+        }
+        
+        //Check if 10 seconds has past since activating Intangibility
+        if (getSpecialState().equals(PathXSpriteState.INTANGIBLE.toString())){
+            GregorianCalendar newTime = new GregorianCalendar();
+            long timePast = newTime.getTimeInMillis() - getSpecialTimer().getTimeInMillis();
+            if ((timePast / 1000) >= 10){
+                game.getGUIButtons().get(PathXConstants.INTANGIBILITY_BUTTON_TYPE).setState(PathXSpriteState.VISIBLE.toString());
+                setSpecialState("");
+                setSpecialTimer(null);
+            }
+                
+        }
+        
+        //Check if 10 seconds has past since activating God Mode
+        if (getSpecialState().equals(PathXSpriteState.GOD_MODE.toString())){
+            GregorianCalendar newTime = new GregorianCalendar();
+            long timePast = newTime.getTimeInMillis() - getSpecialTimer().getTimeInMillis();
+            if ((timePast / 1000) >= 10){
+                game.getGUIButtons().get(PathXConstants.GOD_MODE_BUTTON_TYPE).setState(PathXSpriteState.VISIBLE.toString());
+                setSpecialState("");
+                setSpecialTimer(null);
+            }
+                
+        }
+
+        if (getSpecialState().equals(PathXSpriteState.STEALING.toString())) {
+            ArrayList<Car> otherCars = new ArrayList();
+            otherCars.addAll(data.getCops());
+            otherCars.addAll(data.getBandits());
+            otherCars.addAll(data.getZombies());
+
+            for (Car car : otherCars) {
+                if (aabbsOverlap(car)) {
+                    if (!car.isStolen()) {
+                        data.getRecord().balance += 20;
+                        car.setStolen(true);
+                    }
+                }
+            }
+        }
+        
         super.update(game);
         
         PathXDataModel dataModel = (PathXDataModel) game.getDataModel();
         PathXNode safeHouse = dataModel.getNodes().get(1);
         if (getIntersection() == safeHouse)
             dataModel.endGameAsWin();
+    }
+
+    public void steal() {
+        if (getSpecialState().equals("")){
+            setSpecialState(PathXSpriteState.STEALING.toString());
+            setSpecialTimer(new GregorianCalendar());
+        }
+    }
+
+    public void intangibility() {
+        if (getSpecialState().equals("")){
+            setSpecialState(PathXSpriteState.INTANGIBLE.toString());
+            setSpecialTimer(new GregorianCalendar());
+        }
+    }
+    
+    public void godMode(){
+        if (getSpecialState().equals("")){
+            setSpecialState(PathXSpriteState.GOD_MODE.toString());
+            setSpecialTimer(new GregorianCalendar());
+        }
     }
 }

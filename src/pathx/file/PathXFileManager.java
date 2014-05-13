@@ -185,6 +185,7 @@ public class PathXFileManager {
         
         //Construct the graph
         Graph newGraph = new Graph();
+        Graph refGraph = new Graph();
         
         //Load the intersections/vertices.
         Node intersectionsList = levelDoc.getElementsByTagName(INTERSECTIONS_LIST_TAG).item(0);
@@ -193,7 +194,9 @@ public class PathXFileManager {
 
             //Create the new Vertex and add it to the graph.
             Vertex newVertex = new Vertex();
+            Vertex refVertex = new Vertex();
             newGraph.addVertex(newVertex);
+            refGraph.addVertex(refVertex);
         }
         
         //Load the edges of the graph
@@ -206,14 +209,19 @@ public class PathXFileManager {
             int nodeIndex2 = Integer.parseInt(attributes.getNamedItem(INT_ID2_ATT).getNodeValue());
             boolean oneWay = Boolean.parseBoolean(attributes.getNamedItem(ONE_WAY_ATT).getNodeValue());
             Vertex v1 = newGraph.getVertex(nodeIndex1);
+            Vertex refV1 = refGraph.getVertex(nodeIndex1);
             Vertex v2 = newGraph.getVertex(nodeIndex2);
+            Vertex refV2 = refGraph.getVertex(nodeIndex2);
             
             //Make the appropriate connections
             if (oneWay){
                 v1.addNeighbor(v2);
+                refV1.addNeighbor(refV2);
             }else{
                 v1.addNeighbor(v2);
+                refV1.addNeighbor(refV2);
                 v2.addNeighbor(v1);
+                refV2.addNeighbor(refV1);
             }
             
             
@@ -221,7 +229,7 @@ public class PathXFileManager {
 
         //Create the PathXLevel and add all relevant information.
         PathXLevel newLevel = new PathXLevel(levelName, path, bgImageName, 
-                newGraph, reward, LEVEL_X_POS[levelsLoaded], LEVEL_Y_POS[levelsLoaded],
+                newGraph, refGraph, reward, LEVEL_X_POS[levelsLoaded], LEVEL_Y_POS[levelsLoaded],
                 data, previousLevel);
         
         levelsLoaded++;

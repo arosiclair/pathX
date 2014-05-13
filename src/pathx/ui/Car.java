@@ -57,6 +57,7 @@ public abstract class Car extends Sprite{
     
     private GregorianCalendar specialTimer;
     private String specialState;
+    private boolean stolen;
     
     public Car(SpriteType initSpriteType, float initX, float initY, float initVx, 
             float initVy, String initState, PathXLevel level, PathXNode startSpot){
@@ -70,6 +71,7 @@ public abstract class Car extends Sprite{
         maxSpeed = 2;
         speed = maxSpeed;
         specialState = "";
+        stolen = false;
     }
     
     //This method will be overidden and defined for other, AI-driven cars in game.
@@ -226,24 +228,35 @@ public abstract class Car extends Sprite{
         //If enough time has past since the tires were flattened or the gas
         //emptied, then the specialState and timer get reset and the car is allowed
         //to update.
+        //MindlessTerror will affect how each enemy Car's generatePath() method 
+        //will function. We keep track of the time for MindlessTerror here though.
         if (!specialState.equals("")){
-            if (specialState.equals(PathXConstants.FLAT_TIRE_SPECIAL_TYPE)){
+            if (getSpecialState().equals(PathXConstants.FLAT_TIRE_SPECIAL_TYPE)){
                 GregorianCalendar newTime = new GregorianCalendar();
-                long timePast = newTime.getTimeInMillis() - specialTimer.getTimeInMillis();
+                long timePast = newTime.getTimeInMillis() - getSpecialTimer().getTimeInMillis();
                 if((timePast/1000) <= 10)
                     return;
                 else{
-                    specialState = "";
-                    specialTimer = null;
+                    setSpecialState("");
+                    setSpecialTimer(null);
                 }
-            }else if (specialState.equals(PathXConstants.EMPTY_GAS_SPECIAL_TYPE)){
+            }else if (getSpecialState().equals(PathXConstants.EMPTY_GAS_SPECIAL_TYPE)){
                 GregorianCalendar newTime = new GregorianCalendar();
-                long timePast = newTime.getTimeInMillis() - specialTimer.getTimeInMillis();
+                long timePast = newTime.getTimeInMillis() - getSpecialTimer().getTimeInMillis();
                 if((timePast/1000) <= 20)
                     return;
                 else{
-                    specialState = "";
-                    specialTimer = null;
+                    setSpecialState("");
+                    setSpecialTimer(null);
+                }
+            } else if (getSpecialState().equals(PathXSpriteState.INCAPACITATED.toString())) {
+                GregorianCalendar newTime = new GregorianCalendar();
+                long timePast = newTime.getTimeInMillis() - getSpecialTimer().getTimeInMillis();
+                if ((timePast / 1000) <= 20) 
+                    return;
+                else {
+                    setSpecialState("");
+                    setSpecialTimer(null);
                 }
             }
         }
@@ -265,7 +278,8 @@ public abstract class Car extends Sprite{
                 
 
                 //If we just reached a red light then stop the car
-                if(intersection.getState().indexOf("RED") >= 0){
+                if(intersection.getState().indexOf("RED") >= 0 && 
+                        !specialState.equals(PathXConstants.MINDLESS_TERROR_SPECIAL_TYPE)){
                     speed = 0;
                     movingToTarget = false;
                     return;
@@ -340,17 +354,60 @@ public abstract class Car extends Sprite{
     public void setMaxSpeed(double maxSpeed) {
         this.maxSpeed = maxSpeed;
     }
+    
+    public String getSpecialState() {
+        return specialState;
+    }
+
+    public void setSpecialState(String specialState) {
+        this.specialState = specialState;
+    }
 
     /**
      * Prevents the car from moving for 10 seconds.
      */
     public void flattenTires() {
-        specialTimer = new GregorianCalendar();
-        specialState = PathXConstants.FLAT_TIRE_SPECIAL_TYPE;
+        setSpecialTimer(new GregorianCalendar());
+        setSpecialState(PathXConstants.FLAT_TIRE_SPECIAL_TYPE);
     }
     
     public void emptyGas(){
-        specialTimer = new GregorianCalendar();
-        specialState = PathXConstants.EMPTY_GAS_SPECIAL_TYPE;
+        if (specialState.equals("")){
+            setSpecialTimer(new GregorianCalendar());
+            setSpecialState(PathXConstants.EMPTY_GAS_SPECIAL_TYPE);
+        }
     }
+
+    void mindlessTerror() {
+        if (specialState.equals("")){
+            //specialTimer = new GregorianCalendar();
+            setSpecialState(PathXConstants.MINDLESS_TERROR_SPECIAL_TYPE);
+        }
+    }
+
+
+    public void incapacitate() {
+        if (specialState.equals("")){
+            setSpecialTimer(new GregorianCalendar());
+            setSpecialState(PathXSpriteState.INCAPACITATED.toString());
+        }
+    }
+
+    public void setSpecialTimer(GregorianCalendar specialTimer) {
+        this.specialTimer = specialTimer;
+    }
+
+    public GregorianCalendar getSpecialTimer() {
+        return specialTimer;
+    }
+
+    void setStolen(boolean b) {
+        stolen = b;
+    }
+
+    public boolean isStolen() {
+        return stolen;
+    }
+    
+    
 }

@@ -67,7 +67,7 @@ public class Road {
             v1.removeNeighbor(v2);
             v2.removeNeighbor(v1);
         } catch (VertexNotFoundException ex) {
-            Logger.getLogger(Road.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
         
     }

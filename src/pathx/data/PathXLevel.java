@@ -7,7 +7,6 @@
 package pathx.data;
 
 import graph.Graph;
-import mini_game.Viewport;
 import static pathx.PathXConstants.VIEWPORT_X;
 import static pathx.PathXConstants.VIEWPORT_Y;
 import pathx.ui.PathXNode;
@@ -34,6 +33,9 @@ public class PathXLevel {
     //The graph data structure.
     private Graph graph;
     
+    //A reference graph used to reset the level.
+    private Graph referenceGraph;
+    
     //private PathXNode startNode;
     private PathXDataModel dataModel;
     
@@ -45,7 +47,7 @@ public class PathXLevel {
     
     
     public PathXLevel(String levelName, String xmlFile, String bgImage, 
-            Graph graph, int reward, int xPos, int yPos, PathXDataModel data, 
+            Graph graph, Graph referenceGraph, int reward, int xPos, int yPos, PathXDataModel data, 
             PathXLevel prevLevel){
         this.dataModel = data;
         this.levelName = levelName;
@@ -55,6 +57,7 @@ public class PathXLevel {
         this.yPos = yPos;
         
         this.graph = graph;
+        this.referenceGraph = referenceGraph;
         this.bgImage = bgImage;
         
         this.completed = false;
@@ -170,5 +173,9 @@ public class PathXLevel {
     
     public void decreaseReward(){
         reward = (int) (reward * 0.90);
+    }
+    
+    public void resetGraph(){
+        graph = referenceGraph;
     }
 }

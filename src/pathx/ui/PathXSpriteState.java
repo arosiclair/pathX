@@ -26,6 +26,7 @@ public enum PathXSpriteState {
     MINDLESS,
     FLYING,
     GOD_MODE,
+    INCAPACITATED,
     
     /**
      * There are only 3 states for each Node/Intersection
