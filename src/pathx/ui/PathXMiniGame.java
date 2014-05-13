@@ -609,17 +609,17 @@ public class PathXMiniGame extends MiniGame{
         guiButtons.put(MAKE_RED_BUTTON_TYPE, s);
         
         //Freeze Time Button
-        sT = new SpriteType(FREEZE_BUTTON_TYPE);
-        img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_FREEZE_TIME));
-        sT.addState(VISIBLE.toString(), img);
-        sT.addState(MOUSE_OVER.toString(), img);
-        img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_FREEZE_TIME_ACTIVE));
-        sT.addState(ENABLED.toString(), img);
-        x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 2);
-        y = PathXConstants.FIRST_SPECIAL_Y;
-        s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
-        s.setEnabled(false);
-        guiButtons.put(FREEZE_BUTTON_TYPE, s);
+//        sT = new SpriteType(FREEZE_BUTTON_TYPE);
+//        img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_FREEZE_TIME));
+//        sT.addState(VISIBLE.toString(), img);
+//        sT.addState(MOUSE_OVER.toString(), img);
+//        img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_FREEZE_TIME_ACTIVE));
+//        sT.addState(ENABLED.toString(), img);
+//        x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 2);
+//        y = PathXConstants.FIRST_SPECIAL_Y;
+//        s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
+//        s.setEnabled(false);
+//        guiButtons.put(FREEZE_BUTTON_TYPE, s);
         
         //INCREASE SPEED BUTTON
         sT = new SpriteType(INCREASE_SPEED_BUTTON_TYPE);
@@ -628,7 +628,7 @@ public class PathXMiniGame extends MiniGame{
         sT.addState(MOUSE_OVER.toString(), img);
         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_INCREASE_SPEED_ACTIVE));
         sT.addState(ENABLED.toString(), img);
-        x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 3);
+        x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 2);
         y = PathXConstants.FIRST_SPECIAL_Y;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
         s.setEnabled(false);
@@ -641,8 +641,8 @@ public class PathXMiniGame extends MiniGame{
         sT.addState(MOUSE_OVER.toString(), img);
         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_DECREASE_SPEED_ACTIVE));
         sT.addState(ENABLED.toString(), img);
-        x = PathXConstants.FIRST_SPECIAL_X;
-        y = PathXConstants.FIRST_SPECIAL_Y + GAME_SPECIAL_HEIGHT;
+        x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 3);
+        y = PathXConstants.FIRST_SPECIAL_Y ;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
         s.setEnabled(false);
         guiButtons.put(DECREASE_SPEED_BUTTON_TYPE, s);
@@ -654,7 +654,7 @@ public class PathXMiniGame extends MiniGame{
         sT.addState(MOUSE_OVER.toString(), img);
         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_INCREASE_PLAYER_SPEED_ACTIVE));
         sT.addState(ENABLED.toString(), img);
-        x = PathXConstants.FIRST_SPECIAL_X + GAME_SPECIAL_WIDTH;
+        x = PathXConstants.FIRST_SPECIAL_X;
         y = PathXConstants.FIRST_SPECIAL_Y + GAME_SPECIAL_HEIGHT;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
         s.setEnabled(false);
@@ -667,7 +667,7 @@ public class PathXMiniGame extends MiniGame{
         sT.addState(MOUSE_OVER.toString(), img);
         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_FLAT_TIRE_ACTIVE));
         sT.addState(ENABLED.toString(), img);
-        x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 2);
+        x = PathXConstants.FIRST_SPECIAL_X + GAME_SPECIAL_WIDTH;
         y = PathXConstants.FIRST_SPECIAL_Y + GAME_SPECIAL_HEIGHT;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
         s.setEnabled(false);
@@ -680,7 +680,7 @@ public class PathXMiniGame extends MiniGame{
         sT.addState(MOUSE_OVER.toString(), img);
         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_EMPTY_GAS_ACTIVE));
         sT.addState(ENABLED.toString(), img);
-        x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 3);
+        x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 2);
         y = PathXConstants.FIRST_SPECIAL_Y + GAME_SPECIAL_HEIGHT;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
         s.setEnabled(false);
@@ -693,8 +693,8 @@ public class PathXMiniGame extends MiniGame{
         sT.addState(MOUSE_OVER.toString(), img);
         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_CLOSE_ROAD_ACTIVE));
         sT.addState(ENABLED.toString(), img);
-        x = PathXConstants.FIRST_SPECIAL_X;
-        y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_HEIGHT * 2);
+        x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 3);
+        y = PathXConstants.FIRST_SPECIAL_Y + GAME_SPECIAL_HEIGHT;
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
         s.setEnabled(false);
         guiButtons.put(CLOSE_ROAD_BUTTON_TYPE, s);
@@ -706,7 +706,7 @@ public class PathXMiniGame extends MiniGame{
         sT.addState(MOUSE_OVER.toString(), img);
         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_OPEN_NODE_ACTIVE));
         sT.addState(ENABLED.toString(), img);
-        x = PathXConstants.FIRST_SPECIAL_X + GAME_SPECIAL_WIDTH;
+        x = PathXConstants.FIRST_SPECIAL_X;
         y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_WIDTH * 2);
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
         s.setEnabled(false);
@@ -719,7 +719,7 @@ public class PathXMiniGame extends MiniGame{
         sT.addState(MOUSE_OVER.toString(), img);
         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_CLOSE_NODE_ACTIVE));
         sT.addState(ENABLED.toString(), img);
-        x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 2);
+        x = PathXConstants.FIRST_SPECIAL_X + GAME_SPECIAL_WIDTH;
         y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_WIDTH * 2);
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
         s.setEnabled(false);
@@ -732,7 +732,7 @@ public class PathXMiniGame extends MiniGame{
         sT.addState(MOUSE_OVER.toString(), img);
         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_STEALING_ACTIVE));
         sT.addState(ENABLED.toString(), img);
-        x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 3);
+        x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 2);
         y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_WIDTH * 2);
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
         s.setEnabled(false);
@@ -745,8 +745,8 @@ public class PathXMiniGame extends MiniGame{
         sT.addState(MOUSE_OVER.toString(), img);
         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_MIND_CONTROL_ACTIVE));
         sT.addState(ENABLED.toString(), img);
-        x = PathXConstants.FIRST_SPECIAL_X;
-        y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_HEIGHT * 3);
+        x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 3);
+        y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_HEIGHT * 2);
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
         s.setEnabled(false);
         guiButtons.put(MIND_CONTROL_BUTTON_TYPE, s);
@@ -758,7 +758,7 @@ public class PathXMiniGame extends MiniGame{
         sT.addState(MOUSE_OVER.toString(), img);
         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_INTANGIBILITY_ACTIVE));
         sT.addState(ENABLED.toString(), img);
-        x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH);
+        x = PathXConstants.FIRST_SPECIAL_X;
         y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_HEIGHT * 3);
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
         s.setEnabled(false);
@@ -771,8 +771,8 @@ public class PathXMiniGame extends MiniGame{
         sT.addState(MOUSE_OVER.toString(), img);
         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_MINDLESS_TERROR_ACTIVE));
         sT.addState(ENABLED.toString(), img);
-        x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 2);
-        y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_WIDTH * 3);
+        x = PathXConstants.FIRST_SPECIAL_X + GAME_SPECIAL_WIDTH;
+        y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_HEIGHT * 3);
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
         s.setEnabled(false);
         guiButtons.put(MINDLESS_TERROR_BUTTON_TYPE, s);
@@ -784,7 +784,7 @@ public class PathXMiniGame extends MiniGame{
         sT.addState(MOUSE_OVER.toString(), img);
         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_FLYING_ACTIVE));
         sT.addState(ENABLED.toString(), img);
-        x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 3);
+        x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 2);
         y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_WIDTH * 3);
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
         s.setEnabled(false);
@@ -797,8 +797,8 @@ public class PathXMiniGame extends MiniGame{
         sT.addState(MOUSE_OVER.toString(), img);
         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_GOD_MODE_ACTIVE));
         sT.addState(ENABLED.toString(), img);
-        x = PathXConstants.FIRST_SPECIAL_X + GAME_SPECIAL_WIDTH + 15;
-        y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_HEIGHT * 4);
+        x = PathXConstants.FIRST_SPECIAL_X + (GAME_SPECIAL_WIDTH * 3);
+        y = PathXConstants.FIRST_SPECIAL_Y + (GAME_SPECIAL_HEIGHT * 3);
         s = new Sprite(sT, x, y, 0, 0, INVISIBLE.toString());
         s.setEnabled(false);
         guiButtons.put(GOD_MODE_BUTTON_TYPE, s);
@@ -1126,31 +1126,31 @@ public class PathXMiniGame extends MiniGame{
         });
         
         //FREEZE TIME HANDLING
-        Sprite freeze = guiButtons.get(FREEZE_BUTTON_TYPE);
-        freeze.setActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent ae)
-            {
-                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
-                String specialButton;
-                PathXDataModel dataModel = (PathXDataModel) getDataModel();
-                if (activeSpecial.equals(FREEZE_SPECIAL_TYPE)) {
-                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
-                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
-                    getGUIButtons().get(FREEZE_BUTTON_TYPE).setState(VISIBLE.toString());
-                } else if (!activeSpecial.equals("")) {
-                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
-                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
-                    dataModel.setActivatedSpecial(FREEZE_SPECIAL_TYPE);
-                    dataModel.setSpecialActive(true);
-                    getGUIButtons().get(FREEZE_BUTTON_TYPE).setState(ENABLED.toString());
-                } else {
-
-                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
-                    ((PathXDataModel) getDataModel()).setActivatedSpecial(FREEZE_SPECIAL_TYPE);
-                    getGUIButtons().get(FREEZE_BUTTON_TYPE).setState(ENABLED.toString());
-                }
-            }
-        });
+//        Sprite freeze = guiButtons.get(FREEZE_BUTTON_TYPE);
+//        freeze.setActionListener(new ActionListener(){
+//            public void actionPerformed(ActionEvent ae)
+//            {
+//                String activeSpecial = ((PathXDataModel) getDataModel()).getActivatedSpecial();
+//                String specialButton;
+//                PathXDataModel dataModel = (PathXDataModel) getDataModel();
+//                if (activeSpecial.equals(FREEZE_SPECIAL_TYPE)) {
+//                    ((PathXDataModel) getDataModel()).setActivatedSpecial("");
+//                    ((PathXDataModel) getDataModel()).setSpecialActive(false);
+//                    getGUIButtons().get(FREEZE_BUTTON_TYPE).setState(VISIBLE.toString());
+//                } else if (!activeSpecial.equals("")) {
+//                    specialButton = activeSpecial.substring(0, activeSpecial.indexOf("_SPECIAL_TYPE")) + "_BUTTON_TYPE";
+//                    getGUIButtons().get(specialButton).setState(VISIBLE.toString());
+//                    dataModel.setActivatedSpecial(FREEZE_SPECIAL_TYPE);
+//                    dataModel.setSpecialActive(true);
+//                    getGUIButtons().get(FREEZE_BUTTON_TYPE).setState(ENABLED.toString());
+//                } else {
+//
+//                    ((PathXDataModel) getDataModel()).setSpecialActive(true);
+//                    ((PathXDataModel) getDataModel()).setActivatedSpecial(FREEZE_SPECIAL_TYPE);
+//                    getGUIButtons().get(FREEZE_BUTTON_TYPE).setState(ENABLED.toString());
+//                }
+//            }
+//        });
         
         //DECREASE SPEED LIMIT
         Sprite decrSpeed = guiButtons.get(DECREASE_SPEED_BUTTON_TYPE);
@@ -1806,8 +1806,8 @@ public class PathXMiniGame extends MiniGame{
         guiButtons.get(MAKE_GREEN_BUTTON_TYPE).setEnabled(true);
         guiButtons.get(MAKE_RED_BUTTON_TYPE).setState(VISIBLE.toString());
         guiButtons.get(MAKE_RED_BUTTON_TYPE).setEnabled(true);
-        guiButtons.get(FREEZE_BUTTON_TYPE).setState(VISIBLE.toString());
-        guiButtons.get(FREEZE_BUTTON_TYPE).setEnabled(true);
+//        guiButtons.get(FREEZE_BUTTON_TYPE).setState(VISIBLE.toString());
+//        guiButtons.get(FREEZE_BUTTON_TYPE).setEnabled(true);
         guiButtons.get(INCREASE_SPEED_BUTTON_TYPE).setState(VISIBLE.toString());
         guiButtons.get(INCREASE_SPEED_BUTTON_TYPE).setEnabled(true);
         guiButtons.get(DECREASE_SPEED_BUTTON_TYPE).setState(VISIBLE.toString());
@@ -1843,8 +1843,8 @@ public class PathXMiniGame extends MiniGame{
         guiButtons.get(MAKE_GREEN_BUTTON_TYPE).setEnabled(false);
         guiButtons.get(MAKE_RED_BUTTON_TYPE).setState(INVISIBLE.toString());
         guiButtons.get(MAKE_RED_BUTTON_TYPE).setEnabled(false);
-        guiButtons.get(FREEZE_BUTTON_TYPE).setState(INVISIBLE.toString());
-        guiButtons.get(FREEZE_BUTTON_TYPE).setEnabled(false);
+//        guiButtons.get(FREEZE_BUTTON_TYPE).setState(INVISIBLE.toString());
+//        guiButtons.get(FREEZE_BUTTON_TYPE).setEnabled(false);
         guiButtons.get(INCREASE_SPEED_BUTTON_TYPE).setState(INVISIBLE.toString());
         guiButtons.get(INCREASE_SPEED_BUTTON_TYPE).setEnabled(false);
         guiButtons.get(DECREASE_SPEED_BUTTON_TYPE).setState(INVISIBLE.toString());
