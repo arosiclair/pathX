@@ -6,7 +6,6 @@
 
 package pathx;
 
-import mini_game.MiniGame;
 import properties_manager.PropertiesManager;
 import static pathx.PathXConstants.*;
 import pathx.ui.PathXErrorHandler;

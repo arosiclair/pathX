@@ -55,7 +55,7 @@
      <start_intersection id="0" image="DefaultStartLocation.png"/>
      <destination_intersection id="1" image="DefaultDestination.png"/>
      <money amount="3000"/>
-     <police num="5"/>
-     <bandits num="2"/>
+     <police num="3"/>
+     <bandits num="1"/>
      <zombies num="1"/>
 </level>
