@@ -23,7 +23,7 @@ You are are a getaway driver on a cross-country crime spree stealing money to pa
 
 Features
 ===
-20 Custom levels
-Origial, custom UI elements
-Real-time, variable street networks.
+1. 20 Custom levels
+2. Origial, custom UI elements
+3. Real-time, variable street networks.
 
